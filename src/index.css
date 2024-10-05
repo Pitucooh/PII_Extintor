@@ -1,0 +1,29 @@
+/* index.css */
+
+/* Estilos gerais para o modal */
+#modal {
+    position: fixed; /* Fixa o modal na tela */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro e semi-transparente */
+    display: flex; /* Usar flexbox para centralizar */
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: center; /* Centraliza horizontalmente */
+    z-index: 1000; /* Garante que o modal fique acima de outros elementos */
+  }
+  
+  #modalContent {
+    background-color: white; /* Fundo branco para o conteúdo do modal */
+    padding: 20px;
+    border-radius: 8px; /* Bordas arredondadas */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Sombra para dar profundidade */
+    width: 300px; /* Largura fixa */
+  }
+  
+  .close {
+    cursor: pointer; /* Cursor de ponteiro para indicar que é clicável */
+    float: right; /* Posiciona o botão de fechar à direita */
+  }
+  
