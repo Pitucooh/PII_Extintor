@@ -1,13 +1,17 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Alterado para Routes
-import Busca from './Busca'; // Componente de busca
+import Tela_Inicial from './Tela_Inicial';
+import Login from './Login';
+import Busca from './Busca'; 
 
 const App = () => {
   return (
     <Router>
       <div>
         <Routes> {/* Usando Routes em vez de Switch */}
-          <Route path="/" element={<Busca />} /> {/* Usando element */}
+          <Route path="/" element={<Tela_Inicial/>} /> 
+          <Route path="/" element={<Login />} /> 
+          <Route path="/" element={<Busca />} /> 
         </Routes>
       </div>
     </Router>

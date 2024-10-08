@@ -64,9 +64,7 @@ app.put('/update/:id', async (req, res) => {
       prox_rec = $8, 
       nao_conf = $9, 
       id_local = $10, 
-      qr_code = $11, 
-      observacao = $12
-      WHERE id = $13
+      observacao = $11
     `;
 
     const values = [
@@ -80,9 +78,7 @@ app.put('/update/:id', async (req, res) => {
       updatedData.prox_rec,
       updatedData.nao_conf,
       updatedData.id_local,
-      updatedData.qr_code,
       updatedData.observacao,
-      id,
     ];
 
     const result = await pool.query(updateQuery, values);

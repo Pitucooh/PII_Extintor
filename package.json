@@ -11,6 +11,9 @@
   "dependencies": {
     "app": "^0.1.0",
     "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "node": "^20.18.0",
+    "pg": "^8.13.0",
     "PII_Extintor": "file:",
     "qrious": "^4.0.2",
     "react": "^18.3.1",
