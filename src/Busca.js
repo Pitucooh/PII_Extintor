@@ -1,3 +1,4 @@
+// src/Busca.js
 import React, { useState, useRef, useEffect } from 'react';
 import QRious from 'qrious'; // Importando a biblioteca QRious para gerar QR codes
 import './index.css'; // Importando o arquivo CSS para estilos
@@ -18,31 +19,28 @@ const QRCodeCanvas = ({ value }) => {
   return <canvas ref={canvasRef}></canvas>;
 };
 
-const App = () => {
-  // Estados para gerenciar os dados
-  const [patrimonio, setPatrimonio] = useState(''); // Estado para armazenar o patrimônio digitado
-  const [resultados, setResultados] = useState([]); // Estado para armazenar os resultados da busca
-  const [modalData, setModalData] = useState(null); // Estado para armazenar os dados do item a ser editado
-  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar a visibilidade do modal
-  const [novoExtintor, setNovoExtintor] = useState({}); // Estado para armazenar dados do novo extintor
+const Busca = () => {
+  const [patrimonio, setPatrimonio] = useState('');
+  const [resultados, setResultados] = useState([]);
+  const [modalData, setModalData] = useState(null);
+  const role = localStorage.getItem('role'); // Obtendo o papel do localStorage
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [novoExtintor, setNovoExtintor] = useState({});
 
-  // Função para tratar o envio do formulário de busca
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      // Fazendo a requisição para buscar os dados
       const response = await fetch(`http://localhost:3002/busca?patrimonio=${encodeURIComponent(patrimonio)}`);
       if (!response.ok) {
         throw new Error('Erro na requisição');
       }
       const dados = await response.json();
 
-      // Verificando se há resultados
       if (dados.length === 0) {
         setResultados([{ message: 'Nenhum extintor encontrado' }]);
       } else {
-        setResultados(dados);
+        setResultados(dados.filter(item => item.patrimonio === patrimonio));
       }
     } catch (error) {
       console.error('Erro:', error);
@@ -50,18 +48,16 @@ const App = () => {
     }
   };
 
-  // Função para abrir o modal de edição
   const abrirModal = (item) => {
-    setModalData(item); // Armazenando os dados do item a ser editado
-    setIsModalOpen(true); // Abrindo o modal
+    setModalData(item);
+    setIsModalOpen(true);
   };
 
-  // Função para fechar o modal
   const closeModal = () => {
     setIsModalOpen(false);
   };
 
-  // Função para tratar o envio do formulário de edição
+
   const handleEditSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -85,16 +81,14 @@ const App = () => {
 
       const result = await response.json();
       console.log('Dados atualizados:', result.message);
-      closeModal(); // Fecha o modal após salvar as alterações
+      closeModal();
 
-      // Opcional: Atualizar a lista de resultados após a edição
-      // Você pode precisar fazer uma nova busca ou atualizar o estado local
+      setResultados(prevResultados => prevResultados.map(item => (item.id === modalData.id ? { ...item, ...updatedData } : item)));
     } catch (error) {
       console.error('Erro ao enviar dados atualizados:', error);
     }
   };
 
-  // Função para tratar o envio do formulário de cadastro
   const handleCadastroSubmit = async (event) => {
     event.preventDefault();
 
@@ -113,10 +107,30 @@ const App = () => {
 
       const result = await response.json();
       console.log('Extintor cadastrado:', result.message);
-      // Opcional: Você pode limpar o estado do novo extintor ou atualizar a lista
-      setNovoExtintor({}); // Limpa o formulário após o envio
+      setNovoExtintor({});
     } catch (error) {
       console.error('Erro ao cadastrar extintor:', error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Você tem certeza que deseja excluir este extintor?")) {
+      try {
+        const response = await fetch(`http://localhost:3002/delete/${id}`, {
+          method: 'DELETE',
+        });
+
+        if (!response.ok) {
+          throw new Error('Erro ao excluir extintor');
+        }
+
+        const result = await response.json();
+        console.log('Extintor excluído:', result.message);
+        setResultados(resultados.filter(item => item.id !== id));
+
+      } catch (error) {
+        console.error('Erro ao excluir extintor:', error);
+      }
     }
   };
 
@@ -130,7 +144,7 @@ const App = () => {
           id="patrimonio"
           placeholder="Digite o patrimônio"
           value={patrimonio}
-          onChange={(e) => setPatrimonio(e.target.value)} // Atualizando o estado ao digitar
+          onChange={(e) => setPatrimonio(e.target.value)}
           required
         />
         <button type="submit">Buscar</button>
@@ -140,7 +154,7 @@ const App = () => {
         {resultados.map((item, index) => (
           <div key={index} className="resultado-item">
             {item.message ? (
-              <p>{item.message}</p> // Mensagem quando não há resultados
+              <p>{item.message}</p>
             ) : (
               Object.entries(item).map(([key, value]) => (
                 <div key={key}>
@@ -152,6 +166,9 @@ const App = () => {
             {!item.message && (
               <>
                 <button onClick={() => abrirModal(item)}>Editar</button>
+                {role !== 'Operador' && ( // Condição para mostrar o botão de excluir
+                  <button onClick={() => handleDelete(item.id)}>Excluir</button>
+                )}
                 {item.num_equip && <QRCodeCanvas value={item.num_equip} />}
               </>
             )}
@@ -159,7 +176,6 @@ const App = () => {
         ))}
       </div>
 
-      {/* Formulário para cadastrar um novo extintor */}
       <h2>Cadastrar Novo Extintor</h2>
       <form onSubmit={handleCadastroSubmit}>
         <input
@@ -200,77 +216,28 @@ const App = () => {
         <input
           type="text"
           placeholder="Data_Fabricação"
-          value={novoExtintor.fabricante || ''}
-          onChange={(e) => setNovoExtintor({ ...novoExtintor, fabricante: e.target.value })}
+          value={novoExtintor.data_fabricacao || ''}
+          onChange={(e) => setNovoExtintor({ ...novoExtintor, data_fabricacao: e.target.value })}
           required
         />
         <input
           type="text"
           placeholder="Data_Validade"
-          value={novoExtintor.fabricante || ''}
-          onChange={(e) => setNovoExtintor({ ...novoExtintor, fabricante: e.target.value })}
+          value={novoExtintor.data_validade || ''}
+          onChange={(e) => setNovoExtintor({ ...novoExtintor, data_validade: e.target.value })}
           required
         /> 
         <input
           type="text"
           placeholder="Última_Recarga"
-          value={novoExtintor.fabricante || ''}
-          onChange={(e) => setNovoExtintor({ ...novoExtintor, fabricante: e.target.value })}
-          required
-        /> 
-         <input
-          type="text"
-          placeholder="Próxima_Inspeção"
-          value={novoExtintor.fabricante || ''}
-          onChange={(e) => setNovoExtintor({ ...novoExtintor, fabricante: e.target.value })}
+          value={novoExtintor.ultima_recarga || ''}
+          onChange={(e) => setNovoExtintor({ ...novoExtintor, ultima_recarga: e.target.value })}
           required
         />
-        <input
-          type="text"
-          placeholder="Status"
-          value={novoExtintor.fabricante || ''}
-          onChange={(e) => setNovoExtintor({ ...novoExtintor, fabricante: e.target.value })}
-          required
-        />     
-        <input
-          type="text"
-          placeholder="ID_Localização"
-          value={novoExtintor.fabricante || ''}
-          onChange={(e) => setNovoExtintor({ ...novoExtintor, fabricante: e.target.value })}
-          required
-        />  
-           <input
-          type="text"
-          placeholder="Observações"
-          value={novoExtintor.fabricante || ''}
-          onChange={(e) => setNovoExtintor({ ...novoExtintor, fabricante: e.target.value })}
-          required
-        />         
-        <button type="submit">Cadastrar Extintor</button>
+        <button type="submit">Cadastrar</button>
       </form>
-
-      {/* Modal para edição */}
-      {isModalOpen && (
-        <div id="modal" onClick={closeModal}> {/* Adicionado onClick para fechar ao clicar fora */}
-          <div id="modalContent" onClick={(e) => e.stopPropagation()}> {/* Impede o fechamento ao clicar no conteúdo */}
-            <span className="close" onClick={closeModal}>&times;</span>
-            <h2>Editar Informações</h2>
-            <form id="formEditar" onSubmit={handleEditSubmit}>
-              <div id="camposEdicao">
-                {modalData && Object.entries(modalData).map(([key, value]) => (
-                  <div key={key}>
-                    <label>{key}:</label>
-                    <input type="text" name={key} defaultValue={value || ''} /><br />
-                  </div>
-                ))}
-              </div>
-              <button type="submit">Salvar</button>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
-export default App;
+export default Busca;

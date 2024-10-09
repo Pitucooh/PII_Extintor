@@ -139,6 +139,24 @@ app.post('/insert', async (req, res) => {
   }
 });
 
+// Endpoint para excluir um item pelo patrimônio
+app.delete('/delete', async (req, res) => {
+  const { patrimonio } = req.body; // Patrimônio do item a ser excluído
+
+  try {
+    const result = await pool.query('DELETE FROM metro.extintores WHERE patrimonio = $1', [patrimonio]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'Extintor não encontrado' });
+    }
+
+    res.json({ message: 'Extintor excluído com sucesso' });
+  } catch (error) {
+    console.error('Erro ao excluir extintor:', error);
+    res.status(500).json({ message: 'Erro ao excluir extintor' });
+  }
+});
+
 // Inicia o servidor
 app.listen(3002, () => {
   console.log('Servidor rodando na porta 3002');

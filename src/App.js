@@ -10,12 +10,13 @@ const App = () => {
       <div>
         <Routes> {/* Usando Routes em vez de Switch */}
           <Route path="/" element={<Tela_Inicial/>} /> 
-          <Route path="/" element={<Login />} /> 
-          <Route path="/" element={<Busca />} /> 
+          <Route path="/login" element={<Login />} />
+          <Route path="/busca" element={<Busca />} /> 
         </Routes>
-      </div>
+      </div>   
     </Router>
   );
+  
 };
 
 export default App;
