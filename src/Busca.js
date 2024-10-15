@@ -23,9 +23,9 @@ const Busca = () => {
   const [patrimonio, setPatrimonio] = useState('');
   const [resultados, setResultados] = useState([]);
   const [modalData, setModalData] = useState(null);
-  const role = localStorage.getItem('role'); // Obtendo o papel do localStorage
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [setIsModalOpen] = useState(false);
   const [novoExtintor, setNovoExtintor] = useState({});
+  const role = localStorage.getItem('role'); // Obtendo o papel do localStorage
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -137,7 +137,7 @@ const Busca = () => {
   return (
     <div>
       <h1>Buscar extintor por patrimônio</h1>
-
+      <p>Seu papel: {role}</p>
       <form id="formBusca" onSubmit={handleSubmit}>
         <input
           type="text"
@@ -162,7 +162,6 @@ const Busca = () => {
                 </div>
               ))
             )}
-
             {!item.message && (
               <>
                 <button onClick={() => abrirModal(item)}>Editar</button>

@@ -1,19 +1,26 @@
 // src/Login.js
 import React, { useState } from 'react';
-import {useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [cpfError, setCpfError] = useState('');
   const navigate = useNavigate();
+  const location = useLocation(); // Importando useLocation
 
-  const handleSubmit = (e, role) => {
+  // Captura o role da URL
+  const params = new URLSearchParams(location.search);
+  const role = params.get('role');
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    navigate(`/busca?role=${role}`); 
 
+    // Aqui você pode adicionar a validação do CPF
     // if (validateCPF(password)) {
-    //   navigate(`/busca?role=${role}`); 
+      // Armazena o papel no localStorage
+      localStorage.setItem('role', role);
+      navigate(`/busca?role=${role}`);
     // } else {
     //   setCpfError('CPF inválido. Por favor, insira um CPF no formato válido.');
     // }
