@@ -1,49 +1,41 @@
 // src/Tela_Inicial
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './Tela_Inicial.css';
 
 const Tela_Inicial = () => {
   const navigate = useNavigate();
 
-  const handleRoleSelect = (role) => {
+  const handleRoleSelection = (role) => {
     navigate(`/login?role=${role}`); 
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '50px' }}>
-      <h2>Selecione seu papel</h2>
-      <button
-        style={buttonStyle}
-        onClick={() => handleRoleSelect('Administrador')}
-      >
-        Administrador
-      </button>
-      <button
-        style={buttonStyle}
-        onClick={() => handleRoleSelect('Operador')}
-      >
-        Operador
-      </button>
-      <button
-        style={buttonStyle}
-        onClick={() => handleRoleSelect('Apenas Leitura')}
-      >
-        Apenas Leitura
-      </button>
+    <div className="container">
+      <div className="header">
+        <div className="logo"></div>
+        <div className="title">
+          <h1>Metrô SP - Gestão de equipamentos de combate a incêndio</h1>
+        </div>
+        <div className="company">
+          <h2>CPTM</h2>
+          <p>Identificação</p>
+        </div>
+      </div>
+      <div className="content">
+        <h3>Escolha seu tipo de usuário</h3>
+        <div className="role-selection">
+          <button onClick={() => handleRoleSelection('admin')}>Administrador</button>
+          <button onClick={() => handleRoleSelection('operador')}>Operador</button>
+          <button onClick={() => handleRoleSelection('leitura')}>Apenas leitura</button>
+        </div>
+        <p className="info-text">
+          Ao escolher um tipo de usuário, você verá apenas seu perfil (privativo). A visualização não
+          terá funcionalidades reais de modificação.
+        </p>
+      </div>
     </div>
   );
-};
-
-const buttonStyle = {
-  width: '200px',
-  height: '60px',
-  fontSize: '18px',
-  margin: '10px',
-  cursor: 'pointer',
-  backgroundColor: '#007bff',
-  color: 'white',
-  border: 'none',
-  borderRadius: '5px',
 };
 
 export default Tela_Inicial;

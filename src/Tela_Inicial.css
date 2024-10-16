@@ -1,6 +1,6 @@
 
 .container {
-    background: url('/path-to-background-image.png') no-repeat center center fixed; 
+    /* background: url('/path-to-background-image.png') no-repeat center center fixed;  */
     background-size: cover;
     height: 100vh;
     display: flex;
