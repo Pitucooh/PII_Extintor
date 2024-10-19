@@ -19,32 +19,25 @@ const pool = new Pool({
 app.use(cors());
 
 // Endpoint para buscar extintores
-app.get('/busca', async (req, res) => {
-  const { patrimonio } = req.query; // Recebe a chave de busca por query string
+// app.get('/busca', async (req, res) => {
+//   const { patrimonio } = req.query; // Recebe a chave de busca por query string
+//   try {
+//     const result = await pool.query('SELECT * FROM metro.extintores WHERE patrimonio LIKE $1', [`${patrimonio}`]);
+//     console.log(result.rows); // Verifique os dados que estão sendo retornados
+//     res.json(result.rows);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send('Erro no servidor');
+//   }
+// });
+
+// Endpoint para atualizar um extintor 
+app.put('/update', async (req, res) => {
+  const { updatedData } = req.body; // Patrimônio do item a ser excluído
   try {
-    const result = await pool.query('SELECT * FROM metro.extintores WHERE patrimonio LIKE $1', [`${patrimonio}`]);
-    console.log(result.rows); // Verifique os dados que estão sendo retornados
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Erro no servidor');
-  }
-});
-
-// Página de teste para ver se está funcionando
-app.get('/test', (req, res) => {
-  res.send('Servidor funcionando!');
-});
-
-// Endpoint para atualizar um item
-app.put('/update/:id', async (req, res) => {
-  const id = req.params.id; // ID do item a ser atualizado
-  const updatedData = req.body; // Dados enviados no corpo da requisição
-
-  try {
-    // Verificar se o patrimônio já existe
-    const checkQuery = 'SELECT * FROM metro.extintores WHERE patrimonio = $1 AND id != $2';
-    const checkValues = [updatedData.patrimonio, id];
+    // Verificar se o patrimônio já existe (exceto o que está sendo atualizado)
+    const checkQuery = 'SELECT * FROM metro.extintores WHERE patrimonio = $1 AND patrimonio != $2';
+    const checkValues = [updatedData.patrimonio, updatedData.patrimonio];
     const checkResult = await pool.query(checkQuery, checkValues);
 
     if (checkResult.rowCount > 0) {
@@ -54,21 +47,20 @@ app.put('/update/:id', async (req, res) => {
     // Atualizando o item no banco de dados
     const updateQuery = `
       UPDATE metro.extintores SET 
-      patrimonio = $1, 
-      num_equip = $2, 
-      tipo = $3, 
-      capacidade = $4, 
-      fabricante = $5, 
-      prox_ret = $6, 
-      data_insp = $7, 
-      prox_rec = $8, 
-      nao_conf = $9, 
-      id_local = $10, 
-      observacao = $11
+      num_equip = $1, 
+      tipo = $2, 
+      capacidade = $3, 
+      fabricante = $4, 
+      prox_ret = $5, 
+      data_insp = $6, 
+      prox_rec = $7, 
+      nao_conf = $8, 
+      id_local = $9, 
+      observacao = $10 
+      WHERE patrimonio = $11
     `;
 
     const values = [
-      updatedData.patrimonio,
       updatedData.num_equip,
       updatedData.tipo,
       updatedData.capacidade,
@@ -79,6 +71,7 @@ app.put('/update/:id', async (req, res) => {
       updatedData.nao_conf,
       updatedData.id_local,
       updatedData.observacao,
+      updatedData.patrimonio, 
     ];
 
     const result = await pool.query(updateQuery, values);
@@ -94,8 +87,62 @@ app.put('/update/:id', async (req, res) => {
   }
 });
 
-// Endpoint para inserir um novo item
-app.post('/insert', async (req, res) => {
+let tempIdLocal; // Variável global para armazenar o id_local temporariamente
+
+// Função para gerar um id_local aleatório
+const generateUniqueId = async () => {
+  const minId = 1; // Defina o valor mínimo para o id_local
+  const maxId = 99999; // Defina o valor máximo para o id_local
+  let uniqueId;
+
+  do {
+    uniqueId = Math.floor(Math.random() * (maxId - minId + 1)) + minId; // Gera um número aleatório
+    const checkQuery = 'SELECT * FROM metro.localizacoes WHERE id_local = $1';
+    const checkValues = [uniqueId];
+    const checkResult = await pool.query(checkQuery, checkValues);
+    
+  } while (checkResult.rowCount > 0); // Continue gerando até encontrar um único id_local
+
+  return uniqueId;
+};
+
+// Endpoint para inserir uma nova localização
+app.post('/insertlocal', async (req, res) => {
+  const newItem = req.body; // Dados enviados no corpo da requisição
+
+  try {
+    // Gerar um id_local único
+    tempIdLocal = await generateUniqueId(); // Armazena o id_local temporariamente
+
+    // Inserindo o novo item na tabela localizacoes
+    const locationQuery = `
+      INSERT INTO metro.localizacoes (
+        id_local, setor, area, gerencia, predio, local, observacoes
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+    `;
+
+    const locationValues = [
+      tempIdLocal, // Usando o id_local gerado
+      newItem.setor,
+      newItem.localizacao.area,
+      newItem.localizacao.gerencia,
+      newItem.localizacao.predio,
+      newItem.localizacao.local,
+      newItem.localizacao.observacoes
+    ];
+
+    console.log('Valores para localizacoes:', locationValues); // Adicionando log para depuração
+
+    await pool.query(locationQuery, locationValues);
+    res.status(201).json({ message: 'Localização inserida com sucesso' });
+  } catch (error) {
+    console.error('Erro ao inserir localização:', error);
+    res.status(500).json({ message: 'Erro ao inserir localização' });
+  }
+});
+
+// Endpoint para inserir um novo extintor
+app.post('/insertextintor', async (req, res) => {
   const newItem = req.body; // Dados enviados no corpo da requisição
 
   try {
@@ -108,7 +155,6 @@ app.post('/insert', async (req, res) => {
       return res.status(400).json({ message: 'Patrimônio já existe, escolha um valor diferente.' });
     }
 
-    // Inserindo o novo item no banco de dados
     const insertQuery = `
       INSERT INTO metro.extintores (
         patrimonio, num_equip, tipo, capacidade, fabricante, prox_ret, 
@@ -126,16 +172,36 @@ app.post('/insert', async (req, res) => {
       newItem.data_insp,
       newItem.prox_rec,
       newItem.nao_conf,
-      newItem.id_local,
+      tempIdLocal, // Usando o id_local gerado anteriormente
       newItem.observacao,
     ];
 
-    await pool.query(insertQuery, values);
+    console.log('Valores para extintores:', values); // Adicionando log para depuração
 
-    res.status(201).json({ message: 'Item inserido com sucesso' });
+    await pool.query(insertQuery, values);
+    res.status(201).json({ message: 'Extintor inserido com sucesso' });
   } catch (error) {
-    console.error('Erro ao inserir item:', error);
-    res.status(500).json({ message: 'Erro ao inserir item' });
+    console.error('Erro ao inserir extintor:', error);
+    res.status(500).json({ message: 'Erro ao inserir extintor' });
+  }
+});
+
+// Endpoint para obter um item pelo patrimônio
+app.get('/extintor', async (req, res) => {
+  const { patrimonio } = req.query; // Patrimônio do item a ser consultado
+
+  try {
+    const result = await pool.query('SELECT * FROM metro.extintores WHERE patrimonio = $1', [patrimonio]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'Extintor não encontrado' });
+    }
+
+    // Retornar o extintor encontrado
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Erro ao consultar extintor:', error);
+    res.status(500).json({ message: 'Erro ao consultar extintor' });
   }
 });
 
@@ -149,13 +215,12 @@ app.delete('/delete', async (req, res) => {
     if (result.rowCount === 0) {
       return res.status(404).json({ message: 'Extintor não encontrado' });
     }
-
-    res.json({ message: 'Extintor excluído com sucesso' });
   } catch (error) {
     console.error('Erro ao excluir extintor:', error);
     res.status(500).json({ message: 'Erro ao excluir extintor' });
   }
 });
+
 
 // Inicia o servidor
 app.listen(3002, () => {

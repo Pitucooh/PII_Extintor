@@ -1,7 +1,7 @@
 // src/Tela_Inicial
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Tela_Inicial.css';
+import './css/Tela_Inicial.css';
 
 const Tela_Inicial = () => {
   const navigate = useNavigate();
