@@ -22,19 +22,25 @@ const Tela_Inicial = () => {
           <p>Identificação</p>
         </div>
       </div>
-      <div className="content">
+      <div className="title-modal">
         <h3>Escolha seu tipo de usuário</h3>
+      </div>
+
+    
+      <div className="role-selection-modal">
         <div className="role-selection">
           <button onClick={() => handleRoleSelection('admin')}>Administrador</button>
           <button onClick={() => handleRoleSelection('operador')}>Operador</button>
           <button onClick={() => handleRoleSelection('leitura')}>Apenas leitura</button>
-        </div>
-        <p className="info-text">
+
+          <p className="info-text">
           Ao escolher um tipo de usuário, você verá apenas seu perfil (privativo). A visualização não
           terá funcionalidades reais de modificação.
         </p>
+        </div>
       </div>
-    </div>
+        
+      </div>
   );
 };
 

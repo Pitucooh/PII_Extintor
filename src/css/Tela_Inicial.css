@@ -1,7 +1,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  /*background: url('/src/css/imagens.jfif') no-repeat center center fixed;*/
+  /* background: url('/src/css/imagens.jfif') no-repeat center center fixed; */
   background-size: cover;
 }
 
@@ -10,11 +10,12 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - 80px); 
+  height: calc(100vh - 80px);
   padding-top: 80px;
   color: #fff;
 }
 
+/* Header Section */
 .header {
   position: fixed;
   top: 0;
@@ -23,7 +24,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #3174AA; 
+  background-color: #3174AA;
   padding: 10px 20px;
   color: white;
   height: 80px;
@@ -31,7 +32,6 @@ body {
 }
 
 .header .logo {
-  
   background-size: contain;
   width: 50px;
   height: 50px;
@@ -49,7 +49,7 @@ body {
 }
 
 .header .company {
-  background-color: #A0522D; 
+  background-color: #A0522D;
   padding: 5px 15px;
   text-align: right;
   border-top-right-radius: 10px;
@@ -66,19 +66,30 @@ body {
   margin: 0;
 }
 
+/* Title Modal */
+.title-modal {
+  background-color: #3174AA;
+  padding: 15px 20px;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 450px;
+  margin-bottom: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
 
-.content {
-  background-color: #3174AA; 
+.title-modal h3 {
+  margin-top: 0;
+  font-size: 22px;
+  color: #fff;
+}
+
+.role-selection-modal {
+  background-color: #3174AA;
   padding: 40px;
   border-radius: 12px;
   text-align: center;
   max-width: 450px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-}
-
-.content h3 {
-  margin-top: 0;
-  font-size: 22px;
 }
 
 .role-selection {
@@ -101,10 +112,11 @@ body {
 
 .role-selection button:hover {
   background-color: #d4d4d4;
-  transform: translateY(-5px); 
+  transform: translateY(-5px);
   box-shadow: 0 4px 5px rgba(0, 0, 0, 0.74);
-  color:rgba(0, 51, 102, 0.9)
+  color: rgba(0, 51, 102, 0.9);
 }
+
 
 .info-text {
   font-size: 14px;
