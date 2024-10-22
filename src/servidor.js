@@ -18,32 +18,30 @@ const pool = new Pool({
 // Habilita CORS
 app.use(cors());
 
-// Endpoint para buscar extintores
-// app.get('/busca', async (req, res) => {
-//   const { patrimonio } = req.query; // Recebe a chave de busca por query string
-//   try {
-//     const result = await pool.query('SELECT * FROM metro.extintores WHERE patrimonio LIKE $1', [`${patrimonio}`]);
-//     console.log(result.rows); // Verifique os dados que estão sendo retornados
-//     res.json(result.rows);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send('Erro no servidor');
-//   }
-// });
+app.get('/busca', async (req, res) => {
+  const { patrimonio } = req.query; // Recebe a chave de busca por query string
+  try {
+    const result = await pool.query('SELECT * FROM metro.extintores WHERE patrimonio LIKE $1', [`${patrimonio}`]);
+    console.log(result.rows); // Verifique os dados que estão sendo retornados
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Erro no servidor');
+  }
+});
 
 // Endpoint para atualizar um extintor 
+// Endpoint para atualizar um extintor 
 app.put('/update', async (req, res) => {
-  const { updatedData } = req.body; // Patrimônio do item a ser excluído
+  const { updatedData } = req.body; 
+
+  if (!updatedData) {
+    return res.status(400).json({ message: 'Dados de atualização não fornecidos.' });
+  }
+
+  const { patrimonio } = updatedData;
+
   try {
-    // Verificar se o patrimônio já existe (exceto o que está sendo atualizado)
-    const checkQuery = 'SELECT * FROM metro.extintores WHERE patrimonio = $1 AND patrimonio != $2';
-    const checkValues = [updatedData.patrimonio, updatedData.patrimonio];
-    const checkResult = await pool.query(checkQuery, checkValues);
-
-    if (checkResult.rowCount > 0) {
-      return res.status(400).json({ message: 'Patrimônio já existe, escolha um valor diferente.' });
-    }
-
     // Atualizando o item no banco de dados
     const updateQuery = `
       UPDATE metro.extintores SET 
@@ -71,7 +69,7 @@ app.put('/update', async (req, res) => {
       updatedData.nao_conf,
       updatedData.id_local,
       updatedData.observacao,
-      updatedData.patrimonio, 
+      patrimonio, // Usando o patrimônio como chave para localizar o registro
     ];
 
     const result = await pool.query(updateQuery, values);
@@ -86,8 +84,6 @@ app.put('/update', async (req, res) => {
     res.status(500).json({ message: 'Erro ao atualizar item' });
   }
 });
-
-let tempIdLocal; // Variável global para armazenar o id_local temporariamente
 
 // Função para gerar um id_local aleatório
 const generateUniqueId = async () => {
@@ -105,6 +101,8 @@ const generateUniqueId = async () => {
 
   return uniqueId;
 };
+
+let tempIdLocal; // Variável global para armazenar o id_local temporariamente
 
 // Endpoint para inserir uma nova localização
 app.post('/insertlocal', async (req, res) => {
@@ -186,25 +184,6 @@ app.post('/insertextintor', async (req, res) => {
   }
 });
 
-// Endpoint para obter um item pelo patrimônio
-app.get('/extintor', async (req, res) => {
-  const { patrimonio } = req.query; // Patrimônio do item a ser consultado
-
-  try {
-    const result = await pool.query('SELECT * FROM metro.extintores WHERE patrimonio = $1', [patrimonio]);
-
-    if (result.rowCount === 0) {
-      return res.status(404).json({ message: 'Extintor não encontrado' });
-    }
-
-    // Retornar o extintor encontrado
-    res.status(200).json(result.rows[0]);
-  } catch (error) {
-    console.error('Erro ao consultar extintor:', error);
-    res.status(500).json({ message: 'Erro ao consultar extintor' });
-  }
-});
-
 // Endpoint para excluir um item pelo patrimônio
 app.delete('/delete', async (req, res) => {
   const { patrimonio } = req.body; // Patrimônio do item a ser excluído
@@ -220,7 +199,6 @@ app.delete('/delete', async (req, res) => {
     res.status(500).json({ message: 'Erro ao excluir extintor' });
   }
 });
-
 
 // Inicia o servidor
 app.listen(3002, () => {

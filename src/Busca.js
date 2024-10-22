@@ -75,7 +75,7 @@ const Busca = () => {
 };
 
 //EDITAR
-// Função para abrir o modal de edição
+// Função para abrir o modal
 const abrirModal = (item) => {
   setModalData(item);
 
@@ -83,18 +83,17 @@ const abrirModal = (item) => {
     title: 'Editar Extintor',
     html: (
       <form id="form-edit">
-        <input type="text" name="patrimonio" defaultValue={item.patrimonio || ''} placeholder="Patrimônio" />
-        <input type="text" name="num_equip" defaultValue={item.num_equip || ''} placeholder="Número do Equipamento" />
-        <input type="text" name="tipo" defaultValue={item.tipo || ''} placeholder="Tipo" />
-        <input type="text" name="capacidade" defaultValue={item.capacidade || ''} placeholder="Capacidade" />
-        <input type="text" name="fabricante" defaultValue={item.fabricante || ''} placeholder="Código do Fabricante" />
-        <input type="text" name="data_fabricacao" defaultValue={item.data_fabricacao || ''} placeholder="Data de Fabricação" />
-        <input type="text" name="data_validade" defaultValue={item.data_validade || ''} placeholder="Data de Validade" />
-        <input type="text" name="ultima_recarga" defaultValue={item.ultima_recarga || ''} placeholder="Última Recarga" />
-        <input type="text" name="data_insp" defaultValue={item.data_insp || ''} placeholder="Próxima Inspeção" />
-        <input type="text" name="status" defaultValue={item.status || ''} placeholder="Status" />
-        <input type="text" name="id_local" defaultValue={item.id_local || ''} placeholder="ID de Localização" />
-        <input type="text" name="observacao" defaultValue={item.observacao || ''} placeholder="Observações" />
+        <input type="text" name="num_equip" placeholder="Número do Equipamento" />
+        <input type="text" name="tipo" placeholder="Tipo" />
+        <input type="text" name="capacidade" placeholder="Capacidade" />
+        <input type="text" name="fabricante" placeholder="Código do Fabricante" />
+        <input type="text" name="data_fabricacao" placeholder="Data de Fabricação" />
+        <input type="text" name="data_validade" placeholder="Data de Validade" />
+        <input type="text" name="ultima_recarga" placeholder="Última Recarga" />
+        <input type="text" name="data_insp" placeholder="Próxima Inspeção" />
+        <input type="text" name="status" placeholder="Status" />
+        <input type="text" name="id_local" placeholder="ID de Localização" />
+        <input type="text" name="observacao" placeholder="Observações" />
       </form>
     ),
     showCancelButton: true,
@@ -107,40 +106,43 @@ const abrirModal = (item) => {
       formData.forEach((value, key) => {
         updatedData[key] = value;
       });
-      return updatedData; // Retorna os dados atualizados
+      return { updatedData }; // Retorna os dados atualizados dentro de um objeto
     },
   }).then((result) => {
     if (result.isConfirmed) {
-      const updatedData = result.value; // Aqui obtemos os dados retornados
+      const updatedData = result.value.updatedData; // Aqui obtemos os dados retornados
       handleEditSubmit(updatedData); // Chama a função com os dados atualizados
     }
   });
 };
 
-  const handleEditSubmit = async (updatedData) => {
-    try {
-      const response = await fetch(`http://localhost:3002/update`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedData),
-      });
-  
-      if (!response.ok) {
-        throw new Error('Erro ao atualizar item');
-      }
-  
-      const result = await response.json();
-      console.log('Dados atualizados:', result.message);
-  
-      setResultados(prevResultados => prevResultados.map(item => (item.patrimonio === updatedData.patrimonio ? { ...item, ...updatedData } : item))); // Use patrimonio para comparação
-      MySwal.fire('Sucesso!', 'Dados atualizados com sucesso.', 'success');
-    } catch (error) {
-      console.error('Erro ao enviar dados atualizados:', error);
-      MySwal.fire('Erro!', 'Não foi possível atualizar os dados.', 'error');
+// Função para enviar os dados atualizados
+const handleEditSubmit = async (updatedData) => {
+  try {
+    const response = await fetch(`http://localhost:3002/update`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ updatedData }), // Envia dentro de um objeto
+    });
+
+    if (!response.ok) {
+      const errorDetails = await response.json();
+      console.error('Detalhes do erro:', errorDetails);
+      throw new Error('Erro ao atualizar item');
     }
-  };  
+
+    const result = await response.json();
+    console.log('Dados atualizados:', result.message);
+
+    setResultados(prevResultados => prevResultados.map(item => (item.patrimonio === updatedData.patrimonio ? { ...item, ...updatedData } : item))); // Use patrimonio para comparação
+    MySwal.fire('Sucesso!', 'Dados atualizados com sucesso.', 'success');
+  } catch (error) {
+    console.error('Erro ao enviar dados atualizados:', error);
+    MySwal.fire('Erro!', 'Não foi possível atualizar os dados.', 'error');
+  }
+};
 
 // DELETAR
 const handleDelete = async (patrimonio) => {
