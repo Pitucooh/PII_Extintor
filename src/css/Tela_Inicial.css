@@ -1,8 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap');
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   /* background: url('/src/css/imagens.jfif') no-repeat center center fixed; */
   background-size: cover;
+  font-family: 'Josefin Sans', sans-serif;
 }
 
 .container {
@@ -23,36 +26,38 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #3174AA;
+  background-color: #3174AA; 
   padding: 10px 20px;
   color: white;
   height: 80px;
   z-index: 1000;
 }
 
-.header .logo {
-  background-size: contain;
-  width: 50px;
-  height: 50px;
-}
-
 .header .title {
   flex-grow: 1;
   text-align: left;
-  margin-left: 15px;
+  background-color: #3174AA; 
+  padding: 10px 20px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  font-family: 'Josefin Sans', sans-serif; 
+  white-space: normal; 
+  line-height: 1.4; 
 }
 
 .header .title h1 {
-  font-size: 20px;
+  font-size: 18px;
   margin: 0;
 }
 
+
 .header .company {
-  background-color: #A0522D;
-  padding: 5px 15px;
+  background-color: #A0522D; 
+  padding: 10px 20px;
   text-align: right;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
+  font-family: 'Josefin Sans', sans-serif; 
 }
 
 .header .company h2 {
@@ -65,6 +70,7 @@ body {
   margin: 0;
 }
 
+
 .title-modal {
   background-color: rgba(49, 116, 170, 0.8); 
   padding: 10px;
@@ -76,11 +82,11 @@ body {
 }
 
 .title-modal h3 {
-  margin-bottom: 0;
   font-size: 22px;
   color: #fff;
   text-align: center;
   align-items: center;
+  
 }
 
 .role-selection-modal {
@@ -108,6 +114,7 @@ body {
   width: 100%;
   max-width: 300px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+  font-family: 'Josefin Sans', sans-serif;
 }
 
 .role-selection button:hover {
@@ -124,4 +131,23 @@ body {
   margin-top: 15px;
   max-width: 700px;
   text-align: center;
+}
+
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #3174AA; 
+  color: #fff;
+  text-align: center;
+  padding: 10px 20px;
+  font-size: 14px;
+  z-index: 1000;
+  box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.footer p {
+  margin: 0;
 }

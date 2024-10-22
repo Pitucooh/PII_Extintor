@@ -39,7 +39,11 @@ const Tela_Inicial = () => {
         </p>
         </div>
       </div>
-        
+        <div className="footer">
+          <p>
+            
+          </p>
+        </div>
       </div>
   );
 };
