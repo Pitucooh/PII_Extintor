@@ -30,7 +30,41 @@ app.get('/busca', async (req, res) => {
   }
 });
 
-// Endpoint para atualizar um extintor 
+app.get('/manutencao/:id', async (req, res) => {
+  const { id } = req.params; // Recebe o ID da manutenção da URL
+  try {
+    const result = await pool.query('SELECT * FROM metro.hist_manutencao WHERE id_manutencao = $1', [id]);
+    if (result.rows.length > 0) {
+      res.json(result.rows[0]); // Retorna a primeira linha encontrada
+    } else {
+      res.status(404).json({ message: 'Manutenção não encontrada' });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Erro no servidor' });
+  }
+});
+
+app.get('/historico/:patrimonio', async (req, res) => {
+  const { patrimonio } = req.params; // Recebe o patrimonio da URL
+  debugger;
+  try {
+    const result = await pool.query(
+      'SELECT * FROM metro.hist_manutencao WHERE patrimonio = $1', 
+      [patrimonio]
+    );
+
+    if (result.rows.length > 0) {
+      res.json(result.rows); // Retorna todas as linhas encontradas
+    } else {
+      res.status(404).json({ message: 'Nenhuma manutenção encontrada para este patrimônio' });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Erro no servidor' });
+  }
+});
+
 // Endpoint para atualizar um extintor 
 app.put('/update', async (req, res) => {
   const { updatedData } = req.body; 

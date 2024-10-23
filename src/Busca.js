@@ -3,6 +3,7 @@ import QRious from 'qrious'; // Importando a biblioteca QRious para gerar QR cod
 import './css/busca.css'; // Importando o arquivo CSS para estilos
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content'; 
+import { useNavigate } from 'react-router-dom';
 
 const MySwal = withReactContent(Swal);
 
@@ -22,6 +23,8 @@ const QRCodeCanvas = ({ value }) => {
   return <canvas ref={canvasRef}></canvas>;
 };
 
+
+
 const Busca = () => {
   const [patrimonio, setPatrimonio] = useState('');
   const [resultados, setResultados] = useState([]);
@@ -40,6 +43,11 @@ const Busca = () => {
     status: '',
     observacoes: '',
   });
+
+  const navigate = useNavigate(); // Inicializa o hook
+  const handleNavigate = () => {
+    navigate('/Relatorio'); // Redireciona para outra página
+  };
 
   const [novoLocal, setNovoLocal] = useState({
     setor: '',
@@ -451,6 +459,11 @@ const handleChange = (e) => {
       />
       <button type="submit">Cadastrar Extintor</button>
     </form>
+    <div>
+      <h1>Buscar extintor por patrimônio</h1>
+      <button onClick={handleNavigate}>Relatorios</button> {/* Botão de redirecionamento */}
+      {/* Resto do seu código */}
+    </div>
     </div>
   );
 };

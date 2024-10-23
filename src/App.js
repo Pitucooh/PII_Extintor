@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Al
 import Tela_Inicial from './Tela_Inicial';
 import Login from './Login';
 import Busca from './Busca'; 
+import Relatorio from './Relatorio'; 
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
           <Route path="/" element={<Tela_Inicial/>} /> 
           <Route path="/login" element={<Login />} />
           <Route path="/busca" element={<Busca />} /> 
+          <Route path="/relatorio" element={<Relatorio />} /> 
         </Routes>
       </div>   
     </Router>
