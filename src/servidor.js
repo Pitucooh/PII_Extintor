@@ -55,7 +55,21 @@ app.get('/historico/:patrimonio', async (req, res) => {
     );
 
     if (result.rows.length > 0) {
-      res.json(result.rows); // Retorna todas as linhas encontradas
+      const historicoFormatado = result.rows.map((item) => ({
+        manutencaoId: item.id_manutencao,
+        data: new Date(item.data_manu).toLocaleDateString('pt-BR'),
+        descricao: item.desc || 'Sem descrição',
+        responsavel: item.resp,
+        observacoes: item.observacoes || 'Sem observações',
+      }));
+
+      const resposta = {
+        patrimonio,
+        totalManutencoes: historicoFormatado.length,
+        manutencoes: historicoFormatado,
+      };
+      console.log(resposta);
+      res.json(resposta);
     } else {
       res.status(404).json({ message: 'Nenhuma manutenção encontrada para este patrimônio' });
     }

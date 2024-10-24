@@ -65,13 +65,16 @@ const Relatorio = () => {
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {data && (
         <div>
-          <h3>Detalhes da Manutenção:</h3>
-          <p>ID: {data.id_manutencao}</p>
-          <p>Patrimonio: {data.patrimonio}</p>
-          <p>Data: {data.data_manu}</p>
-          <p>Descrição: {data.desc}</p>
-          <p>Responsável: {data.resp}</p>
-          <p>Observações: {data.observacoes}</p>
+          <h3>Detalhes da Manutenção de ID {data.id_manutencao}:</h3>
+          <ul>
+            <li>
+              <p>Patrimonio: {data.patrimonio}</p>
+              <p>Data: {data.data_manu}</p>
+              <p>Descrição: {data.desc}</p>
+              <p>Responsável: {data.resp}</p>
+              <p>Observações: {data.observacoes}</p>
+            </li>
+          </ul>
         </div>
       )}
 
@@ -91,16 +94,25 @@ const Relatorio = () => {
         <button type="submit">Buscar Histórico</button>
       </form>
       {error && <p>{error}</p>}
-      {historico.length > 0 && (
+      {historico ? (
+      <div>
+        <h3>Histórico de Manutenções - Patrimônio {historico.patrimonio}</h3>
+        <p>Total de Manutenções: {historico.totalManutencoes}</p>
         <ul>
-          {historico.map((item) => (
-            <li key={item.id_manutencao}>
-              {/* Exiba os detalhes da manutenção conforme necessário */}
-              {JSON.stringify(item)} {}
+          {historico.manutencoes?.map((item) => (
+            <li key={item.manutencaoId}>
+              <p><strong>ID:</strong> {item.manutencaoId}</p>
+              <p><strong>Data:</strong> {item.data}</p>
+              <p><strong>Responsável:</strong> {item.responsavel}</p>
+              <p><strong>Descrição:</strong> {item.descricao}</p>
+              <p><strong>Observações:</strong> {item.observacoes}</p>
             </li>
           ))}
         </ul>
-      )}
+      </div>
+    ) : (
+      !error && <p>Nenhum dado encontrado</p>
+    )}
     </div>
     </div>
     </div>
