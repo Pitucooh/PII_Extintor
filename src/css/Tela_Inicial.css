@@ -38,7 +38,7 @@ body::before {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #3174AA; 
+  background-color: #001789; 
   padding: 10px 20px;
   color: white;
   height: 80px;
@@ -83,7 +83,7 @@ body::before {
 
 
 .title-modal {
-  background-color: rgba(49, 116, 170, 0.65);
+  background-color: #001789;
   padding: 10px;
   border-radius: 12px;
   text-align: center;
@@ -101,7 +101,7 @@ body::before {
 
 
 .role-selection-modal {
-  background-color: #3174AA;
+  background-color: #001789;
   padding: 40px;
   border-radius: 12px;
   text-align: center;
@@ -150,7 +150,7 @@ body::before {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: #3174AA; 
+  background-color: #001789; 
   color: #fff;
   text-align: center;
   padding: 10px 20px;
