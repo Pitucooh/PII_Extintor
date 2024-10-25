@@ -15,7 +15,8 @@ const Tela_Inicial = () => {
       <div className="header">
         <div className="logo"></div>
         <div className="title">
-          <h1>Metrô SP - Gestão de equipamentos de combate a incêndio</h1>
+          <h1>Metrô SP - Gestão de equipamentos </h1>
+          <h1>de combate a incêndio</h1>
         </div>
         <div className="company">
           <h2>CPTM</h2>

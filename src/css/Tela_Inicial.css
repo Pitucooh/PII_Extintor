@@ -3,9 +3,21 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  /* background: url('/src/css/imagens.jfif') no-repeat center center fixed; */
+  background: url('https://www.portaldotransito.com.br/wp-content/uploads/2023/12/iStock-1164764932.jpg') no-repeat center center fixed; 
   background-size: cover;
   font-family: 'Josefin Sans', sans-serif;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.5); 
+  z-index: -1; 
 }
 
 .container {
@@ -36,20 +48,18 @@ body {
 .header .title {
   flex-grow: 1;
   text-align: left;
-  background-color: #3174AA; 
   padding: 10px 20px;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
-  font-family: 'Josefin Sans', sans-serif; 
-  white-space: normal; 
-  line-height: 1.4; 
+  font-family: 'Josefin Sans', sans-serif;
+  white-space: normal;
+  line-height: 1.4;
 }
 
 .header .title h1 {
-  font-size: 18px;
+  font-size: 24px;
   margin: 0;
 }
-
 
 .header .company {
   background-color: #A0522D; 
@@ -73,7 +83,7 @@ body {
 
 
 .title-modal {
-  background-color: #3174AA; 
+  background-color: rgba(49, 116, 170, 0.65);
   padding: 10px;
   border-radius: 12px;
   text-align: center;
@@ -87,8 +97,8 @@ body {
   color: #fff;
   text-align: center;
   align-items: center;
-  
 }
+
 
 .role-selection-modal {
   background-color: #3174AA;
