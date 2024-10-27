@@ -62,7 +62,7 @@ body::before {
 }
 
 .header .company {
-  background-color: #A0522D; 
+  background-color: #ffffff; 
   padding: 10px 20px;
   text-align: right;
   border-top-right-radius: 10px;
@@ -79,6 +79,12 @@ body::before {
 .header .company p {
   font-size: 14px;
   margin: 0;
+}
+
+.header .company img {
+  height: 50px; 
+  margin-right: 15px;
+  display: inline-block;
 }
 
 
@@ -144,13 +150,15 @@ body::before {
   padding: 60px; 
   border-radius: 12px;
   text-align: center;
-  width: 500px; 
-  height: 1000px;
+  width: 420px; 
+  height: 350px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
   position: absolute;
-  left: 50%;
+  left: 49%;
   transform: translate(-50%, -50%);
   z-index: -1; 
+  margin-bottom: 5%;
+  top: 500px;
 }
 
 
@@ -181,3 +189,74 @@ body::before {
   margin: 0;
 }
 
+
+#loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://j.gifs.com/L8B85p.gif') no-repeat center center fixed; 
+  display: flex;
+  background-size: cover;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 10000;
+  color: white; 
+  font-size: 24px; 
+  text-align: center;
+}
+
+#loading-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.5); 
+  z-index: -1; 
+}
+
+
+.balls {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.ball {
+  width: 20px;
+  height: 20px;
+  background-color: #001789; 
+  border-radius: 50%;
+  animation: bounce 0.6s infinite alternate;
+}
+
+
+
+.ball:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.ball:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+  to {
+    transform: translateY(-20px);
+  }
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
