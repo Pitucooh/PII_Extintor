@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "app": "^0.1.0",
+    "axios": "^1.7.7",
+    "chart.js": "^4.4.5",
     "cors": "^2.8.5",
     "express": "^4.21.0",
     "json-schema-traverse": "^1.0.0",
@@ -19,6 +21,7 @@
     "qrious": "^4.0.2",
     "randombytes": "^2.1.0",
     "react": "^18.3.1",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.2",
     "react-scripts": "^5.0.1",

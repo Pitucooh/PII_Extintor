@@ -2,10 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './css/Tela_Inicial.css';
+import logo from './assets/LOGO.jpg';
 
 const Tela_Inicial = () => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     // Simulate a loading delay of 3 seconds
@@ -43,14 +45,11 @@ const Tela_Inicial = () => {
               <h1>de combate a incêndio</h1>
             </div>
             <div className="company">
-              <img src="./css/logo.JPG" alt="Logo" />
+              <img src={logo} />
             </div>
           </div>
           <div className="title-modal">
             <h3>Escolha seu tipo de usuário</h3>
-          </div>
-
-          <div className="light-blue-modal">
           </div>
 
           <div className="role-selection-modal">
@@ -66,9 +65,6 @@ const Tela_Inicial = () => {
                 terá funcionalidades reais de modificação.
               </p>
             </div>
-          </div>
-
-          <div className="light-blue-modal">
           </div>
 
           <footer style={{

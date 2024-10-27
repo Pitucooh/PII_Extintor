@@ -18,6 +18,18 @@ const pool = new Pool({
 // Habilita CORS
 app.use(cors());
 
+// Rota 1: Equipamentos por area
+app.get('/equipamentos-por-regiao', async (req, res) => {
+  try {
+    const query = `SELECT area, COUNT(*) AS total FROM metro.localizacoes GROUP BY area;`;
+    const result = await pool.query(query);
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Erro ao buscar dados');
+  }
+});
+
 app.get('/busca', async (req, res) => {
   const { patrimonio } = req.query; // Recebe a chave de busca por query string
   try {

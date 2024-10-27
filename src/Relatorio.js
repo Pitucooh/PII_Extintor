@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import EquipamentosPorRegiao from './graphs/EquipamentosPorRegiao.js';
 
 const Relatorio = () => {
   const [id, setId] = useState('');
@@ -13,7 +14,7 @@ const Relatorio = () => {
     setError(''); 
   
     try {
-      const response = await fetch(`http://localhost:3002/manutencao/${id}`);
+      const response = await fetch(`http://localhost:3000/manutencao/${id}`);
       console.log(response); 
       if (!response.ok) {
         throw new Error('Registro não encontrado');
@@ -46,6 +47,7 @@ const Relatorio = () => {
 
   return (
     <div>
+      <EquipamentosPorRegiao/>
       <h1>Extintores por Manutenção</h1>
       <form onSubmit={(e) => {
         handle_Manut_Ext(e);
@@ -115,6 +117,7 @@ const Relatorio = () => {
     )}
     </div>
     </div>
+    
     </div>
   );
 };
