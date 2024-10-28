@@ -1,6 +1,6 @@
 # Projeto Integrador Interdisciplinar: EXTINTOR METRO
 
-Projeto  desenvolvido pela Equipe WePink para o [Metrô de São Paulo](https://www.metro.sp.gov.br/), no [Instituto Mauá de Tecnologia](https://maua.br/). Consiste em um aplicativo web e móvel destinado à consulta e manutenção de extintores nas dependências do metrô. A solução visa melhorar o sistema atual de monitoramento e garantir a segurança dos equipamentos em todas as áreas da rede metroviária.
+Projeto  desenvolvido para o [Metrô de São Paulo](https://www.metro.sp.gov.br/), no [Instituto Mauá de Tecnologia](https://maua.br/). Consiste em um aplicativo web e móvel destinado à consulta e manutenção de extintores nas dependências do metrô. A solução visa melhorar o sistema atual de monitoramento e garantir a segurança dos equipamentos em todas as áreas da rede metroviária.
 
 # Funções
 
