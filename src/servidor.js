@@ -18,10 +18,24 @@ const pool = new Pool({
 // Habilita CORS
 app.use(cors());
 
+
+
 // Rota 1: Equipamentos por area
 app.get('/equipamentos-por-regiao', async (req, res) => {
   try {
-    const query = `SELECT area, COUNT(*) AS total FROM metro.localizacoes GROUP BY area;`;
+    const query = `SELECT area, COUNT(*) AS total FROM metro.localizacoes GROUP BY area ORDER BY area ASC;`;
+    const result = await pool.query(query);
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Erro ao buscar dados');
+  }
+});
+
+// Rota 1: validade dos equipamentos por ano
+app.get('/validade-equipamentos', async (req, res) => {
+  try {
+    const query = `SELECT COALESCE(prox_ret::text, 'Validade Desconhecida') as validade, COUNT(*) as total FROM metro.extintores GROUP BY validade ORDER BY validade ASC;`;
     const result = await pool.query(query);
     res.json(result.rows);
   } catch (err) {

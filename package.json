@@ -12,6 +12,7 @@
     "app": "^0.1.0",
     "axios": "^1.7.7",
     "chart.js": "^4.4.5",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "cors": "^2.8.5",
     "express": "^4.21.0",
     "json-schema-traverse": "^1.0.0",

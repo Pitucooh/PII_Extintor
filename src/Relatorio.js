@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import EquipamentosPorRegiao from './graphs/EquipamentosPorRegiao.js';
+import ValidadeEquipamento from './graphs/ValidadeEquipamento.js';
 
 const Relatorio = () => {
   const [id, setId] = useState('');
@@ -47,7 +48,6 @@ const Relatorio = () => {
 
   return (
     <div>
-      <EquipamentosPorRegiao/>
       <h1>Extintores por Manutenção</h1>
       <form onSubmit={(e) => {
         handle_Manut_Ext(e);
@@ -117,7 +117,8 @@ const Relatorio = () => {
     )}
     </div>
     </div>
-    
+    <EquipamentosPorRegiao/>
+    <ValidadeEquipamento/>
     </div>
   );
 };
