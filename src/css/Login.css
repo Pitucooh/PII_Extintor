@@ -1,0 +1,88 @@
+.login-container {
+    background-color: rgba(5, 7, 140, 0.8);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    margin: auto;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .login-container h2 {
+    font-size: 24px;
+    color: #f8f8f8;
+    margin-bottom: 20px;
+    font-family: 'Josefin Sans', sans-serif;
+  }
+  
+  .login-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .login-container label {
+    color: #ffffff;
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-family: 'Josefin Sans', sans-serif;
+    text-align: left;
+    width: 100%;
+    max-width: 100%;
+    border-top: 10px;
+  }
+  
+  .login-container input[type="text"],
+  .login-container input[type="password"] {
+    width: 100%;
+    max-width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    font-family: 'Josefin Sans', sans-serif;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+  }
+  
+  .login-container input[type="text"]:focus,
+  .login-container input[type="password"]:focus {
+    border-color: #a3a3a3;
+  }
+  
+  .login-container button {
+    background-color: #D9D9D9;
+    color: #000000;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    max-width: 300px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    font-family: 'Josefin Sans', sans-serif;
+    border-top: 15px;
+  }
+  
+  .login-container button:hover {
+    background-color: #003580;
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  }
+  
+  .login-container .info-text {
+    font-size: 14px;
+    color: #001789;
+    margin-top: 15px;
+    max-width: 700px;
+    text-align: center;
+  }
+  
