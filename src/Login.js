@@ -55,9 +55,12 @@ const Tela_Inicial = () => {
             </div>
           </div>
 
+          <div className="title-modal">
+            <h3>Login de usuário</h3>
+          </div>
           
           <div className="login-container">
-            <h2>Login</h2>
+            <h2>Insira seus dados</h2>
             <form onSubmit={handleLogin}>
               <div>
                 <label>Número de Registro:</label>
