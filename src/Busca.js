@@ -380,8 +380,7 @@ const abrirModalCadastro = () => {
 return (
   <div>
     <h1>Buscar extintor por patrimônio</h1>
-    <p>Seu papel: {role}</p>
-    
+        
     {/* Formulário para buscar extintores */}
     <form id="formBusca" onSubmit={handleSubmit}>
       <input

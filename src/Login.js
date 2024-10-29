@@ -11,8 +11,6 @@ const Tela_Inicial = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const role = new URLSearchParams(location.search).get('role');
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -21,15 +19,41 @@ const Tela_Inicial = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     if (registrationNumber && password) {
-      localStorage.setItem('role', role);
-      navigate(`/busca?role=${role}`);
+      const role = new URLSearchParams(location.search).get('role');
+      try {
+        const response = await fetch(`http://localhost:3002/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            n_registro: registrationNumber, // Usar CPF como número de registro
+            cpf: password,
+            role, // Envia o papel na requisição
+          }),
+        });
+  
+        const data = await response.json();
+  
+        if (response.ok) {
+          // Armazenar o role do usuário no localStorage
+          localStorage.setItem('role', data.user.status);
+          // Redirecionar para a página de busca
+          navigate(`/busca?role=${data.user.status}`);
+        } else {
+          alert(data.message || 'Erro ao realizar login.');
+        }
+      } catch (error) {
+        console.error('Erro ao fazer login:', error);
+        alert('Erro no servidor. Tente novamente mais tarde.');
+      }
     } else {
       alert("Por favor, insira o número de registro e a senha válidos.");
     }
-  };
+  };  
 
   return (
     <div className="container">
@@ -72,7 +96,7 @@ const Tela_Inicial = () => {
                 />
               </div>
               <div>
-                <label>CPF:</label>
+                <label>Senha:</label>
                 <input
                   type="password"
                   value={password}

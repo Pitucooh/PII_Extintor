@@ -18,8 +18,6 @@ const pool = new Pool({
 // Habilita CORS
 app.use(cors());
 
-
-
 // Rota 1: Equipamentos por area
 app.get('/equipamentos-por-regiao', async (req, res) => {
   try {
@@ -62,6 +60,44 @@ app.get('/busca', async (req, res) => {
     res.status(500).send('Erro no servidor');
   }
 });
+
+
+app.post('/login', async (req, res) => {
+  const { cpf, n_registro, role } = req.body; // Recebe CPF, número de registro e papel do corpo da requisição
+
+  try {
+    // Consulta ao banco de dados
+    const result = await pool.query(
+      `SELECT * FROM metro.usuarios WHERE n_registro = $1 AND cpf = $2`,
+      [n_registro, cpf]
+    );
+
+    if (result.rows.length > 0) {
+      const user = result.rows[0];
+
+      // Verifica se o papel solicitado é consistente com o status do usuário
+      if (user.status === 'A' && role === 'admin') {
+        console.log('Usuário autenticado como admin:', user);
+        return res.status(200).json({ message: 'Login bem-sucedido como administrador', user });
+      } else if (user.status === 'O' && role === 'operador') {
+        console.log('Usuário autenticado como operador:', user);
+        return res.status(200).json({ message: 'Login bem-sucedido como operador', user });
+      } else if (user.status === 'L' && role === 'leitura') {
+        console.log('Usuário autenticado como leitor:', user);
+        return res.status(200).json({ message: 'Login bem-sucedido como leitor', user });
+      } else {
+        return res.status(403).json({ message: 'Acesso negado: papel não correspondente ao status do usuário.' });
+      }
+    } else {
+      // Credenciais inválidas
+      return res.status(401).json({ message: 'Credenciais inválidas' });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Erro no servidor');
+  }
+});
+
 
 app.get('/predio', async (req, res) => {
   const { predio } = req.query; // Recebe a chave de busca por query string

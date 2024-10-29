@@ -21,7 +21,7 @@ const Tela_Inicial = () => {
   const handleRoleSelection = (role) => {
     navigate(`/login?role=${role}`);
   };
-
+  
   return (
     <div className="container">
       {isLoading && (
