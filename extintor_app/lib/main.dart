@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget { //widget configura layout
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   void handleRoleSelection(String role) { //recebe a selecao do usuario
     print('Função selecionada: $role'); //testar o botao
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget { //widget configura layout
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Exntintor App'),
+          title: const Text('Exntintor App'),
         ),
         body: Center(
           child: Column(
@@ -29,16 +29,16 @@ class MyApp extends StatelessWidget { //widget configura layout
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white
                 ),
-                child: Text('ADMIN'),
+                child: const Text('ADMIN'),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               ElevatedButton(
                 onPressed: () => handleRoleSelection('operador'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white
                 ),
-                child: Text('OPERADOR'),
+                child: const Text('OPERADOR'),
               ),
               GestureDetector(
                 onTap: () {
