@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget { //widget configura layout
     print('Função selecionada: $role'); //testar o botao
   }
 
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -38,6 +39,17 @@ class MyApp extends StatelessWidget { //widget configura layout
                   foregroundColor: Colors.white
                 ),
                 child: Text('OPERADOR'),
+              ),
+              GestureDetector(
+                onTap: () {
+                  // Ação ao clicar na imagem
+                  print('Imagem como botão clicada!');
+                },
+                child: Image.asset(
+                  'pii_extintor/src/assets/cameraScan.png', // Caminho da imagem
+                  width: 100, // Largura do botão
+                  height: 100, // Altura do botão
+                ),
               ),
             ],
           ),
