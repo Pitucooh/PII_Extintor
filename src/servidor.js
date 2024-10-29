@@ -21,7 +21,7 @@ app.use(cors());
 // Rota 1: Equipamentos por area
 app.get('/equipamentos-por-regiao', async (req, res) => {
   try {
-    const query = `SELECT area, COUNT(*) AS total FROM metro.localizacoes GROUP BY area ORDER BY area ASC;`;
+    const query = `SELECT predio, COUNT(*) AS total FROM metro.localizacoes GROUP BY predio ORDER BY predio ASC;`;
     const result = await pool.query(query);
     res.json(result.rows);
   } catch (err) {

@@ -8,12 +8,11 @@ import {
   BarElement,
   Title,
   Tooltip,
-  Legend,
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels'; 
 
 // Registrar módulos necessários
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartDataLabels);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, ChartDataLabels);
 
 const ValidadeEquipamento = () => {
   const [dados, setDados] = useState({ labels: [], datasets: [] });
@@ -32,15 +31,32 @@ const ValidadeEquipamento = () => {
               label: 'Equipamentos por Região',
               data: valores,
               backgroundColor: [
-                'rgba(11, 19, 84)',
-                'rgba(20, 34, 152)',
-                'rgba(22, 91, 170)',
-                'rgba(80, 0, 106)',
-                'rgba(161, 85, 185)',
-                'rgba(239, 144, 208)',
-                'rgba(255, 113, 162)',
+                'rgba(11, 19, 84, 0.8)',
+                'rgba(20, 34, 152, 0.8)',
+                'rgba(22, 91, 170, 0.8)',
+                'rgba(80, 0, 106, 0.8)',
+                'rgba(161, 85, 185, 0.8)',
+                'rgba(239, 144, 208, 0.8)',
+                'rgba(255, 113, 162, 0.8)',
               ],
-              borderColor: 'white',
+              hoverBackgroundColor:[
+                'rgba(11, 19, 84, 1)',
+                'rgba(20, 34, 152, 1)',
+                'rgba(22, 91, 170, 1)',
+                'rgba(80, 0, 106, 1)',
+                'rgba(161, 85, 185, 1)',
+                'rgba(239, 144, 208, 1)',
+                'rgba(255, 113, 162, 1)',
+              ],
+              borderColor: [
+                'rgba(11, 19, 84, 0.8)',
+                'rgba(20, 34, 152, 0.8)',
+                'rgba(22, 91, 170, 0.8)',
+                'rgba(80, 0, 106, 0.8)',
+                'rgba(161, 85, 185, 0.8)',
+                'rgba(239, 144, 208, 0.8)',
+                'rgba(255, 113, 162, 0.8)',
+              ],
               borderWidth: 1,
             },
           ],
@@ -50,13 +66,16 @@ const ValidadeEquipamento = () => {
   }, []);
 
   const options = {
+    indexAxis: 'x',
     responsive: true,
     plugins: {
+      legend: { display: false },
       datalabels: {
         color: 'white', // Cor do texto
         font: { size: 14 }, // Estilização do texto
         formatter: (value, context) => value, // Exibir o valor correspondente
         anchor: 'center', // Centralizar o texto dentro da fatia
+        tooltip: { enabled: true }, // Exibir tooltip
       },
     },
   };

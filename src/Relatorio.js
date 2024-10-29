@@ -15,7 +15,7 @@ const Relatorio = () => {
     setError(''); 
   
     try {
-      const response = await fetch(`http://localhost:3000/manutencao/${id}`);
+      const response = await fetch(`http://localhost:3002/manutencao/${id}`);
       console.log(response); 
       if (!response.ok) {
         throw new Error('Registro não encontrado');
@@ -117,6 +117,7 @@ const Relatorio = () => {
     )}
     </div>
     </div>
+    <div></div>
     <EquipamentosPorRegiao/>
     <ValidadeEquipamento/>
     </div>
