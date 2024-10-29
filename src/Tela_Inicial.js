@@ -26,7 +26,7 @@ const Tela_Inicial = () => {
     <div className="container">
       {isLoading && (
         <div id="loading-screen">
-          <p>Estamos carregando a tela de login...</p>
+          <p>Em breve você escolherá seu tipo de usuário...</p>
           <div className="balls">
             <div className="ball"></div>
             <div className="ball"></div>
