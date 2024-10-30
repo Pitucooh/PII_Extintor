@@ -77,8 +77,8 @@
   }
   
   .login-container button {
-    background-color: #D9D9D9;
-    color: #000000;
+    background-color: #001789;
+    color: #ffffff;
     padding: 12px 24px;
     font-size: 16px;
     font-weight: bold;
@@ -94,10 +94,10 @@
   }
   
   .login-container button:hover {
-    background-color: #d4d4d4;
+    background-color: #001789;
     transform: translateY(-5px);
     box-shadow: 0 4px 5px rgba(0, 0, 0, 0.74);
-    color: rgba(0, 51, 102, 0.9);
+    color: rgba(255, 255, 255, 0.9);
   }
   
   .login-container .info-text {

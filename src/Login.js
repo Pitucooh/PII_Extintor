@@ -84,10 +84,9 @@ const Tela_Inicial = () => {
           </div>
           
           <div className="login-container">
-            
             <form onSubmit={handleLogin}>
               <div>
-        
+                
                 <input
                   type="text"
                   value={registrationNumber}
