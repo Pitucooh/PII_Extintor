@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './css/Login.css';
 import logo from './assets/LOGO.jpg';
+import inputImage from './assets/user.png'; 
+
 
 const Tela_Inicial = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -102,6 +104,7 @@ const Tela_Inicial = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
+                <img src={user} alt="Input Icon" className="input-icon" />
               </div>
               <button type="submit">Entrar</button>
             </form>

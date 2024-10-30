@@ -111,3 +111,14 @@
     margin-bottom: 50px;
   }
   
+  .input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px; 
+  }
+  
+  .input-icon {
+    width: 30px; 
+    height: 30px; 
+    margin-left: 10px; 
+  }
