@@ -434,10 +434,10 @@ return (
             )}
             {!item.message && (
               <>
-                {(role === 'admin' || role === 'operador') && (
+                {(role === 'A' || role === 'O') && (
                   <button onClick={() => abrirModalEdicao(item)}>Editar</button>
                 )}
-                {role === 'admin' && (
+                {role === 'A' && (
                   <button onClick={() => handleDelete(item.patrimonio)}>Excluir</button>
                 )}
                 {item.num_equip && <QRCodeCanvas value={item.num_equip} />}
@@ -447,7 +447,7 @@ return (
         ))}
       </div>
       
-      {(role === 'admin' || role === 'operador') && (
+      {(role === 'A' || role === 'O') && (
         <button onClick={abrirModalCadastro}>Cadastrar Novo Extintor</button>
       )}
       <div>

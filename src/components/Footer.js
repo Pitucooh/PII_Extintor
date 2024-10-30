@@ -10,7 +10,7 @@ const Footer = () => {
         textAlign: 'center',
         padding: '0px 20px',
         fontSize: '14px',
-        position: 'fixed',
+        position: 'flex',
         bottom: 0,
         left: 0,
         right: 0,
