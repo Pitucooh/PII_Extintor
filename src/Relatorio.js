@@ -96,13 +96,14 @@ const Relatorio = () => {
         </form>
 
         {error && <p>{error}</p>}
-        {historico && historico.length > 0 ? (
+        {historico && historico.manutencoes && historico.manutencoes.length > 0 ? (
           <div>
-            <h3>Histórico de Manutenções - Patrimônio {historico.patrimonio}</h3>
-            <p>Total de Manutenções: {historico.totalManutencoes}</p>
+            <h2>Histórico de Manutenções - Patrimônio {historico.patrimonio}</h2>
+            <h3>Total de Manutenções: {historico.manutencoes.length}</h3>  
             <ul>
               {historico.manutencoes.map((item) => (
                 <li key={item.manutencaoId}>
+                  
                   <p><strong>ID:</strong> {item.manutencaoId}</p>
                   <p><strong>Data:</strong> {item.data}</p>
                   <p><strong>Responsável:</strong> {item.responsavel}</p>

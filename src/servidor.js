@@ -42,6 +42,7 @@ app.get('/historico/:patrimonio', async (req, res) => {
     );
     if (result.rows.length > 0) {
       const historicoFormatado = result.rows.map((item) => ({
+        patrimonio: item.patrimonio,
         manutencaoId: item.id_manutencao,
         data: new Date(item.data_manu).toLocaleDateString('pt-BR'),
         descricao: item.desc || 'Sem descrição',
