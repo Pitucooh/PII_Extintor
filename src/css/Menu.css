@@ -10,18 +10,18 @@
     position: relative;
     z-index: 1;
   }
-  
+
   .title-modal {
     background-color: #ffffff80;
-    padding: 10px;
-    border-radius: 12px;
+    padding: 1px;
+    border-radius: 0px;
     text-align: center;
     width: 505px;
-    margin-top: 0; 
+    margin-top: 20px; 
     margin-bottom: 20px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-    position: absolute;
-    top: 80px; 
+    position: relative;
+
   }
   
   .login-container h2 {

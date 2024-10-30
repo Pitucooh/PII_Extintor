@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './css/Login.css';
 import logo from './assets/LOGO.jpg';
-import inputImage from './assets/user.png'; 
+import user from './assets/user.png'; 
 
 
 const Tela_Inicial = () => {
@@ -43,8 +43,8 @@ const Tela_Inicial = () => {
         if (response.ok) {
           // Armazenar o role do usuário no localStorage
           localStorage.setItem('role', data.user.status);
-          // Redirecionar para a página de busca
-          navigate(`/busca?role=${data.user.status}`);
+          // Redirecionar para a página do menu
+          navigate(`/menu?role=${data.user.status}`);
         } else {
           alert(data.message || 'Erro ao realizar login.');
         }
@@ -88,7 +88,7 @@ const Tela_Inicial = () => {
           <div className="login-container">
             <form onSubmit={handleLogin}>
               <div>
-                
+
                 <input
                   type="text"
                   value={registrationNumber}

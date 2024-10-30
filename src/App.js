@@ -4,6 +4,7 @@ import Tela_Inicial from './Tela_Inicial';
 import Login from './Login';
 import Busca from './Busca'; 
 import Relatorio from './Relatorio'; 
+import Menu from './Menu';
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/busca" element={<Busca />} /> 
           <Route path="/relatorio" element={<Relatorio />} /> 
+          <Route path="/menu" element={<Menu />} />
         </Routes>
       </div>   
     </Router>
