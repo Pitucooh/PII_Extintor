@@ -11,19 +11,6 @@
     z-index: 1;
     
   }
-
-  .title-modal {
-    background-color: #ffffff80;
-    padding: 10px;
-    border-radius: 12px;
-    text-align: center;
-    width: 505px;
-    margin-top: 0; 
-    margin-bottom: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-    position: absolute;
-    top: 80px; 
-  }
   
   .login-container h2 {
     font-size: 24px;

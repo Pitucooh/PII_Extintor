@@ -5,10 +5,10 @@
     display: flex;
     position: fixed;
     width: 100%;
-    justify-content: flex-start; /* Alinha ao início */
+    justify-content: flex-start;
     top: 100px;
     padding-left: 100px;
-    z-index: 10; /* Garante que a navbar esteja acima de outros elementos */
+    z-index: 10;
   }
   
   .navbar ul {
@@ -34,24 +34,4 @@
   .navbar a:hover {
     background-color: #0000001e;
     text-decoration: underline;
-  }
-  
-  .title-modal {
-    background-color: #ffffff80;
-    padding: 10px;
-    border-radius: 12px;
-    text-align: center;
-    width: 505px;
-    margin: 0 auto; /* Centraliza horizontalmente */
-    margin-top: 20px; /* Espaço acima do título */
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-    position: relative; /* Muda para relative */
-    transform: translateX(-50%); /* Ajusta a posição para centralizar */
-}
-  
-  .title-modal h3 {
-    font-size: 22px;
-    color: #000000;
-    text-align: center;
-    align-items: center;
   }

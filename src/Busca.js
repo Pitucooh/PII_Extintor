@@ -381,13 +381,15 @@ const abrirModalCadastro = () => {
 };
     
 return (
-  <div className="container">
-      <Header></Header>
-      <Navbar></Navbar>
+  <div className="layout">
+    <Header></Header>
+    <Navbar></Navbar>
+    <div className='modal-wrapper' style={{paddingTop: '150px'}}> 
       <div className="title-modal">
         <h3>Equipamentos</h3>
       </div>
-      <div>
+    </div>
+    <div className='container'>
       <h1>Buscar extintor por patrimônio</h1>
           
       {/* Formulário para buscar extintores */}
@@ -448,60 +450,60 @@ return (
       {(role === 'admin' || role === 'operador') && (
         <button onClick={abrirModalCadastro}>Cadastrar Novo Extintor</button>
       )}
-    <div>
-      <h1>Buscar localização por prédio</h1>
-        <form id="formBuscaLocal" onSubmit={handleBuscaLocalizacao}>
-          <input
-            type="text"
-            id="predio"
-            placeholder="Digite o prédio"
-            value={predio}
-            onChange={(e) => setPredio(e.target.value)}
-            required
-          />
-          <button type="submit">Buscar</button>
-        </form>
-            {/* Resultados da busca por patrimônio */}
-            <div id="resultadosPredio">
-              {resultadosPredio.length > 0 ? (
-                resultadosPredio[0].message ? (
-                  <p>{resultadosPredio[0].message}</p>
-                ) : (
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Id_Local</th>
-                        <th>Setor</th>
-                        <th>Área</th>
-                        <th>Gerência</th>
-                        <th>Prédio</th>
-                        <th>Local</th>
-                        <th>Observações</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {resultadosPredio.map((item, index) => (
-                        <tr key={index} onClick={() => abrirEdicaoLocal(item)}>
-                          <td>{item.id_local || 'Indisponível'}</td>
-                          <td>{item.setor || 'Indisponível'}</td>
-                          <td>{item.area || 'Indisponível'}</td>
-                          <td>{item.gerencia || 'Indisponível'}</td>
-                          <td>{item.predio || 'Indisponível'}</td>
-                          <td>{item.local || 'Indisponível'}</td>
-                          <td>{item.observacoes || 'Indisponível'}</td>
+      <div>
+        <h1>Buscar localização por prédio</h1>
+          <form id="formBuscaLocal" onSubmit={handleBuscaLocalizacao}>
+            <input
+              type="text"
+              id="predio"
+              placeholder="Digite o prédio"
+              value={predio}
+              onChange={(e) => setPredio(e.target.value)}
+              required
+            />
+            <button type="submit">Buscar</button>
+          </form>
+              {/* Resultados da busca por patrimônio */}
+              <div id="resultadosPredio">
+                {resultadosPredio.length > 0 ? (
+                  resultadosPredio[0].message ? (
+                    <p>{resultadosPredio[0].message}</p>
+                  ) : (
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Id_Local</th>
+                          <th>Setor</th>
+                          <th>Área</th>
+                          <th>Gerência</th>
+                          <th>Prédio</th>
+                          <th>Local</th>
+                          <th>Observações</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                )
-              ) : null}
-            </div>
-      </div>
+                      </thead>
+                      <tbody>
+                        {resultadosPredio.map((item, index) => (
+                          <tr key={index} onClick={() => abrirEdicaoLocal(item)}>
+                            <td>{item.id_local || 'Indisponível'}</td>
+                            <td>{item.setor || 'Indisponível'}</td>
+                            <td>{item.area || 'Indisponível'}</td>
+                            <td>{item.gerencia || 'Indisponível'}</td>
+                            <td>{item.predio || 'Indisponível'}</td>
+                            <td>{item.local || 'Indisponível'}</td>
+                            <td>{item.observacoes || 'Indisponível'}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )
+                ) : null}
+              </div>
+        </div>
 
         {/* Resultados da busca por localizações */}
   
         <button onClick={handleNavigate}>Relatórios</button> {/* Botão de redirecionamento */}
-  </div>
+      </div>
       <Footer></Footer>
     </div>
   );

@@ -4,6 +4,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import './css/Login.css';
 import logo from './assets/LOGO.jpg';
 import user from './assets/user.png'; 
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 
 const Tela_Inicial = () => {
@@ -16,7 +18,7 @@ const Tela_Inicial = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 3000);
+    }, 1);
 
     return () => clearTimeout(timer);
   }, []);
@@ -58,7 +60,7 @@ const Tela_Inicial = () => {
   };  
 
   return (
-    <div className="container">
+    <div className="layout">
       {isLoading ? (
         <div id="loading-screen">
           <p>Carregando...</p>
@@ -70,64 +72,40 @@ const Tela_Inicial = () => {
         </div>
       ) : (
         <>
-          <div className="header">
-            <div className="logo"></div>
-            <div className="title">
-              <h1>Metrô SP - Gestão de Equipamentos</h1>
-              <h1>de Combate a Incêndio</h1>
-            </div>
-            <div className="company">
-              <img src={logo} alt="Logo" />
+          <Header></Header>
+          <div className="modal-wrapper">
+            <div className="title-modal">
+              <h3>Login de usuário</h3>
             </div>
           </div>
+          <div className="container">
+            <div className="login-container">
+              <form onSubmit={handleLogin}>
+                <div>
 
-          <div className="title-modal">
-            <h3>Login de usuário</h3>
+                  <input
+                    type="text"
+                    value={registrationNumber}
+                    onChange={(e) => setRegistrationNumber(e.target.value)}
+                    required
+                  />
+                </div>
+                <div>
+                  
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                  <img src={user} alt="Input Icon" className="input-icon" />
+                </div>
+                <button type="submit">Entrar</button>
+              </form>
+            </div>
+
+            <Footer></Footer>
           </div>
-          
-          <div className="login-container">
-            <form onSubmit={handleLogin}>
-              <div>
-
-                <input
-                  type="text"
-                  value={registrationNumber}
-                  onChange={(e) => setRegistrationNumber(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <img src={user} alt="Input Icon" className="input-icon" />
-              </div>
-              <button type="submit">Entrar</button>
-            </form>
-          </div>
-
-          <footer style={{
-            backgroundColor: '#878787',
-            color: '#fff',
-            textAlign: 'center',
-            padding: '10px 20px',
-            fontSize: '14px',
-            position: 'fixed',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            boxShadow: '0px -2px 10px rgba(0, 0, 0, 0.3)',
-            zIndex: 1000
-          }}>
-            <p>&copy; 2024 - Todos os direitos reservados.</p>
-            <p>
-              Contato: <a href="#" style={{ color: '#fff', textDecoration: 'underline' }}>metrocptm.com</a>
-            </p>
-          </footer>
         </>
       )}
     </div>

@@ -22,9 +22,17 @@ const Menu = () => {
   }, []);
 
   return (
-    <div className="container">
+    <div className="layout">
       <Header></Header>
       <Navbar></Navbar>
+      <div className='modal-wrapper' style={{paddingTop: '150px'}}> 
+        <div className="title-modal">
+          <h3>Menu</h3>
+        </div>
+      </div>
+      <div className="container">
+        <h1>PlaceHolder</h1>
+      </div>
       <Footer></Footer>
     </div>
   );

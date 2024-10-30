@@ -42,13 +42,15 @@ const Relatorio = () => {
   };
 
   return (
-    <div className="container">
+    <div className="layout">
       <Header />
       <Navbar />
-      <div className="title-modal">
-          <h3>Relatórios</h3>
+      <div className='modal-wrapper' style={{paddingTop: '150px'}}> 
+        <div className="title-modal">
+            <h3>Relatórios</h3>
+        </div>
       </div>
-      <main className="content">
+      <div className="container">
         <h1>Extintores por Manutenção</h1>
         <form onSubmit={handle_Manut_Ext}>
           <label>
@@ -116,7 +118,7 @@ const Relatorio = () => {
 
         <EquipamentosPorRegiao />
         <ValidadeEquipamento />
-      </main>
+      </div>
       <Footer />
     </div>
   );

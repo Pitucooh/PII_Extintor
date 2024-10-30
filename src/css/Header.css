@@ -1,6 +1,5 @@
-/* src/css/Header.css */
 .header {
-  position: fixed; /* Mantém a header fixa no topo */
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -12,11 +11,6 @@
   color: white;
   height: 80px;
   z-index: 1000;
-}
-
-/* Adiciona margem ao conteúdo principal para que não fique sob a header */
-body {
-  margin-top: 80px; /* Altura da header para evitar sobreposição */
 }
 
 .header .title {
@@ -42,6 +36,7 @@ body {
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
   font-family: 'Josefin Sans', sans-serif; 
+  
 }
 
 .header .company h2 {

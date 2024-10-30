@@ -22,9 +22,6 @@ const Navbar = () => {
           </li>
         </ul>
       </nav>
-      <div className="title-modal">
-        <h3>Menu</h3>
-      </div>
     </div>
   );
 };
