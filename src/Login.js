@@ -84,10 +84,10 @@ const Tela_Inicial = () => {
           </div>
           
           <div className="login-container">
-            <h2>Insira seus dados</h2>
+            
             <form onSubmit={handleLogin}>
               <div>
-                <label>Número de Registro:</label>
+        
                 <input
                   type="text"
                   value={registrationNumber}
@@ -96,7 +96,7 @@ const Tela_Inicial = () => {
                 />
               </div>
               <div>
-                <label>Senha:</label>
+                
                 <input
                   type="password"
                   value={password}
