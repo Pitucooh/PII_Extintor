@@ -12,6 +12,7 @@ const Tela_Inicial = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [registrationNumber, setRegistrationNumber] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState(''); // Centralize os erros em uma variável
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -23,41 +24,52 @@ const Tela_Inicial = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  const validateCPF = (cpf) => {
+    const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
+    return cpfRegex.test(cpf);
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (registrationNumber && password) {
-      const role = new URLSearchParams(location.search).get('role');
-      try {
-        const response = await fetch(`http://localhost:3002/login`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            n_registro: registrationNumber, // Usar CPF como número de registro
-            cpf: password,
-            role, // Envia o papel na requisição
-          }),
-        });
-  
-        const data = await response.json();
-  
-        if (response.ok) {
-          // Armazenar o role do usuário no localStorage
-          localStorage.setItem('role', data.user.status);
-          // Redirecionar para a página do menu
-          navigate(`/menu?role=${data.user.status}`);
-        } else {
-          alert(data.message || 'Erro ao realizar login.');
-        }
-      } catch (error) {
-        console.error('Erro ao fazer login:', error);
-        alert('Erro no servidor. Tente novamente mais tarde.');
-      }
-    } else {
-      alert("Por favor, insira o número de registro e a senha válidos.");
+    setErrorMessage(''); // Limpe a mensagem de erro antes de adicionar novas
+
+    // Validar o formato do CPF
+    if (!validateCPF(password)) {
+      setErrorMessage('CPF inválido. Use o formato xxx.xxx.xxx-xx.');
+      return;
     }
-  };  
+
+    // Se o CPF estiver no formato correto, prossegue com a requisição
+    const role = new URLSearchParams(location.search).get('role');
+    try {
+      const response = await fetch(`http://localhost:3002/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          n_registro: registrationNumber,
+          cpf: password,
+          role,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+
+        localStorage.setItem('role', data.user.status);
+          // Redirecionar para a página do menu
+        navigate(`/menu?role=${data.user.status}`);
+      } else {
+        // Exibir erro de credenciais inválidas
+        setErrorMessage(data.message || 'Credenciais inválidas.');
+      }
+    } catch (error) {
+      console.error('Erro ao fazer login:', error);
+      setErrorMessage('Erro no servidor. Tente novamente mais tarde.');
+    }
+  };
 
   return (
     <div className="layout">
@@ -100,6 +112,9 @@ const Tela_Inicial = () => {
                   />
                   <img src={user} alt="Input Icon" className="input-icon" />
                 </div>
+
+                {errorMessage && <p className="error">{errorMessage}</p>}
+
                 <button type="submit">Entrar</button>
               </form>
             </div>
