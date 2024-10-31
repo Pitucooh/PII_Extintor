@@ -474,7 +474,7 @@ return (
                 {role === 'A' && (
                   <button onClick={() => handleDelete(item.patrimonio)}>Excluir</button>
                 )}
-                {item.num_equip && <QRCodeCanvas value={item.num_equip} />}
+                {item.num_equip && <QRCodeCanvas value={item.patrimonio} />}
               </>
             )}
           </div>
