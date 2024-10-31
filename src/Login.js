@@ -1,4 +1,3 @@
-// src/Tela_Inicial
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './css/Login.css';
@@ -11,13 +10,14 @@ const Tela_Inicial = () => {
   const [registrationNumber, setRegistrationNumber] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false); // estado para controlar o modal
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000); // 1 segundo de espera para simular o carregamento
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -33,6 +33,7 @@ const Tela_Inicial = () => {
 
     if (!validateCPF(password)) {
       setErrorMessage('CPF inválido. Use o formato xxx.xxx.xxx-xx.');
+      setShowErrorModal(true);
       return;
     }
 
@@ -57,11 +58,18 @@ const Tela_Inicial = () => {
         navigate(`/menu?role=${data.user.status}`);
       } else {
         setErrorMessage(data.message || 'Credenciais inválidas.');
+        setShowErrorModal(true); // exibe o modal
       }
     } catch (error) {
       console.error('Erro ao fazer login:', error);
       setErrorMessage('Erro no servidor. Tente novamente mais tarde.');
+      setShowErrorModal(true); // exibe o modal
     }
+  };
+
+  const closeModal = () => {
+    setShowErrorModal(false);
+    setErrorMessage('');
   };
 
   return (
@@ -111,13 +119,22 @@ const Tela_Inicial = () => {
                       required
                     />
                   </div>
-                  {errorMessage && <p className="error">{errorMessage}</p>}
                   <button type="submit">Entrar</button>
                 </form>
               </div>
             </div>
           </div>
           <Footer />
+          
+          {showErrorModal && (
+            <div className="error-modal">
+              <div className="modal-content">
+                <span className="close-button" onClick={closeModal}>&times;</span>
+                <p>{errorMessage }</p>
+                <button onClick={closeModal} className="retry-button">Tentar novamente</button>
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>
