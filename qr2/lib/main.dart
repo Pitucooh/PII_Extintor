@@ -52,6 +52,11 @@ class _QRViewExampleState extends State<QRViewExample> {
                   children: [
                     Text('Resultado do QR Code: $qrText'),
                     SizedBox(height: 10),
+                    Text(
+                      'Resposta da API: $apiResponse',
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 20),
                     if (showApiResponseButton)
                       ElevatedButton(
                         onPressed: () {
@@ -140,42 +145,77 @@ class _QRViewExampleState extends State<QRViewExample> {
   }
 }
 
-class ApiResponseScreen extends StatelessWidget {
+class ApiResponseScreen extends StatefulWidget {
   final String apiResponse;
 
   ApiResponseScreen(this.apiResponse);
 
-  String prettyJson(String jsonString) {
+  @override
+  _ApiResponseScreenState createState() => _ApiResponseScreenState();
+}
+
+class _ApiResponseScreenState extends State<ApiResponseScreen> {
+  Map<String, TextEditingController> controllers = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeControllers();
+  }
+
+  void _initializeControllers() {
     try {
-      final jsonObject = jsonDecode(jsonString);
-      final prettyString =
-          const JsonEncoder.withIndent('  ').convert(jsonObject);
-      return prettyString;
+      final dataList = jsonDecode(widget.apiResponse);
+      if (dataList is List && dataList.isNotEmpty) {
+        final data = dataList[0] as Map<String, dynamic>;
+        data.forEach((key, value) {
+          controllers[key] = TextEditingController(text: value?.toString());
+        });
+      }
     } catch (e) {
-      // Caso o JSON esteja inválido, apenas retorna a string original.
-      return jsonString;
+      print("Erro ao processar JSON: $e");
     }
+  }
+
+  @override
+  void dispose() {
+    controllers.forEach((key, controller) {
+      controller.dispose();
+    });
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Detalhes da Resposta')),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              ...controllers.entries.map((entry) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: TextField(
+                    controller: entry.value,
+                    decoration: InputDecoration(
+                      labelText: entry.key,
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                );
+              }).toList(),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  // Logica para modificar ainda será implementada
+                  print(
+                      "Modificações feitas: ${controllers.values.map((e) => e.text).toList()}");
+                },
+                child: Text('Modificar'),
               ),
-              child: Text(
-                prettyJson(apiResponse),
-                style: TextStyle(fontSize: 14, fontFamily: 'Courier'),
-              ),
-            ),
+            ],
           ),
         ),
       ),
