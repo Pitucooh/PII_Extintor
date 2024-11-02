@@ -1,6 +1,6 @@
 /* src/css/Navbar.css */
 .navbar {
-    background-color: #ffffff;
+    background-color: #fafafa;
     padding: 20px 20px;
     display: flex;
     position: fixed;
@@ -9,6 +9,7 @@
     top: 100px;
     padding-left: 100px;
     z-index: 10;
+    align-items: center;
   }
   
   .navbar ul {
@@ -17,10 +18,12 @@
     gap: 0px; /* Espaço entre os itens */
     margin: 0;
     padding: 0;
+    align-items: center;
   }
   
   .navbar li {
     display: inline;
+    align-items: center;
   }
   
   .navbar a {
@@ -29,6 +32,7 @@
     text-decoration: none;
     font-size: 18px;
     padding: 20px;
+    
   }
   
   .navbar a:hover {
