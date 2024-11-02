@@ -66,7 +66,30 @@ app.get('/historico/:patrimonio', async (req, res) => {
   }
 });
 
-  
+app.get('/api/relatorios', async (req, res) => {
+  const { type } = req.query;
+
+  let query;
+  switch (type) {
+    case 'validadeNoAno':
+      query = `SELECT * FROM metro.extintores WHERE prox_ret = EXTRACT(YEAR FROM CURRENT_DATE);`;
+      break;
+    case 'naoConformidades':
+      query = `SELECT * FROM metro.extintores WHERE nao_conf IS NOT NULL;`;
+      break;
+    default:
+      return res.status(400).send('Tipo de relatório inválido.');
+  }
+
+  try {
+    const result = await pool.query(query);
+    res.json(result.rows);  // Retorna os dados sem formatação, já que o frontend de relatórios pode lidar com isso.
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).send('Erro no servidor');
+  }
+});
+
 
 app.get('/api/graficos', async (req, res) => {
   const { type } = req.query;
@@ -76,12 +99,18 @@ app.get('/api/graficos', async (req, res) => {
     case 'validadePorAno':
       query = `SELECT COALESCE(prox_ret::text, 'Validade Desconhecida') as validade, count(*) as quantidade FROM metro.extintores GROUP BY validade ORDER BY validade ASC;`;
         break;
-    case 'tipoPorArea':
+    case 'totalPorTipo':
+      query = `SELECT tipo, COUNT(*) AS total FROM metro.extintores GROUP BY tipo;`;
+        break;
+    case 'totalPorPredio':
       query = `SELECT predio, COUNT(*) AS total FROM metro.localizacoes GROUP BY predio ORDER BY predio ASC;`;
+        break;
+    case 'validadeNoAno':
+      query = `SELECT tipo, COUNT(*) as total FROM metro.extintores WHERE prox_ret = EXTRACT(YEAR FROM CURRENT_DATE) GROUP BY tipo;`
         break;
     case 'contagemPorFabricante':
-      query = `SELECT predio, COUNT(*) AS total FROM metro.localizacoes GROUP BY predio ORDER BY predio ASC;`;
-        break;
+      query = `SELECT fabricante, COUNT(*) AS quantidade FROM metro.extintores GROUP BY fabricante;`;
+      break;
     default:
       return res.status(400).send('Tipo de gráfico inválido.');
   }

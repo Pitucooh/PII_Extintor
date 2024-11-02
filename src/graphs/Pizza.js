@@ -22,7 +22,10 @@ const Pizza = ({ data, title }) => {
         'rgba(80, 0, 106, 0.8)',
         'rgba(161, 85, 185, 0.8)',
         'rgba(239, 144, 208, 0.8)',
-        'rgba(255, 113, 162, 0.8)'
+        'rgba(255, 113, 162, 0.8)',
+        'rgba(201, 213, 181, 0.8)',
+        'rgba(226, 235, 152, 0.8)',
+        'rgba(12, 22, 24, 0.8)'
       ],
       hoverBackgroundColor:[
         'rgba(11, 19, 84, 1)',
@@ -32,6 +35,9 @@ const Pizza = ({ data, title }) => {
         'rgba(161, 85, 185, 1)',
         'rgba(239, 144, 208, 1)',
         'rgba(255, 113, 162, 1)',
+        'rgba(201, 213, 181, 1)',
+        'rgba(226, 235, 152, 1)',
+        'rgba(12, 22, 24, 1)'
       ],
       borderColor: [
         'rgba(11, 19, 84, 1)',
@@ -41,6 +47,9 @@ const Pizza = ({ data, title }) => {
         'rgba(161, 85, 185, 1)',
         'rgba(239, 144, 208, 1)',
         'rgba(255, 113, 162, 1)',
+        'rgba(201, 213, 181, 1)',
+        'rgba(226, 235, 152, 1)',
+        'rgba(12, 22, 24, 1)'
       ],
       borderWidth: 1
     }]
@@ -53,16 +62,6 @@ const Pizza = ({ data, title }) => {
         indexAxis: 'x',
         responsive: true,
         plugins: {
-          title: {
-            display: true,
-            text: title, // Usa o título passado como propriedade
-            font: {
-              size: 20,
-              family: 'Arial',
-              weight: 'bold',
-            },
-            color: 'rgba(0, 0, 0, 0.8)',
-          },
           legend: {
             labels: {
               color: 'rgba(0, 0, 0, 1)', 
