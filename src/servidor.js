@@ -68,7 +68,38 @@ app.get('/historico/:patrimonio', async (req, res) => {
 
   
 
-// Rota 1: Equipamentos por area
+app.get('/api/graficos', async (req, res) => {
+  const { type } = req.query;
+
+  let query;
+  switch (type) {
+    case 'validadePorAno':
+      query = `SELECT COALESCE(prox_ret::text, 'Validade Desconhecida') as validade, count(*) as quantidade FROM metro.extintores GROUP BY validade ORDER BY validade ASC;`;
+        break;
+    case 'tipoPorArea':
+      query = `SELECT predio, COUNT(*) AS total FROM metro.localizacoes GROUP BY predio ORDER BY predio ASC;`;
+        break;
+    case 'contagemPorFabricante':
+      query = `SELECT predio, COUNT(*) AS total FROM metro.localizacoes GROUP BY predio ORDER BY predio ASC;`;
+        break;
+    default:
+      return res.status(400).send('Tipo de gráfico inválido.');
+  }
+
+  try {
+    const result = await pool.query(query);
+    const labels = result.rows.map(row => Object.values(row)[0]);
+    const values = result.rows.map(row => Object.values(row)[1]);
+
+    res.json({ labels, values });
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).send('Erro no servidor');
+  }
+});
+
+
+// Rota 1: Equipamentos por predio
 app.get('/equipamentos-por-regiao', async (req, res) => {
   try {
     const query = `SELECT predio, COUNT(*) AS total FROM metro.localizacoes GROUP BY predio ORDER BY predio ASC;`;
@@ -80,7 +111,7 @@ app.get('/equipamentos-por-regiao', async (req, res) => {
   }
 });
 
-// Rota 1: validade dos equipamentos por ano
+// Rota 2: Validade dos equipamentos por ano
 app.get('/validade-equipamentos', async (req, res) => {
   try {
     const query = `SELECT COALESCE(prox_ret::text, 'Validade Desconhecida') as validade, COUNT(*) as total FROM metro.extintores GROUP BY validade ORDER BY validade ASC;`;

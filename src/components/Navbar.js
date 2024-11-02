@@ -15,7 +15,7 @@ const Navbar = () => {
             <Link to="/menu">Início</Link>
           </li>
           <li>
-            <Link to={`/busca?role=${role}`}>Equipamentos</Link>
+            <Link to={`/busca?role=${role}`}>Buscas</Link>
           </li>
           <li>
             <Link>Estações</Link>
