@@ -516,8 +516,16 @@ return (
                         </tr>
                       </thead>
                       <tbody>
-                        {resultadosPredio.map((item, index) => (
-                          <tr key={index} onClick={() => abrirEdicaoLocal(item)}>
+                      {resultadosPredio.map((item, index) => (
+                        <tr
+                          key={index}
+                          onClick={() => {
+                            const role = localStorage.getItem('role');
+                            if (role === 'O' || role === 'A') {
+                              abrirEdicaoLocal(item);
+                            }                             
+                          }}
+                        >                             
                             <td>{item.id_local || 'Indisponível'}</td>
                             <td>{item.setor || 'Indisponível'}</td>
                             <td>{item.area || 'Indisponível'}</td>
@@ -533,6 +541,7 @@ return (
                 ) : null}
               </div>
         </div>
+
         <h1>Extintores por Manutenção</h1>
         <form onSubmit={handle_Manut_Ext}>
           <label>

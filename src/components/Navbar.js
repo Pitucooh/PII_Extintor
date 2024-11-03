@@ -15,7 +15,7 @@ const Navbar = () => {
             <Link to="/menu">Início</Link>
           </li>
           <li>
-            <Link to={`/busca?role=${role}`}>Buscas</Link>
+          <Link to={role ? `/busca?${role}` : '/busca'}>Buscas</Link>
           </li>
           <li>
             <Link>Estações</Link>

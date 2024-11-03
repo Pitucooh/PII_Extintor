@@ -23,7 +23,11 @@ const Tela_Inicial = () => {
   const handleRoleSelection = (role) => {
     navigate(`/login?role=${role}`);
   };
-  
+
+  const handleRoleSelectionLeitor = () => {
+    navigate(`/menu`);
+  };
+
   return (
     <div>
       {isLoading && (
@@ -56,7 +60,7 @@ const Tela_Inicial = () => {
                 <button onClick={() => handleRoleSelection('admin')}>Administrador</button>
                 <button onClick={() => handleRoleSelection('operador')}>Operador</button>
                 <h3>Visitante</h3>
-                <button onClick={() => handleRoleSelection('leitura')}>Apenas leitura</button>
+                <button onClick={() => handleRoleSelectionLeitor()}>Apenas leitura</button>
 
                 <p className="info-text">
                   Ao escolher APENAS LEITURA, você verá apenas seu perfil (privativo).

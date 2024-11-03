@@ -52,7 +52,6 @@ const Tela_Inicial = () => {
       });
 
       const data = await response.json();
-
       if (response.ok) {
         localStorage.setItem('role', data.user.status);
         navigate(`/menu?role=${data.user.status}`);
