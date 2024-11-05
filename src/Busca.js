@@ -257,9 +257,9 @@ const abrirModalEdicao = (item) => {
         <input type="text" name="fabricante" placeholder="Código do Fabricante" defaultValue={item.fabricante} />
         <input type="number" name="data_fabricacao" placeholder="Data de Fabricação" defaultValue={item.data_fabricacao} />
         <input type="text" name="data_validade" placeholder="Data de Validade" defaultValue={item.data_validade} />
-        <input type="number" name="ultima_recarga" placeholder="Última Recarga" defaultValue={item.ultima_recarga} />
+        <input type="number" name="prox_rec" placeholder="Próxima Recarga" defaultValue={item.prox_rec} />
         <input type="date" name="data_insp" placeholder="Próxima Inspeção" defaultValue={item.data_insp} />
-        <input type="text" name="status" placeholder="Status" defaultValue={item.status} />
+        <input type="text" name="status" placeholder="Status"   defaultValue={item.nao_conf || 'Funcionando'} />
         <input type="number" name="id_local" placeholder="ID de Localização" defaultValue={item.id_local} />
         <input type="text" name="observacao" placeholder="Observações do Extintor" defaultValue={item.observacao} />
         <input type="text" name="setor" placeholder="Setor" defaultValue={item.setor} />
@@ -383,7 +383,7 @@ const abrirModalCadastro = () => {
         <input type="text" name="data_validade" placeholder="Data de Validade" />
         <input type="number" name="ultima_recarga" placeholder="Última Recarga" />
         <input type="date" name="data_insp" placeholder="Próxima Inspeção" />
-        <input type="text" name="status" placeholder="Status" />
+        <input type="text" name="nao_conf" placeholder="Status" />
         <input type="number" name="id_local" placeholder="ID de Localização" />
         <input type="text" name="observacao" placeholder="Observações do Extintor" />
         <input type="text" name="setor" placeholder="Setor" />
@@ -452,10 +452,11 @@ return (
                 <div><strong>Capacidade:</strong> {item.capacidade || 'Indisponível'}</div>
                 <div><strong>Código do Fabricante:</strong> {item.fabricante || 'Indisponível'}</div>
                 <div><strong>Data de Fabricação:</strong> {item.data_fabricacao || 'Indisponível'}</div>
-                <div><strong>Data de Validade:</strong> {item.data_validade || 'Indisponível'}</div>
+                <div><strong>Data de Validade:</strong> {item.prox_ret || 'Indisponível'}</div>
                 <div><strong>Última Recarga:</strong> {item.ultima_recarga || 'Indisponível'}</div>
                 <div><strong>Próxima Inspeção:</strong> {item.data_insp || 'Indisponível'}</div>
-                <div><strong>Status:</strong> {item.status || 'Indisponível'}</div>
+                <div><strong>Proxima Recarga:</strong> {item.prox_rec || 'Indisponível'}</div>
+                <div><strong>Status:</strong> {item.nao_conf || 'Funcionando'}</div>
                 <div><strong>ID de Localização:</strong> {item.id_local || 'Indisponível'}</div>
                 <div><strong>Observações do Extintor:</strong> {item.observacao || 'Indisponível'}</div>
                 <div><strong>Setor:</strong> {item.setor || 'Indisponível'}</div>

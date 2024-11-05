@@ -1,12 +1,18 @@
-// src/Navbar.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../css/Navbar.css';
 
-
-const role = localStorage.getItem('role');
-
 const Navbar = () => {
+  const [role, setRole] = useState('');
+
+  useEffect(() => {
+    // Acessando o 'role' diretamente do localStorage
+    const storedRole = localStorage.getItem('role');
+    if (storedRole) {
+      setRole(storedRole); // Atualiza o estado com o role
+    }
+  }, []);
+
   return (
     <div>
       <nav className="navbar">
@@ -15,10 +21,11 @@ const Navbar = () => {
             <Link to="/menu">Início</Link>
           </li>
           <li>
-          <Link to={role ? `/busca?${role}` : '/busca'}>Buscas</Link>
+            {/* Passando o role como parâmetro na URL */}
+            <Link to={`/busca?role=${role}`}>Buscas</Link>
           </li>
           <li>
-            <Link>Estações</Link>
+            <Link to="/estacoes">Estações</Link>
           </li>
           <li>
             <Link to="/relatorio">Relatórios</Link>
