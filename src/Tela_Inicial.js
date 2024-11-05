@@ -12,10 +12,9 @@ const Tela_Inicial = () => {
   
 
   useEffect(() => {
-    // Simulate a loading delay of 3 seconds
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
