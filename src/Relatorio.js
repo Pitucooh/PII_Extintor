@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable'
+import html2canvas from 'html2canvas';
 import Pizza from './graphs/Pizza';
 import BarraVertical from './graphs/BarraVertical';
 import BarraHorizontal from './graphs/BarraHorizontal';
@@ -13,24 +16,76 @@ const Relatorio = () => {
   const [tituloGrafico, setTituloGrafico] = useState('');
   const [reportData, setReportData] = useState(null);
   const [columns, setColumns] = useState([]);
+  const [showExportButton, setShowExportButton] = useState(false);
 
+  const exportChartToPDF = () => {
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const chartElement = document.getElementById('chart-container');
+  
+    if (chartElement) {
+      html2canvas(chartElement, { scale: 2 }).then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const imgWidth = 180;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  
+        pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+        pdf.save('Grafico.pdf');
+      });
+    }
+  };
+  
+  const exportReportToPDF = () => {
+    const pdf = new jsPDF('landscape', 'mm', 'a4');
+    const reportElement = document.getElementById('report-container');
+  
+    if (!reportElement) return;
+  
+    // Obtendo os dados da tabela
+    const rows = Array.from(reportElement.getElementsByTagName('tr'));
+    const columns = rows[0].getElementsByTagName('th');
+  
+    // Configurando os dados para a tabela
+    const tableData = rows.slice(1).map(row => {
+      const cells = row.getElementsByTagName('td');
+      return Array.from(cells).map(cell => (cell.innerText !== '') ? cell.innerText : '-');
+    });
+  
+    // Adicionando a tabela ao PDF
+    pdf.autoTable({
+      head: [Array.from(columns).map(th => th.innerText)],
+      body: tableData,
+      margin: { top: 20, left: 10, right: 10, bottom: 10 },
+      styles: {
+        overflow: 'linebreak',
+        cellWidth: 'auto', 
+        fontSize: 10,
+        valign: 'middle',
+        halign: 'center',
+      },
+    });
+  
+    pdf.save('Relatorio.pdf');
+  };
+
+  // Função para buscar dados do relatorio
   const fetchReportData = async (type) => {
     try {
       const response = await fetch(`http://localhost:3002/api/relatorios?type=${type}`);
       const data = await response.json();
       setReportData(data);
   
-      // Define as colunas dinamicamente com base nas chaves do primeiro objeto
       if (data.length > 0) {
         setColumns(Object.keys(data[0]));
       } else {
-        setColumns([]); // Nenhuma coluna caso não haja dados
+        setColumns([]); 
       }
+      setShowExportButton(true);
     } catch (error) {
       console.error('Erro ao carregar relatório:', error);
     }
   };
-    // Função para buscar dados do gráfico
+
+  // Função para buscar dados do gráfico
   const fetchChartData = async (type, chartType) => {
     try {
         const response = await fetch(`http://localhost:3002/api/graficos?type=${type}`);
@@ -47,6 +102,7 @@ const Relatorio = () => {
             label: type,
         });
         setChartType(chartType);
+        setShowExportButton(true);
     } catch (error) {
         console.error('Erro ao carregar os dados do gráfico:', error);
     }
@@ -70,41 +126,49 @@ const Relatorio = () => {
           <button onClick={() => {setTituloGrafico('Contagem por Fabricante'); fetchChartData('contagemPorFabricante', 'barra')}}>Contagem por Fabricante</button>
           <button onClick={() => {setTituloGrafico('Validade por Ano'); fetchChartData('contagemPorFabricante', 'barraHorizontal')}}>Contagem por Fabricante</button>
 
-          <h2 style={{textAlign: 'center', color: 'black', textDecoration: 'bold'}}>{tituloGrafico}</h2>
-          {chartData && chartType === 'barra' && <BarraVertical data={chartData} />}
-          {chartData && chartType === 'pizza' && <Pizza data={chartData}/>}
-          {chartData && chartType === 'barraHorizontal' && <BarraHorizontal data={chartData} />}
+          <div id="chart-container">
+            <h2 style={{textAlign: 'center', color: 'black', textDecoration: 'bold'}}>{tituloGrafico}</h2>
+            {chartData && chartType === 'barra' && <BarraVertical data={chartData} />}
+            {chartData && chartType === 'pizza' && <Pizza data={chartData}/>}
+            {chartData && chartType === 'barraHorizontal' && <BarraHorizontal data={chartData} />}
+          </div>
+          {chartData && <button onClick={exportChartToPDF}>Exportar Gráfico para PDF</button>}
 
-          <h3>Relatórios</h3>
+        <div>
+        <h3>Relatórios</h3>
           <button onClick={() => fetchReportData('validadePorAno')}>Validade por Ano</button>
           <button onClick={() => fetchReportData('tipoPorArea')}>Tipo por Área</button>
           <button onClick={() => fetchReportData('naoConformidades')}>Não Conformidades</button>
           <button onClick={() => fetchReportData('validadeNoAno')}>Equipamentos que vencem no ano</button>
 
-          {reportData && (
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-              <thead>
-                <tr>
-                  {columns.map((column, index) => (
-                    <th key={index} style={{ border: '1px solid #000000', padding: '8px', color: '#000000' }}>
-                      {column}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {reportData.map((item, rowIndex) => (
-                  <tr key={rowIndex}>
-                    {columns.map((column, colIndex) => (
-                      <td key={colIndex} style={{ border: '1px solid #000000', padding: '8px', color: '#000000'}}>
-                        {item[column] != null ? item[column] : '-'} {/* Mostra '-' para valores nulos */}
-                      </td>
+          <div id="report-container" style={{marginTop: '15px'}}>
+            {reportData && (
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr>
+                    {columns.map((column, index) => (
+                      <th key={index} style={{ border: '1px solid #000000', padding: '8px', color: '#000000' }}>
+                        {column}
+                      </th>
                     ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                </thead>
+                <tbody>
+                  {reportData.map((item, rowIndex) => (
+                    <tr key={rowIndex}>
+                      {columns.map((column, colIndex) => (
+                        <td key={colIndex} style={{ border: '1px solid #000000', padding: '8px', color: '#000000'}}>
+                          {item[column] != null ? item[column] : '-'} 
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+          {reportData && <button onClick={exportReportToPDF}>Exportar Relatório para PDF</button>}
+        </div>
         </div>
       </div>
       <Footer />

@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "jest"
   },
   "dependencies": {
@@ -12,7 +14,10 @@
     "chartjs-plugin-datalabels": "^2.2.0",
     "cors": "^2.8.5",
     "express": "^4.21.1",
+    "html2canvas": "^1.4.1",
     "json-schema-traverse": "^1.0.0",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
     "node": "^20.18.0",
     "pg": "^8.13.1",
     "PII_Extintor": "file:",
