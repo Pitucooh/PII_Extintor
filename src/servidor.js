@@ -171,7 +171,6 @@ app.get('/busca', async (req, res) => {
   }
 });
 
-
 app.post('/login', async (req, res) => {
   const { cpf, n_registro, role } = req.body; // Recebe CPF, número de registro e papel do corpo da requisição
 
@@ -465,3 +464,6 @@ app.delete('/delete', async (req, res) => {
 app.listen(3002, () => {
   console.log('Servidor rodando na porta 3002');
 });
+
+module.exports = app;
+
