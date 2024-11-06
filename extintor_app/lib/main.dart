@@ -4,56 +4,95 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget { //widget configura layout
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  void handleRoleSelection(String role) { //recebe a selecao do usuario
-    print('Função selecionada: $role'); //testar o botao
-  }
-
-  
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Exntintor App'),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () => handleRoleSelection('admin'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white
-                ),
-                child: const Text('ADMIN'),
+    return const MaterialApp(
+      home: UserTypeScreen(),
+    );
+  }
+}
+
+class UserTypeScreen extends StatelessWidget {
+  const UserTypeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Column(
+        children: [
+          Container(
+            color: const Color(0xFF001789),
+            height: 120,
+            width: double.infinity,
+            child: Center(
+              child: Image.asset(
+                'assets/images/LOGO.jpg',
+                fit: BoxFit.contain,
+                height: 80,
               ),
-              const SizedBox(height: 15),
-              ElevatedButton(
-                onPressed: () => handleRoleSelection('operador'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white
-                ),
-                child: const Text('OPERADOR'),
-              ),
-              GestureDetector(
-                onTap: () {
-                  // Ação ao clicar na imagem
-                  print('Imagem como botão clicada!');
-                },
-                child: Image.asset(
-                  'pii_extintor/src/assets/cameraScan.png', // Caminho da imagem
-                  width: 100, // Largura do botão
-                  height: 100, // Altura do botão
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          const SizedBox(height: 60),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
+            decoration: BoxDecoration(
+              color: Colors.grey[400],
+            ),
+            child: const Text(
+              'Selecione o tipo de usuário',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          const SizedBox(height: 150),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey[300],
+                    padding: const EdgeInsets.symmetric(vertical: 25),
+                    textStyle: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero,
+                    ),
+                    minimumSize: const Size(double.infinity, 60),
+                  ),
+                  child: const Text('Administrador', style: TextStyle(color: Colors.black)),
+                ),
+                const SizedBox(height: 40),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey[300],
+                    padding: const EdgeInsets.symmetric(vertical: 25),
+                    textStyle: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero,
+                    ),
+                    minimumSize: const Size(double.infinity, 60),
+                  ),
+                  child: const Text('Operador', style: TextStyle(color: Colors.black)),
+                ),
+              ],
+            ),
+          ),
+          const Spacer(),
+          Container(
+            height: 10,
+            color: const Color(0xFF001789),
+          ),
+        ],
       ),
     );
   }

@@ -6,6 +6,8 @@ import 'dart:convert';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,6 +17,8 @@ class MyApp extends StatelessWidget {
 }
 
 class QRViewExample extends StatefulWidget {
+  const QRViewExample({super.key});
+
   @override
   State<StatefulWidget> createState() => _QRViewExampleState();
 }
@@ -30,7 +34,7 @@ class _QRViewExampleState extends State<QRViewExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('QR Code Scanner')),
+      appBar: AppBar(title: const Text('QR Code Scanner')),
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -41,7 +45,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                       key: qrKey,
                       onQRViewCreated: _onQRViewCreated,
                     )
-                  : Center(
+                  : const Center(
                       child: Text('Pressione o botão para ativar a câmera')),
             ),
             Expanded(
@@ -51,12 +55,12 @@ class _QRViewExampleState extends State<QRViewExample> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text('Resultado do QR Code: $qrText'),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                       'Resposta da API: $apiResponse',
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     if (showApiResponseButton)
                       ElevatedButton(
                         onPressed: () {
@@ -68,9 +72,9 @@ class _QRViewExampleState extends State<QRViewExample> {
                             ),
                           );
                         },
-                        child: Text('Ver Detalhes da Resposta'),
+                        child: const Text('Ver Detalhes da Resposta'),
                       ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
@@ -148,7 +152,7 @@ class _QRViewExampleState extends State<QRViewExample> {
 class ApiResponseScreen extends StatefulWidget {
   final String apiResponse;
 
-  ApiResponseScreen(this.apiResponse);
+  const ApiResponseScreen(this.apiResponse, {super.key});
 
   @override
   _ApiResponseScreenState createState() => _ApiResponseScreenState();
@@ -188,7 +192,7 @@ class _ApiResponseScreenState extends State<ApiResponseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Detalhes da Resposta')),
+      appBar: AppBar(title: const Text('Detalhes da Resposta')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -201,19 +205,19 @@ class _ApiResponseScreenState extends State<ApiResponseScreen> {
                     controller: entry.value,
                     decoration: InputDecoration(
                       labelText: entry.key,
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                 );
-              }).toList(),
-              SizedBox(height: 20),
+              }),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   // Logica para modificar ainda será implementada
                   print(
                       "Modificações feitas: ${controllers.values.map((e) => e.text).toList()}");
                 },
-                child: Text('Modificar'),
+                child: const Text('Modificar'),
               ),
             ],
           ),
