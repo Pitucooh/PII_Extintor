@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'tela_cadastro.dart';
 
 void main() {
   runApp(const MyApp());
@@ -58,7 +59,12 @@ class UserTypeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const TelaCadastro()),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey[300],
                     padding: const EdgeInsets.symmetric(vertical: 25),
@@ -72,7 +78,12 @@ class UserTypeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 40),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const TelaCadastro()),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey[300],
                     padding: const EdgeInsets.symmetric(vertical: 25),
