@@ -483,9 +483,7 @@ return (
         ))}
       </div>
 
-      {(role === 'A' || role === 'O') && (
-        <button onClick={abrirModalCadastro}>Cadastrar Novo Extintor</button>
-      )}
+      
     </div>
 
     {/* Container para busca por localização */}
@@ -618,6 +616,11 @@ return (
       )}
     </div>
   </div>
+    <div className='buttonSignUp'>
+      {(role === 'A' || role === 'O') && (
+        <button onClick={abrirModalCadastro}>Cadastrar Novo Extintor</button>
+      )}
+    </div>
   <Footer></Footer>
 </div>
 

@@ -87,9 +87,6 @@
 } */
 
 
-
-
-/* Container para busca por localização */
 .search-container{
   padding: 2rem;
   background-color: #f9f9f9;
@@ -98,6 +95,13 @@
   width: 50%;
   margin-bottom: 2%;
   margin-left: 35%;
+}
+
+.search-container h1 {
+  color: #004ba0;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 25px;
 }
 
 .containerLocal {
@@ -111,7 +115,7 @@
 }
 
 .containerLoc {
-  color: #004ba0;
+  color: #1367c7;
   text-align: center;
   margin-bottom: 1rem;
 }
@@ -136,7 +140,6 @@ th {
   background-color: #f0f0f0;
 }
 
-/* Container para busca por manutenção */
 .containerManu {
   padding: 2rem;
   background-color: #f9f9f9;
@@ -153,7 +156,7 @@ th {
   margin-bottom: 1rem;
 }
 
-/* Container para histórico de manutenções */
+
 .containerHist {
   padding: 2rem;
   background-color: #f9f9f9;
@@ -185,16 +188,16 @@ th {
 
 .container-wrapper {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  grid-template-columns: repeat(2, 1fr); 
   gap: 0.5rem; 
   padding: 2rem;
   justify-content: center;
 }
 
-/* Adjustments for smaller screens */
+
 @media (max-width: 768px) {
   .container-wrapper {
-    grid-template-columns: 1fr; /* Stack containers in one column on smaller screens */
+    grid-template-columns: 1fr;
   }
 }
 
@@ -233,7 +236,7 @@ th {
   background-color: #f0f0f0;
 }
 
-/* Título do container */
+
 .containerBuscaPatri h1,
 .containerLocal h1,
 .containerManu h1,
@@ -244,23 +247,23 @@ th {
   font-size: 1.5rem;
 }
 
-/* Títulos dos modais */
+
 .title-modal h3 {
   font-size: 2rem;
   color: #004ba0;
   text-align: center;
 }
 
-/* Estilo para os formulários dentro dos containers */
+
 form {
   display: flex;
   flex-direction: column;
-  gap: 1rem; /* Espaçamento entre os elementos */
+  gap: 1rem; 
   justify-content: center;
   align-items: center;
 }
 
-/* Estilo para inputs de texto */
+
 input[type="text"] {
   padding: 0.75rem;
   border: 1px solid #ccc;
@@ -274,7 +277,7 @@ input[type="text"]:focus {
   border-color: #004ba0;
 }
 
-/* Estilo para os botões */
+
 button {
   background-color: #004ba0;
   color: white;
@@ -285,14 +288,14 @@ button {
   font-size: 1rem;
   transition: background-color 0.3s;
   width: 50%;
-  align-self: center; /* Alinha o botão ao centro */
+  align-self: center; 
 }
 
 button:hover {
   background-color: #00327e;
 }
 
-/* Estilo para a lista de resultados dentro dos containers */
+
 #resultados, #resultadosPredio, .containerHist ul {
   margin-top: 1rem;
   padding: 0;
@@ -300,7 +303,7 @@ button:hover {
   width: 100%;
 }
 
-/* Estilo para itens de resultados */
+
 .resultado-item,
 .containerHist li {
   padding: 1rem;
@@ -331,13 +334,13 @@ th {
   background-color: #f0f0f0;
 }
 
-/* Estilo para o QRCode dentro do resultado */
+
 #resultados .resultado-item .qrcode {
   margin-top: 1rem;
   text-align: center;
 }
 
-/* Estilo para os erros dentro dos containers */
+
 .error {
   color: red;
   font-size: 1rem;
@@ -346,10 +349,10 @@ th {
 }
 
 @media (max-width: 768px) {
-  /* Ajustes no conteúdo para telas pequenas */
+ 
   input[type="text"], button {
     font-size: 14px;
-    width: 100%; /* Inputs e botões ocupam toda a largura do container */
+    width: 100%; 
   }
 
   .resultado-item, .containerHist li {
@@ -364,3 +367,80 @@ th {
     font-size: 1.25rem;
   }
 }
+
+
+input[type="text"] {
+  padding: 1rem;
+  border: 2px solid #ccc;
+  border-radius: 8px; 
+  font-size: 1rem;
+  width: 80%; 
+  transition: border-color 0.3s, box-shadow 0.3s; 
+  margin: 0.5rem 0;
+  outline: none; 
+  background-color: #f9f9f9;
+}
+
+
+input[type="text"]:focus {
+  border-color: #004ba0;
+  box-shadow: 0 0 10px rgba(0, 75, 160, 0.2); 
+  background-color: #fff;
+}
+
+input[type="text"]::placeholder {
+  color: #aaa;
+  font-style: italic; 
+  font-size: 1rem;
+}
+
+
+input[type="text"].error {
+  border-color: red; 
+  background-color: #ffe6e6; 
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.2); 
+}
+
+input[type="text"].success {
+  border-color: green; 
+  background-color: #e6ffe6; 
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.2); 
+}
+
+@media (max-width: 768px) {
+  input[type="text"] {
+    width: 100%; 
+  }
+}
+
+
+button {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  color: #fff;
+  background-image: linear-gradient(45deg, #0028ee, #001789); 
+  border: none;
+  border-radius: 8px; 
+  cursor: pointer;
+  transition: background-image 0.5s ease, transform 0.2s ease; 
+  text-transform: uppercase; 
+}
+
+
+button:hover {
+  background-image: linear-gradient(45deg, #001789,#0028ee); 
+  transform: scale(1.05); 
+}
+
+
+button:focus {
+  outline: none; 
+}
+
+
+button:disabled {
+  background-image: linear-gradient(45deg, #ccc, #ccc);
+  cursor: not-allowed;
+}
+
+
