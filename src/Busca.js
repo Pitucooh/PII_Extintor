@@ -416,17 +416,19 @@ const abrirModalCadastro = () => {
     
 return (
   <div className="layout">
-    <Header></Header>
-    <Navbar></Navbar>
-    <div className='modal-wrapper' style={{paddingTop: '150px'}}> 
-      <div className="title-modal">
-        <h3>Equipamentos</h3>
-      </div>
+  <Header></Header>
+  <Navbar></Navbar>
+
+  <div className='modal-wrapper' style={{paddingTop: '150px'}}> 
+    <div className="title-modal">
+      <h3>Equipamentos</h3>
     </div>
-    <div className='container'>
-      <h1>Buscar extintor por patrimônio</h1>
-          
-      {/* Formulário para buscar extintores */}
+  </div>
+
+  <div className='container-wrapper'>
+    {/* Container para busca por patrimônio */}
+    <div className='search-container'>
+      <h1 className='containerPatr'>Buscar extintor por patrimônio</h1>
       <form id="formBusca" onSubmit={handleSubmit}>
         <input
           type="text"
@@ -438,8 +440,7 @@ return (
         />
         <button type="submit">Buscar</button>
       </form>
-      
-      {/* Resultados da busca por patrimônio */}
+
       <div id="resultados">
         {resultados.map((item, index) => (
           <div key={index} className="resultado-item">
@@ -481,138 +482,145 @@ return (
           </div>
         ))}
       </div>
-      
+
       {(role === 'A' || role === 'O') && (
         <button onClick={abrirModalCadastro}>Cadastrar Novo Extintor</button>
       )}
-      <div>
-        <h1>Buscar localização por prédio</h1>
-          <form id="formBuscaLocal" onSubmit={handleBuscaLocalizacao}>
-            <input
-              type="text"
-              id="predio"
-              placeholder="Digite o prédio"
-              value={predio}
-              onChange={(e) => setPredio(e.target.value)}
-              required
-            />
-            <button type="submit">Buscar</button>
-          </form>
-              {/* Resultados da busca por patrimônio */}
-              <div id="resultadosPredio">
-                {resultadosPredio.length > 0 ? (
-                  resultadosPredio[0].message ? (
-                    <p>{resultadosPredio[0].message}</p>
-                  ) : (
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>Id_Local</th>
-                          <th>Setor</th>
-                          <th>Área</th>
-                          <th>Gerência</th>
-                          <th>Prédio</th>
-                          <th>Local</th>
-                          <th>Observações</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                      {resultadosPredio.map((item, index) => (
-                        <tr
-                          key={index}
-                          onClick={() => {
-                            const role = localStorage.getItem('role');
-                            if (role === 'O' || role === 'A') {
-                              abrirEdicaoLocal(item);
-                            }                             
-                          }}
-                        >                             
-                            <td>{item.id_local || 'Indisponível'}</td>
-                            <td>{item.setor || 'Indisponível'}</td>
-                            <td>{item.area || 'Indisponível'}</td>
-                            <td>{item.gerencia || 'Indisponível'}</td>
-                            <td>{item.predio || 'Indisponível'}</td>
-                            <td>{item.local || 'Indisponível'}</td>
-                            <td>{item.observacoes || 'Indisponível'}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  )
-                ) : null}
-              </div>
-        </div>
-
-        <h1>Extintores por Manutenção</h1>
-        <form onSubmit={handle_Manut_Ext}>
-          <label>
-            ID da Manutenção:
-            <input
-              type="text"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
-              required
-            />
-          </label>
-          <button type="submit">Buscar</button>
-        </form>
-
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        {data && (
-          <div>
-            <h3>Detalhes da Manutenção de ID {data.id_manutencao}:</h3>
-            <ul>
-              <li>
-                <p>Patrimônio: {data.patrimonio}</p>
-                <p>Data: {data.data_manu}</p>
-                <p>Descrição: {data.desc}</p>
-                <p>Responsável: {data.resp}</p>
-                <p>Observações: {data.observacoes}</p>
-              </li>
-            </ul>
-          </div>
-        )}
-
-        <h1>Manutenções por Extintor</h1>
-        <form onSubmit={handle_Ext_Manut}>
-          <label>
-            Patrimônio do Extintor:
-            <input
-              type="text"
-              value={patrimonio}
-              onChange={(e) => setPatrimonio(e.target.value)}
-              required
-            />
-          </label>
-          <button type="submit">Buscar Histórico</button>
-        </form>
-
-        {error && <p>{error}</p>}
-        {historico && historico.manutencoes && historico.manutencoes.length > 0 ? (
-          <div>
-            <h2>Histórico de Manutenções - Patrimônio {historico.patrimonio}</h2>
-            <h3>Total de Manutenções: {historico.manutencoes.length}</h3>  
-            <ul>
-              {historico.manutencoes.map((item) => (
-                <li key={item.manutencaoId}>
-                  
-                  <p><strong>ID:</strong> {item.manutencaoId}</p>
-                  <p><strong>Data:</strong> {item.data}</p>
-                  <p><strong>Responsável:</strong> {item.responsavel}</p>
-                  <p><strong>Descrição:</strong> {item.descricao}</p>
-                  <p><strong>Observações:</strong> {item.observacoes}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : (
-          !error && <p>Nenhum dado encontrado</p>
-        )}
-
-  
-      </div>
-      <Footer></Footer>
     </div>
+
+    {/* Container para busca por localização */}
+    <div className='containerLocal'>
+      <h1 className='containerLoc'>Buscar localização por prédio</h1>
+      <form id="formBuscaLocal" onSubmit={handleBuscaLocalizacao}>
+        <input
+          type="text"
+          id="predio"
+          placeholder="Digite o prédio"
+          value={predio}
+          onChange={(e) => setPredio(e.target.value)}
+          required
+        />
+        <button type="submit">Buscar</button>
+      </form>
+
+      <div id="resultadosPredio">
+        {resultadosPredio.length > 0 ? (
+          resultadosPredio[0].message ? (
+            <p>{resultadosPredio[0].message}</p>
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th>Id_Local</th>
+                  <th>Setor</th>
+                  <th>Área</th>
+                  <th>Gerência</th>
+                  <th>Prédio</th>
+                  <th>Local</th>
+                  <th>Observações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {resultadosPredio.map((item, index) => (
+                  <tr
+                    key={index}
+                    onClick={() => {
+                      const role = localStorage.getItem('role');
+                      if (role === 'O' || role === 'A') {
+                        abrirEdicaoLocal(item);
+                      }
+                    }}
+                  >
+                    <td>{item.id_local || 'Indisponível'}</td>
+                    <td>{item.setor || 'Indisponível'}</td>
+                    <td>{item.area || 'Indisponível'}</td>
+                    <td>{item.gerencia || 'Indisponível'}</td>
+                    <td>{item.predio || 'Indisponível'}</td>
+                    <td>{item.local || 'Indisponível'}</td>
+                    <td>{item.observacoes || 'Indisponível'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )
+        ) : null}
+      </div>
+    </div>
+
+    {/* Container para busca por manutenção */}
+    <div className='containerManu'>
+      <h1>Extintores por Manutenção</h1>
+      <form onSubmit={handle_Manut_Ext}>
+        <label>
+          ID da Manutenção:
+          <input
+            type="text"
+            value={id}
+            onChange={(e) => setId(e.target.value)}
+            required
+          />
+        </label>
+        <button type="submit">Buscar</button>
+      </form>
+
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {data && (
+        <div>
+          <h3>Detalhes da Manutenção de ID {data.id_manutencao}:</h3>
+          <ul>
+            <li>
+              <p>Patrimônio: {data.patrimonio}</p>
+              <p>Data: {data.data_manu}</p>
+              <p>Descrição: {data.desc}</p>
+              <p>Responsável: {data.resp}</p>
+              <p>Observações: {data.observacoes}</p>
+            </li>
+          </ul>
+        </div>
+      )}
+    </div>
+
+    {/* Container para histórico de manutenções */}
+    <div className='containerHist'>
+      <h1>Manutenções por Extintor</h1>
+      <form onSubmit={handle_Ext_Manut}>
+        <label>
+          Patrimônio do Extintor:
+          <input
+            type="text"
+            value={patrimonio}
+            onChange={(e) => setPatrimonio(e.target.value)}
+            required
+          />
+        </label>
+        <button type="submit">Buscar Histórico</button>
+      </form>
+
+      {error && <p>{error}</p>}
+      {historico && historico.manutencoes && historico.manutencoes.length > 0 ? (
+        <div>
+          <h2>Histórico de Manutenções - Patrimônio {historico.patrimonio}</h2>
+          <h3>Total de Manutenções: {historico.manutencoes.length}</h3>  
+          <ul>
+            {historico.manutencoes.map((item) => (
+              <li key={item.manutencaoId}>
+                <p><strong>ID:</strong> {item.manutencaoId}</p>
+                <p><strong>Data:</strong> {item.data}</p>
+                <p><strong>Responsável:</strong> {item.responsavel}</p>
+                <p><strong>Descrição:</strong> {item.descricao}</p>
+                <p><strong>Observações:</strong> {item.observacoes}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        !error && <p>Nenhum dado encontrado</p>
+      )}
+    </div>
+  </div>
+  <Footer></Footer>
+</div>
+
   );
 };
 
