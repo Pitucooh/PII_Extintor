@@ -119,7 +119,7 @@ const Tela_Inicial = () => {
                       required
                     />
                   </div>
-                  <button type="submit">Entrar</button>
+                  <button className='login-button' type="submit">Entrar</button>
                 </form>
               </div>
             </div>

@@ -424,7 +424,11 @@ return (
       <h3>Equipamentos</h3>
     </div>
   </div>
-
+  <div className='cadastrar-container'>
+      {(role === 'A' || role === 'O') && (
+        <button className='button-cadastrar' onClick={abrirModalCadastro}>Cadastrar Novo Extintor</button>
+      )}
+    </div>
   <div className='container-wrapper'>
     {/* Container para busca por patrimônio */}
     <div className='search-container'>
@@ -438,7 +442,7 @@ return (
           onChange={(e) => setPatrimonio(e.target.value)}
           required
         />
-        <button type="submit">Buscar</button>
+        <button className='button-busca' type="submit">Buscar</button>
       </form>
 
       <div id="resultados">
@@ -498,7 +502,7 @@ return (
           onChange={(e) => setPredio(e.target.value)}
           required
         />
-        <button type="submit">Buscar</button>
+        <button className='button-busca' type="submit">Buscar</button>
       </form>
 
       <div id="resultadosPredio">
@@ -550,15 +554,15 @@ return (
       <h1>Extintores por Manutenção</h1>
       <form onSubmit={handle_Manut_Ext}>
         <label>
-          ID da Manutenção:
           <input
             type="text"
             value={id}
             onChange={(e) => setId(e.target.value)}
             required
+            placeholder="Digite o ID da manutenção"
           />
         </label>
-        <button type="submit">Buscar</button>
+        <button className='button-busca' type="submit">Buscar</button>
       </form>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -583,7 +587,7 @@ return (
       <h1>Manutenções por Extintor</h1>
       <form onSubmit={handle_Ext_Manut}>
         <label>
-          Patrimônio do Extintor:
+          Patrimônio do extintor (111222333):
           <input
             type="text"
             value={patrimonio}
@@ -591,7 +595,7 @@ return (
             required
           />
         </label>
-        <button type="submit">Buscar Histórico</button>
+        <button className='button-busca' type="submit">Buscar Histórico</button>
       </form>
 
       {error && <p>{error}</p>}
@@ -616,11 +620,7 @@ return (
       )}
     </div>
   </div>
-    <div className='buttonSignUp'>
-      {(role === 'A' || role === 'O') && (
-        <button onClick={abrirModalCadastro}>Cadastrar Novo Extintor</button>
-      )}
-    </div>
+    
   <Footer></Footer>
 </div>
 
