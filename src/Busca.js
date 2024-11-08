@@ -587,7 +587,6 @@ return (
       <h1>Manutenções por Extintor</h1>
       <form onSubmit={handle_Ext_Manut}>
         <label>
-          Patrimônio do extintor (111222333):
           <input
             type="text"
             value={patrimonio}
