@@ -342,7 +342,7 @@ app.put('/update', async (req, res) => {
       updatedData.predio || null,
       updatedData.local || null,
       updatedData.observacoes || null,
-      updatedData.id_local // Aqui usamos o mesmo id_local da tabela extintores
+      updatedData.id_local 
     ];
 
     await client.query(updateQuery_2, values_2);

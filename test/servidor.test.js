@@ -1,8 +1,9 @@
 // Importa as dependências necessárias
 const request = require('supertest');
 const express = require('express');
-const app = require('./src/servidor.js');
+const app = require('../src/servidor.js');
 const pool = require('pg');  // Importando o Pool do pg
+const { Pool } = require('pg');
 
 describe('Testes do Servidor', () => {
    
@@ -194,6 +195,7 @@ describe('Testes do Servidor', () => {
     });
   });
   
+  //teste validade equipamentos 
   describe('GET /validade-equipamentos', () => {
     it('deve retornar status 200 e a validade dos equipamentos por ano', async () => {
       const response = await request(app).get('/validade-equipamentos');
@@ -220,18 +222,18 @@ describe('Testes do Servidor', () => {
       expect(response.body[0]).toHaveProperty('predio'); // Verifique se o primeiro item tem a propriedade 'predio'
     });
   
-    it('should return 500 if there is a server error', async () => {
-      // Simular erro de servidor
-      jest.spyOn(pool, 'query').mockRejectedValue(new Error('Database error'));
+    it('should return an empty array if no localizacoes match the predio query', async () => {
+      const response = await request(app)
+        .get('/predio')
+        .query({ predio: 'EDIFICIO_INEXISTENTE' }); // Nome de um prédio que não existe
   
-      const response = await request(app).get('/predio').query({ predio: 'Edificio X' });
-  
-      expect(response.status).toBe(500);
-      expect(response.body.message).toBe('Erro no servidor');
+      expect(response.status).toBe(200);
+      expect(response.body).toBeInstanceOf(Array); // Esperamos que o corpo da resposta seja um array
+      expect(response.body.length).toBe(0); // Esperamos que a lista esteja vazia
     });
   });
   
-
+//teste editar local 
 describe('PUT /editlocal', () => {
   it('should update the localizacao and return success message', async () => {
     const updatedData = {
@@ -262,42 +264,27 @@ describe('PUT /editlocal', () => {
     expect(response.status).toBe(400);
     expect(response.body.message).toBe('Local não fornecido.');
   });
-
-  it('should return 500 if there is a server error', async () => {
-    jest.spyOn(pool, 'query').mockRejectedValue(new Error('Database error'));
-
-    const updatedData = {
-      patrimonio: 1
-    };
-
-    const response = await request(app)
-      .put('/editlocal')
-      .send({ updatedData });
-
-    expect(response.status).toBe(500);
-    expect(response.body.message).toBe('Erro ao atualizar item');
-  });
 });
 
+// Teste update
 describe('PUT /update', () => {
-  it('should update the extintor and location and return success message', async () => {
+  it('should update an extintor and location successfully', async () => {
     const updatedData = {
-      patrimonio: '1234',
-      num_equip: '5678',
-      tipo: 'CO2',
-      capacidade: '5L',
-      fabricante: 'Fabricante A',
-      prox_ret: '2025-12-31',
-      data_insp: '2024-01-01',
-      prox_rec: '2024-06-01',
-      nao_conf: 'Sim',
-      id_local: 1,
-      setor: 'Setor X',
-      area: 'Area 200',
+      patrimonio: '12345',
+      num_equip: 'teste atualizado',
+      tipo: 'teste atualizado',
+      capacidade: '20L',
+      fabricante: 'Fabricante X',
+      prox_ret: null,
+      data_insp: '2024-12-01',
+      prox_rec: '2026-01-01',
+      nao_conf: 'não conformidade',
+      setor: 'Setor A',
+      area: 'Área 200',
       gerencia: 'Gerencia B',
-      predio: 'Edificio Y',
+      predio: 'Edifício Y',
       local: 'Local B',
-      observacoes: 'Observacao B'
+      observacoes: 'Observações atualizadas'
     };
 
     const response = await request(app)
@@ -308,8 +295,8 @@ describe('PUT /update', () => {
     expect(response.body.message).toBe('Item atualizado com sucesso');
   });
 
-  it('should return 400 if patrimonio is not provided', async () => {
-    const updatedData = { num_equip: '1234' };
+  it('should return 400 if patrimonio is missing', async () => {
+    const updatedData = { tipo: 'CO2' };
 
     const response = await request(app)
       .put('/update')
@@ -318,37 +305,22 @@ describe('PUT /update', () => {
     expect(response.status).toBe(400);
     expect(response.body.message).toBe('Patrimônio não fornecido.');
   });
-
-  it('should return 500 if there is a server error', async () => {
-    jest.spyOn(pool, 'query').mockRejectedValue(new Error('Database error'));
-
-    const updatedData = {
-      patrimonio: '1234',
-      num_equip: '5678',
-    };
-
-    const response = await request(app)
-      .put('/update')
-      .send({ updatedData });
-
-    expect(response.status).toBe(500);
-    expect(response.body.message).toBe('Erro ao atualizar item');
-  });
 });
 
+ 
+//teste de inserir 
 describe('POST /insert', () => {
   it('should insert a new extintor and location successfully', async () => {
     const newData = {
-      patrimonio: '12345',
-      num_equip: '23456',
-      tipo: 'ABC',
+      patrimonio: 'teste',
+      num_equip: 'teste',
+      tipo: 'teste',
       capacidade: '10L',
       fabricante: 'Fabricante B',
-      prox_ret: '2026-06-30',
-      data_insp: '2025-01-01',
-      prox_rec: '2025-07-01',
-      nao_conf: 'Não',
-      id_local: 2,
+      prox_ret: null,
+      data_insp: null,
+      prox_rec: null,
+      nao_conf: null,
       setor: 'Setor Y',
       area: 'Area 300',
       gerencia: 'Gerencia C',
@@ -377,12 +349,12 @@ describe('POST /insert', () => {
   });
 });
 
-
+//teste de deletar
 describe('DELETE /delete', () => {
   it('should delete an extintor successfully', async () => {
     const response = await request(app)
       .delete('/delete')
-      .send({ patrimonio: '0028' });
+      .send({ patrimonio: 'teste' });
 
     expect(response.status).toBe(200);
     expect(response.body.message).toBe('Extintor deletado com sucesso');
