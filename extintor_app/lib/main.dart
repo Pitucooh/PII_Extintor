@@ -69,8 +69,8 @@ class UserTypeScreen extends StatelessWidget {
                     backgroundColor: Colors.grey[300],
                     padding: const EdgeInsets.symmetric(vertical: 25),
                     textStyle: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12), // Rounded corners
                     ),
                     minimumSize: const Size(double.infinity, 60),
                   ),
@@ -88,8 +88,8 @@ class UserTypeScreen extends StatelessWidget {
                     backgroundColor: Colors.grey[300],
                     padding: const EdgeInsets.symmetric(vertical: 25),
                     textStyle: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12), // Rounded corners
                     ),
                     minimumSize: const Size(double.infinity, 60),
                   ),
