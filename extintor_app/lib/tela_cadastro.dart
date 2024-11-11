@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'tela_qrcode.dart';
 
 class TelaCadastro extends StatelessWidget {
   const TelaCadastro({super.key});
@@ -24,25 +25,39 @@ class TelaCadastro extends StatelessWidget {
           ),
           const SizedBox(height: 60),
           
+          // Grey Box with Instruction Text
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
+              decoration: BoxDecoration(
+                color: Colors.grey[400],
+              ),
+              child: const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  'Digite seu número de registro e CPF',
+                  style: TextStyle(fontSize: 24),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          
           // Grey Box with Text Fields
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: Colors.grey[400],
               ),
               child: const Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Digite seu número de registro e CPF',
-                      style: TextStyle(fontSize: 24),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 20),
                     TextField(
                       decoration: InputDecoration(
                         labelText: 'Número de Registro:',
@@ -71,7 +86,10 @@ class TelaCadastro extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    // Add your access logic here
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const TelaQRCode()),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey[300],
