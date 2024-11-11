@@ -418,7 +418,7 @@ return (
   <div className="layout">
   <Header></Header>
   <Navbar></Navbar>
-
+  
   <div className='modal-wrapper' style={{paddingTop: '150px'}}> 
     <div className="title-modal">
       <h3>Equipamentos</h3>
