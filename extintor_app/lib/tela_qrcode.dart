@@ -1,8 +1,38 @@
 import 'package:flutter/material.dart';
-import 'tela_qrcode.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-class TelaCadastro extends StatelessWidget {
-  const TelaCadastro({super.key});
+class TelaQRCode extends StatefulWidget {
+  const TelaQRCode({super.key});
+
+  @override
+  _TelaQRCodeState createState() => _TelaQRCodeState();
+}
+
+class _TelaQRCodeState extends State<TelaQRCode> {
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  QRViewController? controller;
+  bool isCameraActive = false;
+  String qrText = '';
+  String apiResponse = 'Aguardando resultado do QR Code...';
+  bool showApiResponseButton = false;
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
+
+  void _onQRViewCreated(QRViewController controller) {
+    setState(() {
+      this.controller = controller;
+    });
+    controller.scannedDataStream.listen((scanData) {
+      setState(() {
+        qrText = scanData.code;
+        // Handle the scanned QR code data
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +55,7 @@ class TelaCadastro extends StatelessWidget {
           ),
           const SizedBox(height: 60),
           
-          // Grey Box with Instruction Text
+          // Grey Box with Text
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Container(
@@ -36,7 +66,7 @@ class TelaCadastro extends StatelessWidget {
               child: const Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Text(
-                  'Digite seu número de registro e CPF',
+                  'Escaneie ou adicione um novo QR CODE',
                   style: TextStyle(fontSize: 24),
                   textAlign: TextAlign.center,
                 ),
@@ -45,38 +75,26 @@ class TelaCadastro extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           
-          // Grey Box with Text Fields
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
-              decoration: BoxDecoration(
-                color: Colors.grey[400],
-              ),
-              child: const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextField(
-                      decoration: InputDecoration(
-                        labelText: 'Número de Registro:',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    TextField(
-                      decoration: InputDecoration(
-                        labelText: 'CPF:',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ],
+          // QR Code Scanner
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(12),
                 ),
+                child: isCameraActive
+                    ? QRView(
+                        key: qrKey,
+                        onQRViewCreated: _onQRViewCreated,
+                      )
+                    : const Center(
+                        child: Text('Pressione o botão para ativar a câmera')),
               ),
             ),
           ),
-          const SizedBox(height: 150),
+          const SizedBox(height: 20),
           
           // Buttons
           Padding(
@@ -86,10 +104,9 @@ class TelaCadastro extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const TelaQRCode()),
-                    );
+                    setState(() {
+                      isCameraActive = !isCameraActive;
+                    });
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey[300],
@@ -100,7 +117,7 @@ class TelaCadastro extends StatelessWidget {
                     ),
                     minimumSize: const Size(double.infinity, 80), // Increased button size
                   ),
-                  child: const Text('Acessar', style: TextStyle(color: Colors.black)),
+                  child: const Text('Escanear', style: TextStyle(color: Colors.black)),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
