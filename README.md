@@ -6,6 +6,11 @@ Projeto  desenvolvido para o [Metrô de São Paulo](https://www.metro.sp.gov.br/
 
 Colocar aqui as funções. [**TRELLO**](https://trello.com/b/KHaxIiSC/metro-day)
 
+- Registro de manutenção de extintores de todas as linhas do metrô.
+- Gerar e imprimir QR Code para o extintor.
+- Consulta da manutenção dos extintores por meio da leitura do QR Code.
+- Editar a manutenção dos extintores.
+
 ## Como montar
 
 Usando o node.js rodar o conector com o banco de dados google e usando o npm rodar os programas etc etc...
