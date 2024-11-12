@@ -425,10 +425,13 @@ return (
     </div>
   </div>
   <div className='cadastrar-container'>
-      {(role === 'A' || role === 'O') && (
-        <button className='button-cadastrar' onClick={abrirModalCadastro}>Cadastrar Novo Extintor</button>
-      )}
-    </div>
+  {(role === 'A' || role === 'O') && (
+    <button className='button-cadastrar' onClick={abrirModalCadastro}>
+      <span className="icon">+</span>
+      <span className="button-text">Cadastrar Novo Extintor</span>
+    </button>
+  )}
+</div>
   <div className='container-wrapper'>
     {/* Container para busca por patrimônio */}
     <div className='search-container'>

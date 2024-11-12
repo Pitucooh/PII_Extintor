@@ -571,28 +571,62 @@ input::placeholder {
   }
 }
 
-.cadastrar-container .button-cadastrar {
+.cadastrar-container {
+  position: relative;
   display: flex;
-  align-items: center;
-  background-color: #00a0e3; /* Cor azul igual ao da imagem */
-  color: white;
-  border: none;
-  border-radius: 30px; /* Cantos arredondados para igualar o formato */
-  padding: 5px 12px; /* Tamanho do botão reduzido */
-  font-size: 15px; /* Fonte pequena para igualar */
+  justify-content: flex-end;
+  padding: 1rem;
+  margin-bottom: -2rem;
+  margin-top: -1rem;
+}
+
+.button-cadastrar {
+  position: relative;
+  width: 120px;
+  height: 60px;
+  border-radius: 30px; 
+  background-color: #007bff;
+  color: #ffffff;
+  font-size: 30px;
   font-weight: bold;
+  border: none;
   cursor: pointer;
-  transition: background-color 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  transition: height 0.3s ease-in-out, padding 0.3s ease-in-out;
+  overflow: hidden;
+  top: -100px; 
 }
 
-.cadastrar-container .button-cadastrar:hover {
-  background-color: #007bb5; /* Azul escuro ao passar o mouse */
+.icon {
+  font-size: 30px;
 }
 
-.cadastrar-container .button-cadastrar::before {
-  content: url('https://cdn-icons-png.flaticon.com/512/8922/8922789.png'); /* Caminho do ícone de papel e lápis */
-  display: inline-block;
-  width: 10px; /* Ajuste do tamanho do ícone */
-  height: 18px;
-  margin-right: 5px;
+.button-text {
+  font-size: 12px;
+  margin-top: 5px;
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  bottom: -200px; 
+  transition: opacity 0.3s, visibility 0.3s, bottom 0.3s ease-in-out;
+}
+
+.button-cadastrar:hover {
+  height: 100px; 
+  padding: 20px;
+}
+
+.button-cadastrar:hover .button-text {
+  opacity: 1;
+  visibility: visible;
+  bottom: 5px;
+}
+
+.button-cadastrar:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
