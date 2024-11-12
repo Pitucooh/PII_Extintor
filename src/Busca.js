@@ -37,11 +37,23 @@ const Busca = () => {
   const [dadosEditados, setDadosEditados] = useState(null);
   const [predio, setPredio] = useState(''); 
   const [resultadosPredio, setResultadosPredio] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [modalAberto, setModalAberto] = useState(false);
+  const [itemSelecionado, setItemSelecionado] = useState(null);
 
   const navigate = useNavigate(); // Inicializa o hook
   const handleNavigate = () => {
     navigate('/Relatorio'); // Redireciona para outra página
+  };
+
+  const abrirModal = (item) => {
+    console.log("Abrindo modal com item:", item); // Log para verificar conteúdo do item
+    setItemSelecionado(item);
+    setModalAberto(true);
+  };
+
+  const fecharModal = () => {
+    setModalAberto(false);
+    setItemSelecionado(null);
   };
 
   const role = localStorage.getItem('role'); // Obtendo o papel do localStorage
@@ -452,42 +464,52 @@ return (
               <p>{item.message}</p>
             ) : (
               <>
+              <div><strong>Patrimônio:</strong> {item.patrimonio || 'Indisponível'}</div>
                 <div><strong>Número do Equipamento:</strong> {item.num_equip || 'Indisponível'}</div>
-                <div><strong>Tipo:</strong> {item.tipo || 'Indisponível'}</div>
-                <div><strong>Capacidade:</strong> {item.capacidade || 'Indisponível'}</div>
-                <div><strong>Código do Fabricante:</strong> {item.fabricante || 'Indisponível'}</div>
-                <div><strong>Data de Fabricação:</strong> {item.data_fabricacao || 'Indisponível'}</div>
-                <div><strong>Data de Validade:</strong> {item.prox_ret || 'Indisponível'}</div>
-                <div><strong>Última Recarga:</strong> {item.ultima_recarga || 'Indisponível'}</div>
-                <div><strong>Próxima Inspeção:</strong> {item.data_insp || 'Indisponível'}</div>
-                <div><strong>Proxima Recarga:</strong> {item.prox_rec || 'Indisponível'}</div>
-                <div><strong>Status:</strong> {item.nao_conf || 'Funcionando'}</div>
-                <div><strong>ID de Localização:</strong> {item.id_local || 'Indisponível'}</div>
-                <div><strong>Observações do Extintor:</strong> {item.observacao || 'Indisponível'}</div>
-                <div><strong>Setor:</strong> {item.setor || 'Indisponível'}</div>
-                <div><strong>Área:</strong> {item.area || 'Indisponível'}</div>
-                <div><strong>Gerência:</strong> {item.gerencia || 'Indisponível'}</div>
-                <div><strong>Prédio:</strong> {item.predio || 'Indisponível'}</div>
-                <div><strong>Local:</strong> {item.local || 'Indisponível'}</div>
-                <div><strong>Observações da Localização:</strong> {item.observacoes || 'Indisponível'}</div>
-              </>
-            )}
-            {!item.message && (
-              <>
+                <button onClick={() => abrirModal(item)}>Ver Detalhes</button>
                 {(role === 'A' || role === 'O') && (
                   <button onClick={() => abrirModalEdicao(item)}>Editar</button>
                 )}
                 {role === 'A' && (
-                  <button onClick={() => handleDelete(item.patrimonio)}>Excluir</button>
+                  <button style={{backgroundColor: 'rgb(209, 8, 8)'}} onClick={() => handleDelete(item.patrimonio)}>Excluir</button>
                 )}
-                {item.num_equip && <QRCodeCanvas value={item.patrimonio} />}
               </>
             )}
           </div>
         ))}
       </div>
 
-      
+      {modalAberto && itemSelecionado ? (
+        <div className="modal">
+          <div className="modal-conteudo">
+            <button onClick={fecharModal}>Fechar</button>
+            <>
+              <h2>Detalhes do Equipamento</h2>
+              <p><strong>Número do Equipamento:</strong> {itemSelecionado.num_equip || 'Indisponível'}</p>
+              <p><strong>Tipo:</strong> {itemSelecionado.tipo || 'Indisponível'}</p>
+              <p><strong>Capacidade:</strong> {itemSelecionado.capacidade || 'Indisponível'}</p>
+              <p><strong>Código do Fabricante:</strong> {itemSelecionado.fabricante || 'Indisponível'}</p>
+              <p><strong>Data de Fabricação:</strong> {itemSelecionado.data_fabricacao || 'Indisponível'}</p>
+              <p><strong>Data de Validade:</strong> {itemSelecionado.prox_ret || 'Indisponível'}</p>
+              <p><strong>Última Recarga:</strong> {itemSelecionado.ultima_recarga || 'Indisponível'}</p>
+              <p><strong>Próxima Inspeção:</strong> {itemSelecionado.data_insp || 'Indisponível'}</p>
+              <p><strong>Próxima Recarga:</strong> {itemSelecionado.prox_rec || 'Indisponível'}</p>
+              <p><strong>Status:</strong> {itemSelecionado.nao_conf || 'Funcionando'}</p>
+              <p><strong>ID de Localização:</strong> {itemSelecionado.id_local || 'Indisponível'}</p>
+              <p><strong>Observações do Extintor:</strong> {itemSelecionado.observacao || 'Indisponível'}</p>
+              <p><strong>Setor:</strong> {itemSelecionado.setor || 'Indisponível'}</p>
+              <p><strong>Área:</strong> {itemSelecionado.area || 'Indisponível'}</p>
+              <p><strong>Gerência:</strong> {itemSelecionado.gerencia || 'Indisponível'}</p>
+              <p><strong>Prédio:</strong> {itemSelecionado.predio || 'Indisponível'}</p>
+              <p><strong>Local:</strong> {itemSelecionado.local || 'Indisponível'}</p>
+              <p><strong>Observações da Localização:</strong> {itemSelecionado.observacoes || 'Indisponível'}</p>
+              {itemSelecionado.num_equip && <QRCodeCanvas value={itemSelecionado.patrimonio} />}
+            </>
+          </div>
+        </div>
+      ) : (
+        modalAberto && <p>Erro: Item selecionado não encontrado.</p> // Mensagem de erro para depuração
+      )}
     </div>
 
     {/* Container para busca por localização */}
@@ -597,8 +619,8 @@ return (
         <button className='button-busca' type="submit">Buscar Histórico</button>
       </form>
 
-      {error && <p>{error}</p>}
-      {historico && historico.manutencoes && historico.manutencoes.length > 0 ? (
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {historico && historico.manutencoes && historico.manutencoes.length > 0 && (
         <div>
           <h2>Histórico de Manutenções - Patrimônio {historico.patrimonio}</h2>
           <h3>Total de Manutenções: {historico.manutencoes.length}</h3>  
@@ -614,8 +636,6 @@ return (
             ))}
           </ul>
         </div>
-      ) : (
-        !error && <p>Nenhum dado encontrado</p>
       )}
     </div>
   </div>
