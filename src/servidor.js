@@ -212,7 +212,24 @@ app.get('/predio', async (req, res) => {
   const { predio } = req.query; // Recebe a chave de busca por query string
   try {
     const result = await pool.query(
-      `SELECT * FROM metro.localizacoes WHERE predio LIKE $1`, 
+      `SELECT 
+        loc.id_local,
+        loc.predio,
+        loc.setor,
+        loc.area,
+        loc.gerencia,
+        loc.predio,
+        loc.local,
+        loc.observacoes AS observacoes_localizacao,
+        ext.patrimonio,
+        ext.num_equip,
+        ext.observacao AS observacao_extintor
+      FROM 
+        metro.localizacoes AS loc
+      JOIN 
+        metro.extintores AS ext ON loc.id_local = ext.id_local
+      WHERE 
+        loc.predio LIKE $1;`, 
       [`${predio}%`]
     );
 

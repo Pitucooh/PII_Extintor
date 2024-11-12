@@ -10,7 +10,7 @@
   padding: 10px 20px;
   color: white;
   height: 80px;
-  z-index: 1000;
+  z-index: 500;
 }
 
 .header .title {

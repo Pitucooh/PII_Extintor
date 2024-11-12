@@ -39,20 +39,26 @@ const Busca = () => {
   const [resultadosPredio, setResultadosPredio] = useState([]);
   const [modalAberto, setModalAberto] = useState(false);
   const [itemSelecionado, setItemSelecionado] = useState(null);
+  const [patrimonioManut, setPatrimonioManut] = useState('');
+  const [errormanut, setErrormanut] = useState('');
 
   const navigate = useNavigate(); // Inicializa o hook
   const handleNavigate = () => {
     navigate('/Relatorio'); // Redireciona para outra página
   };
 
-  const abrirModal = (item) => {
-    console.log("Abrindo modal com item:", item); // Log para verificar conteúdo do item
-    setItemSelecionado(item);
-    setModalAberto(true);
+  const abrirModalExtintor = (dados) => {
+    setItemSelecionado(dados);
+    setModalAberto('modalExtintor');
+  };
+
+  const abrirModalPredio = (dados) => {
+    setItemSelecionado(dados);
+    setModalAberto('modalPredio');
   };
 
   const fecharModal = () => {
-    setModalAberto(false);
+    setModalAberto(null);
     setItemSelecionado(null);
   };
 
@@ -85,8 +91,6 @@ const Busca = () => {
 
   const handleBuscaLocalizacao = async (event) => {
     event.preventDefault();
-
-    // Manipular o valor do prédio para remover espaços e tornar maiúsculas
     const predioLimpo = predio.trim().toUpperCase();
 
     try {
@@ -96,20 +100,7 @@ const Busca = () => {
       }
 
       const dados = await response.json();
-      console.log(dados); // Para verificar o que está sendo retornado
-
-      if (!Array.isArray(dados) || dados.length === 0) {
-        setResultadosPredio([{ message: 'Nenhum local encontrado' }]); // Mensagem somente se não houver dados
-      } else {
-        // Filtrar resultados usando o valor manipulado
-        const resultadosFiltrados = dados.filter(item => item.predio && item.predio.toUpperCase() === predioLimpo);
-
-        // Remove duplicatas (se necessário)
-        const resultadosUnicos = Array.from(new Set(resultadosFiltrados.map(item => item.id_local)))
-          .map(id => resultadosFiltrados.find(item => item.id_local === id));
-
-        setResultadosPredio(resultadosUnicos.length > 0 ? resultadosUnicos : [{ message: 'Nenhum local encontrado' }]);
-      }
+      setResultadosPredio(dados);
     } catch (error) {
       console.error('Erro:', error);
       setResultadosPredio([{ message: 'Erro ao buscar local' }]);
@@ -134,14 +125,16 @@ const Busca = () => {
   //--------------------------------------------------BUSCA MANUTENÇÕES POR PATRIMONIO----------------------------------------------------------------
   const handle_Ext_Manut = async (e) => {
     e.preventDefault();
-    setError('');
+    setErrormanut('');
+  
     try {
-      const response = await fetch(`http://localhost:3002/historico/${patrimonio}`);
+      const response = await fetch(`http://localhost:3002/historico/${patrimonioManut}`);
       if (!response.ok) throw new Error('Registro não encontrado');
       const results = await response.json();
+      console.log(results);
       setHistorico(results);
     } catch (err) {
-      setError(err.message);
+      setErrormanut(err.message);
       setHistorico([]);
     }
   };
@@ -285,6 +278,9 @@ const abrirModalEdicao = (item) => {
     showCancelButton: true,
     confirmButtonText: 'Salvar',
     cancelButtonText: 'Cancelar',
+    customClass: {
+      popup: 'custom-modal', // Adiciona uma classe personalizada ao modal
+    },
     preConfirm: () => {
       const form = document.getElementById('form-edit');
       const formData = new FormData(form);
@@ -443,7 +439,7 @@ return (
       <span className="button-text">Cadastrar Novo Extintor</span>
     </button>
   )}
-</div>
+  </div>
   <div className='container-wrapper'>
     {/* Container para busca por patrimônio */}
     <div className='search-container'>
@@ -467,47 +463,51 @@ return (
               <p>{item.message}</p>
             ) : (
               <>
-              <div><strong>Patrimônio:</strong> {item.patrimonio || 'Indisponível'}</div>
+                <div><strong>Patrimônio:</strong> {item.patrimonio || 'Indisponível'}</div>
                 <div><strong>Número do Equipamento:</strong> {item.num_equip || 'Indisponível'}</div>
-                <button onClick={() => abrirModal(item)}>Ver Detalhes</button>
-                {(role === 'A' || role === 'O') && (
-                  <button onClick={() => abrirModalEdicao(item)}>Editar</button>
-                )}
-                {role === 'A' && (
-                  <button style={{backgroundColor: 'rgb(209, 8, 8)'}} onClick={() => handleDelete(item.patrimonio)}>Excluir</button>
-                )}
+                <button onClick={() => abrirModalExtintor(item)}>Ver Detalhes</button>
               </>
             )}
           </div>
         ))}
       </div>
 
-      {modalAberto && itemSelecionado ? (
-        <div className="modal">
-          <div className="modal-conteudo">
-            <button onClick={fecharModal}>Fechar</button>
-            <>
-              <h2>Detalhes do Equipamento</h2>
-              <p><strong>Número do Equipamento:</strong> {itemSelecionado.num_equip || 'Indisponível'}</p>
-              <p><strong>Tipo:</strong> {itemSelecionado.tipo || 'Indisponível'}</p>
-              <p><strong>Capacidade:</strong> {itemSelecionado.capacidade || 'Indisponível'}</p>
-              <p><strong>Código do Fabricante:</strong> {itemSelecionado.fabricante || 'Indisponível'}</p>
-              <p><strong>Data de Fabricação:</strong> {itemSelecionado.data_fabricacao || 'Indisponível'}</p>
-              <p><strong>Data de Validade:</strong> {itemSelecionado.prox_ret || 'Indisponível'}</p>
-              <p><strong>Última Recarga:</strong> {itemSelecionado.ultima_recarga || 'Indisponível'}</p>
-              <p><strong>Próxima Inspeção:</strong> {itemSelecionado.data_insp || 'Indisponível'}</p>
-              <p><strong>Próxima Recarga:</strong> {itemSelecionado.prox_rec || 'Indisponível'}</p>
-              <p><strong>Status:</strong> {itemSelecionado.nao_conf || 'Funcionando'}</p>
-              <p><strong>ID de Localização:</strong> {itemSelecionado.id_local || 'Indisponível'}</p>
-              <p><strong>Observações do Extintor:</strong> {itemSelecionado.observacao || 'Indisponível'}</p>
-              <p><strong>Setor:</strong> {itemSelecionado.setor || 'Indisponível'}</p>
-              <p><strong>Área:</strong> {itemSelecionado.area || 'Indisponível'}</p>
-              <p><strong>Gerência:</strong> {itemSelecionado.gerencia || 'Indisponível'}</p>
-              <p><strong>Prédio:</strong> {itemSelecionado.predio || 'Indisponível'}</p>
-              <p><strong>Local:</strong> {itemSelecionado.local || 'Indisponível'}</p>
-              <p><strong>Observações da Localização:</strong> {itemSelecionado.observacoes || 'Indisponível'}</p>
-              {itemSelecionado.num_equip && <QRCodeCanvas value={itemSelecionado.patrimonio} />}
-            </>
+      {modalAberto === 'modalExtintor' && itemSelecionado ? (
+        <div className="modal-overlay" onClick={fecharModal}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-conteudo">
+              <button className='modal-close' style={{backgroundColor: 'rgb(209, 8, 8)'}} onClick={fecharModal}>Fechar</button>
+              <>
+                {(role === 'A' || role === 'O') && (
+                  <button onClick={() => abrirModalEdicao(itemSelecionado)}>Editar</button>
+                )}
+                <div style={{padding: '10px'}}></div>
+                <h2>Detalhes do Equipamento</h2>
+                <p><strong>Número do Equipamento:</strong> {itemSelecionado.num_equip || 'Indisponível'}</p>
+                <p><strong>Tipo:</strong> {itemSelecionado.tipo || 'Indisponível'}</p>
+                <p><strong>Capacidade:</strong> {itemSelecionado.capacidade || 'Indisponível'}</p>
+                <p><strong>Código do Fabricante:</strong> {itemSelecionado.fabricante || 'Indisponível'}</p>
+                <p><strong>Data de Fabricação:</strong> {itemSelecionado.data_fabricacao || 'Indisponível'}</p>
+                <p><strong>Data de Validade:</strong> {itemSelecionado.prox_ret || 'Indisponível'}</p>
+                <p><strong>Última Recarga:</strong> {itemSelecionado.ultima_recarga || 'Indisponível'}</p>
+                <p><strong>Próxima Inspeção:</strong> {itemSelecionado.data_insp || 'Indisponível'}</p>
+                <p><strong>Próxima Recarga:</strong> {itemSelecionado.prox_rec || 'Indisponível'}</p>
+                <p><strong>Status:</strong> {itemSelecionado.nao_conf || 'Funcionando'}</p>
+                <p><strong>ID de Localização:</strong> {itemSelecionado.id_local || 'Indisponível'}</p>
+                <p><strong>Observações do Extintor:</strong> {itemSelecionado.observacao || 'Indisponível'}</p>
+                <p><strong>Setor:</strong> {itemSelecionado.setor || 'Indisponível'}</p>
+                <p><strong>Área:</strong> {itemSelecionado.area || 'Indisponível'}</p>
+                <p><strong>Gerência:</strong> {itemSelecionado.gerencia || 'Indisponível'}</p>
+                <p><strong>Prédio:</strong> {itemSelecionado.predio || 'Indisponível'}</p>
+                <p><strong>Local:</strong> {itemSelecionado.local || 'Indisponível'}</p>
+                <p><strong>Observações da Localização:</strong> {itemSelecionado.observacoes || 'Indisponível'}</p>
+                {itemSelecionado.num_equip && <QRCodeCanvas value={itemSelecionado.patrimonio} />}
+
+                {role === 'A' && (
+                  <button style={{backgroundColor: 'rgb(209, 8, 8)'}} onClick={() => handleDelete(itemSelecionado.patrimonio)}>Excluir</button>
+                )}
+              </>
+            </div>
           </div>
         </div>
       ) : (
@@ -535,43 +535,52 @@ return (
           resultadosPredio[0].message ? (
             <p>{resultadosPredio[0].message}</p>
           ) : (
-            <table>
-              <thead>
-                <tr>
-                  <th>Id_Local</th>
-                  <th>Setor</th>
-                  <th>Área</th>
-                  <th>Gerência</th>
-                  <th>Prédio</th>
-                  <th>Local</th>
-                  <th>Observações</th>
-                </tr>
-              </thead>
-              <tbody>
-                {resultadosPredio.map((item, index) => (
-                  <tr
-                    key={index}
-                    onClick={() => {
-                      const role = localStorage.getItem('role');
-                      if (role === 'O' || role === 'A') {
-                        abrirEdicaoLocal(item);
-                      }
-                    }}
-                  >
-                    <td>{item.id_local || 'Indisponível'}</td>
-                    <td>{item.setor || 'Indisponível'}</td>
-                    <td>{item.area || 'Indisponível'}</td>
-                    <td>{item.gerencia || 'Indisponível'}</td>
-                    <td>{item.predio || 'Indisponível'}</td>
-                    <td>{item.local || 'Indisponível'}</td>
-                    <td>{item.observacoes || 'Indisponível'}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div>
+              <button onClick={() => abrirModalPredio(resultadosPredio)}>Ver Detalhes</button>
+            </div>
           )
         ) : null}
       </div>
+
+      {/* Modal */}
+      {modalAberto === 'modalPredio' && (
+      <div className="modal-overlay" onClick={fecharModal}>
+        <div className="modal" onClick={(e) => e.stopPropagation()}>
+          <button className='modal-close' style={{backgroundColor: 'rgb(209, 8, 8)'}} onClick={fecharModal}>Fechar</button>
+          <h2>Equipamentos localizados no prédio {predio}</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Patrimonio</th>
+                <th>Equipamento</th>
+                <th>Id_Local</th>
+                <th>Setor</th>
+                <th>Área</th>
+                <th>Gerência</th>
+                <th>Prédio</th>
+                <th>Local</th>
+                <th>Observações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {itemSelecionado.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.patrimonio || 'Indisponível'}</td>
+                  <td>{item.num_equip || 'Indisponível'}</td>
+                  <td>{item.id_local || 'Indisponível'}</td>
+                  <td>{item.setor || 'Indisponível'}</td>
+                  <td>{item.area || 'Indisponível'}</td>
+                  <td>{item.gerencia || 'Indisponível'}</td>
+                  <td>{item.predio || 'Indisponível'}</td>
+                  <td>{item.local || 'Indisponível'}</td>
+                  <td>{item.observacoes || 'Indisponível'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    )}
     </div>
 
     {/* Container para busca por manutenção */}
@@ -614,15 +623,15 @@ return (
         <label>
           <input
             type="text"
-            value={patrimonio}
-            onChange={(e) => setPatrimonio(e.target.value)}
+            placeholder="Digite o patrimônio do extintor"
+            value={patrimonioManut}
+            onChange={(e) => setPatrimonioManut(e.target.value)}
             required
           />
         </label>
         <button className='button-busca' type="submit">Buscar Histórico</button>
       </form>
-
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {errormanut && <p>{errormanut}</p>}
       {historico && historico.manutencoes && historico.manutencoes.length > 0 && (
         <div>
           <h2>Histórico de Manutenções - Patrimônio {historico.patrimonio}</h2>

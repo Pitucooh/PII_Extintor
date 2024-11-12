@@ -1,26 +1,124 @@
 
-.modal {
+/* Estilos do modal */
+/* Fundo escuro para sobreposição */
+.modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7); /* Fundo escurecido */
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 1000;
+  justify-content: center;
+  z-index: 1000; /* Garantir que o modal fique acima dos outros elementos */
 }
 
-.modal-conteudo {
-  background: white;
-  padding: 20px;
+/* Estilos do modal */
+.modal {
+  background-color: white;
   border-radius: 8px;
-  max-width: 500px;
-  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 90vw; /* Limite de largura do modal */
+  max-height: 80vh; /* Limite de altura do modal */
+  overflow: auto; /* Scroll automático para qualquer direção */
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 10; /* Garante que o modal fique acima de qualquer outro conteúdo */
 }
 
+.custom-modal {
+  z-index: 9999 !important; /* Garantir que o modal de edição apareça acima dos outros */
+}
+.swal2-popup {
+  z-index: 1000; /* Outros modais podem ter um z-index menor */
+}
+/* Estilos do botão de fechar */
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  width: 100px;
+  height: 40px;
+  cursor: pointer;
+  z-index: 10001; /* Garantir que o botão de fechar seja clicável */
+}
 
+/* Tabela */
+table {
+  width: 100%; /* Faz a tabela ocupar toda a largura disponível no modal */
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+/* Scroll específico para tabelas grandes dentro do modal */
+.modal table {
+  display: block;
+  overflow: auto;
+  max-height: 60vh; /* Limite de altura da tabela, com scroll vertical se necessário */
+}
+
+.sugestoes {
+  position: absolute;
+  top: 100%; /* Distância entre o input e a lista */
+  left: 0;
+  right: 0;
+  z-index: 10;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+}
+
+.sugestoes ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sugestoes li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.sugestoes li:hover {
+  background-color: #f0f0f0;
+}
+
+.sugestoes li:active {
+  background-color: #e0e0e0;
+}
+
+#formBuscaLocal {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
 
 .search-container{
   padding: 2rem;
@@ -46,7 +144,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 50%;
   margin-bottom: 2%;
-
+  position: relative;
 }
 
 .containerLoc {
