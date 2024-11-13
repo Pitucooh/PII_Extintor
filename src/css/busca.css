@@ -153,10 +153,6 @@ input[type="text"] {
   margin-bottom: 1rem;
 }
 
-#resultadosPredio {
-  margin-top: 1rem;
-}
-
 table {
   width: 100%;
   border-collapse: collapse;
@@ -329,7 +325,7 @@ button:hover {
 }
 
 
-#resultados, #resultadosPredio, .containerHist ul {
+#resultados, #resultadosPredio, #resultadosManutencao, .containerHist ul {
   margin-top: 1rem;
   padding: 0;
   list-style-type: none;

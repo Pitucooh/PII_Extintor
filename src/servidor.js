@@ -23,7 +23,7 @@ app.get('/manutencao/:id', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM metro.hist_manutencao WHERE id_manutencao = $1', [id]);
     if (result.rows.length > 0) {
-      res.json(result.rows[0]); // Retorna a primeira linha encontrada
+      res.json(result.rows); // Retorna a primeira linha encontrada
     } else {
       res.status(404).json({ message: 'Manutenção não encontrada' });
     }
