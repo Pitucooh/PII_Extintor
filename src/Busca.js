@@ -462,7 +462,7 @@ const Busca = () => {
       <div className='container-wrapper'>
 
       <div className='search-container'>
-        <h1 className='containerPatr'>Buscar extintor por patrimônio</h1>
+        <h1 className='containerPatr'>Busca de equipamento por patrimônio</h1>
         <form id="formBusca" onSubmit={handleSubmit}>
           <input
             type="text"
@@ -504,8 +504,7 @@ const Busca = () => {
                 <p><strong>Prédio:</strong> {itemSelecionado.predio || 'Indisponível'}</p>
                 <p><strong>Local:</strong> {itemSelecionado.local || 'Indisponível'}</p>
                 <p><strong>Observações da Localização:</strong> {itemSelecionado.observacoes || 'Sem observações'}</p>
-                
-
+            
                 {role === 'A' && (
                   <button style={{backgroundColor: 'rgb(209, 8, 8)'}} onClick={() => handleDelete(itemSelecionado.patrimonio)}>Excluir</button>
                 )}
@@ -519,8 +518,8 @@ const Busca = () => {
 
         {/* Container para busca por localização */}
         <div className='containerLocal'>
-          <h1 className='containerLoc'>Buscar localização por prédio</h1>
-          <form id="formBuscaLocal" onSubmit={handleBuscaLocalizacao}>
+          <h1 className='containerLoc'>Busca de equipamento por prédio</h1>
+          <form id="formBusca" onSubmit={handleBuscaLocalizacao}>
             <input
               type="text"
               id="predio"
@@ -581,9 +580,8 @@ const Busca = () => {
 
         {/* Container para busca por manutenção */}
         <div className='containerManu'>
-          <h1>Pesquisa de Manutenções por ID</h1>
-          <form onSubmit={handle_Manut_Ext}>
-            <label>
+          <h1>Pesquisa de manutenções por ID</h1>
+          <form id='formBusca' onSubmit={handle_Manut_Ext}>
               <input
                 type="text"
                 value={id}
@@ -591,7 +589,6 @@ const Busca = () => {
                 required
                 placeholder="Digite o ID da manutenção"
               />
-            </label>
             <button className='button-busca' type="submit">Buscar</button>
           </form>
 
@@ -617,17 +614,15 @@ const Busca = () => {
 
         {/* Container para histórico de manutenções */}
         <div className='containerHist'>
-          <h1>Histórico de Manutenções por Equipamento</h1>
+          <h1>Histórico de manutenções por equipamento</h1>
           <form onSubmit={handle_Ext_Manut}>
-            <label>
-              <input
-                type="text"
-                placeholder="Digite o patrimônio do equipamento"
-                value={patrimonioManut}
-                onChange={(e) => setPatrimonioManut(e.target.value)}
-                required
-              />
-            </label>
+            <input
+              type="text"
+              placeholder="Digite o patrimônio do equipamento"
+              value={patrimonioManut}
+              onChange={(e) => setPatrimonioManut(e.target.value)}
+              required
+            />
             <button className='button-busca' type="submit">Buscar</button>
           </form>
           {errormanut && <p>{errormanut}</p>}

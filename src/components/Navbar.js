@@ -22,14 +22,11 @@ const Navbar = () => {
           </li>
           <li>
             {/* Passando o role como parâmetro na URL */}
-            <Link to={`/busca?role=${role}`}><strong>Buscas</strong></Link>
+            <Link to={`/busca?role=${role}`}><strong>Equipamentos</strong></Link>
           </li>
           <li>
             <Link to="/relatorio"><strong>Relatórios</strong></Link>  
           </li>     
-          <li>
-            <Link to="/relatorio">Relatórios</Link>
-          </li>
         </ul>
       </nav>
     </div>
