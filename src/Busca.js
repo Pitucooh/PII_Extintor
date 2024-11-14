@@ -485,7 +485,7 @@ const Busca = () => {
                 )}
                 <button className='modal-close' style={{backgroundColor: 'rgb(209, 8, 8)'}} onClick={fecharModal}>Fechar</button>
 
-                <h2>Detalhes do Equipamento</h2>
+                <h2>Detalhes do Equipamento {itemSelecionado.patrimonio}</h2>
                 <p><strong>Número do Equipamento:</strong> {itemSelecionado.num_equip || 'Indisponível'}</p>
                 <p><strong>Tipo:</strong> {itemSelecionado.tipo || 'Indisponível'}</p>
                 <p><strong>Capacidade:</strong> {itemSelecionado.capacidade || 'Indisponível'}</p>

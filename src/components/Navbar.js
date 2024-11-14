@@ -18,17 +18,14 @@ const Navbar = () => {
       <nav className="navbar">
         <ul>
           <li>
-            <Link to="/menu">Início</Link>
+            <Link to="/menu"><strong>Início</strong></Link>
           </li>
           <li>
             {/* Passando o role como parâmetro na URL */}
-            <Link to={`/busca?role=${role}`}>Buscas</Link>
+            <Link to={`/busca?role=${role}`}><strong>Buscas</strong></Link>
           </li>
           <li>
-            <Link to="/estacoes">Estações</Link>
-          </li>
-          <li>
-            <Link to="/relatorio">Relatórios</Link>
+            <Link to="/relatorio"><strong>Relatórios</strong></Link>
           </li>
         </ul>
       </nav>

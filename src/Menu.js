@@ -33,6 +33,7 @@ const Menu = () => {
       <div className="container">
         <h1>PlaceHolder</h1>
       </div>
+      
       <Footer></Footer>
     </div>
   );
