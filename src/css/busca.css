@@ -614,7 +614,7 @@ input::placeholder {
   width: 120px;
   height: 60px;
   border-radius: 30px; 
-  background-color: #007bff;
+  background-color: #00162e;
   color: #ffffff;
   font-size: 30px;
   font-weight: bold;
@@ -647,6 +647,7 @@ input::placeholder {
 .button-cadastrar:hover {
   height: 100px; 
   padding: 20px;
+  background-color: #000a3b;
 }
 
 .button-cadastrar:hover .button-text {

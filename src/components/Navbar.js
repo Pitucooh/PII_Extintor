@@ -25,7 +25,10 @@ const Navbar = () => {
             <Link to={`/busca?role=${role}`}><strong>Buscas</strong></Link>
           </li>
           <li>
-            <Link to="/relatorio"><strong>Relatórios</strong></Link>
+            <Link to="/relatorio"><strong>Relatórios</strong></Link>  
+          </li>     
+          <li>
+            <Link to="/relatorio">Relatórios</Link>
           </li>
         </ul>
       </nav>
