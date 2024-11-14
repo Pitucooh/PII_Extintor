@@ -24,9 +24,7 @@ const Navbar = () => {
             {/* Passando o role como parâmetro na URL */}
             <Link to={`/busca?role=${role}`}>Buscas</Link>
           </li>
-          <li>
-            <Link to="/estacoes">Estações</Link>
-          </li>
+          
           <li>
             <Link to="/relatorio">Relatórios</Link>
           </li>
