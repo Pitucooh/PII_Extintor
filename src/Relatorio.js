@@ -9,6 +9,7 @@ import Pizza from './graphs/Pizza';
 import BarraVertical from './graphs/BarraVertical';
 import BarraHorizontal from './graphs/BarraHorizontal';
 import './css/Relatorio.css'; 
+import { FiDownload } from 'react-icons/fi';
 
 const Relatorio = () => {
   const [chartData, setChartData] = useState(null);
@@ -122,11 +123,11 @@ const Relatorio = () => {
         {/* Container de Gráficos */}
         <div className="section-container">
           <h3>Gráficos</h3>
-          <button onClick={() => { setTituloGrafico('Validade por Ano'); fetchChartData('validadePorAno', 'barra'); }}>Validade por Ano</button>
-          <button onClick={() => { setTituloGrafico('Quantidade por Tipo'); fetchChartData('totalPorTipo', 'pizza'); }}>Tipo por Área</button>
-          <button onClick={() => { setTituloGrafico('Quantidade por Prédio'); fetchChartData('totalPorPredio', 'barraHorizontal'); }}>Contagem por Prédio</button>
-          <button onClick={() => { setTituloGrafico('Vencimento Anual'); fetchChartData('validadeNoAno', 'pizza'); }}>Tipos de Equipamentos que Vencem no Ano</button>
-          <button onClick={() => { setTituloGrafico('Contagem por Fabricante'); fetchChartData('contagemPorFabricante', 'barra'); }}>Contagem por Fabricante</button>
+          <button className='graf' onClick={() => { setTituloGrafico('Validade por Ano'); fetchChartData('validadePorAno', 'barra'); }}>Validade por Ano</button>
+          <button className='graf' onClick={() => { setTituloGrafico('Quantidade por Tipo'); fetchChartData('totalPorTipo', 'pizza'); }}>Tipo por Área</button>
+          <button className='graf' onClick={() => { setTituloGrafico('Quantidade por Prédio'); fetchChartData('totalPorPredio', 'barraHorizontal'); }}>Contagem por Prédio</button>
+          <button className='graf' onClick={() => { setTituloGrafico('Vencimento Anual'); fetchChartData('validadeNoAno', 'pizza'); }}>Tipos de Equipamentos que Vencem no Ano</button>
+          <button className='graf' onClick={() => { setTituloGrafico('Contagem por Fabricante'); fetchChartData('contagemPorFabricante', 'barra'); }}>Contagem por Fabricante</button>
           
           <div id="chart-container">
             <h2>{tituloGrafico}</h2>
@@ -136,7 +137,10 @@ const Relatorio = () => {
           </div>
           
           {chartData && (
-            <button className="export-button" onClick={exportChartToPDF}>Exportar Gráfico para PDF</button>
+           <button className="export-button" onClick={exportChartToPDF}>
+              <FiDownload style={{ marginRight: '8px' }} />
+              Exportar Gráfico para PDF
+            </button>
           )}
         </div>
   
@@ -174,7 +178,10 @@ const Relatorio = () => {
           </div>
           
           {reportData && (
-            <button className="export-button" onClick={exportReportToPDF}>Exportar Relatório para PDF</button>
+           <button className="export-button" onClick={exportChartToPDF}>
+              <FiDownload style={{ marginRight: '8px' }} />
+              Exportar Gráfico para PDF
+            </button>
           )}
         </div>
       </div>

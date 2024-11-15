@@ -1,39 +1,39 @@
   #report-container {
     margin: 20px auto;
     padding: 20px;
-    max-width: 1200px; /* Ajuste conforme necessário */
+    max-width: 1200px; 
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   }
 
   #chart-container {
-    width: 1000px; /* Ajuste a largura */
-    height: auto; /* Ajuste a altura */
-    margin: 0 auto; /* Centraliza o gráfico */
+    width: 1000px; 
+    height: auto; 
+    margin: 0 auto; 
   }
   
   table {
     width: 100%;
-    border-collapse: collapse; /* Para remover espaços entre as células */
+    border-collapse: collapse; 
   }
   
   th, td {
-    padding: 12px; /* Espaçamento interno nas células */
-    text-align: left; /* Alinhamento do texto */
-    border-bottom: 1px solid #ddd; /* Linha inferior nas células */
+    padding: 12px;
+    text-align: left; 
+    border-bottom: 1px solid #ddd; 
   }
   
   th {
-    background-color: #4CAF50; /* Cor de fundo do cabeçalho */
-    color: white; /* Cor do texto no cabeçalho */
+    background-color: #4CAF50; 
+    color: white; 
   }
   
   tr:nth-child(even) {
-    background-color: #f9f9f9; /* Cor de fundo em linhas pares */
+    background-color: #f9f9f9;
   }
   
   tr:nth-child(odd) {
-    background-color: #fff; /* Cor de fundo em linhas ímpares */
+    background-color: #fff; 
   }
   
   .container {
@@ -61,24 +61,24 @@
     margin-bottom: 10px;
   }
   
-  button {
-    padding: 10px 20px;
+.graf{
+    padding: 10px 10px;
     margin: 5px 15px 15px 0;
     border: none;
     color: white;
     font-size: 0.9rem;
     border-radius: 5px;
-    width: 30%;
+    width: 25%;
     gap: 25%;
     padding: 1.5rem 2rem;
     color: #fff;
     background-image: linear-gradient(45deg, #0028ee, #001789); 
     cursor: pointer;
     transition: background-image 0.5s ease, transform 0.2s ease; 
-    text-transform: uppercase; 
+    
   }
   
-  button:hover {
+.graf:hover {
     background-image: linear-gradient(45deg, #001789,#0028ee); 
     transform: scale(1.05); 
   }
@@ -120,12 +120,146 @@
     background-color: #f4f4f4;
   }
   
-  button.export-button {
-    margin-top: 15px;
-    background-color: #28a745;
+  .layout .export-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 18px;
+    background-color: #4CAF50; 
+    color: white; 
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px; 
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
   }
   
-  button.export-button:hover {
-    background-color: #218838;
+  .layout .export-button:hover {
+    background-color: #45a049; 
+    transform: scale(1.05); 
   }
   
+  .layout .export-button > svg {
+    margin-right: 8px; 
+    font-size: 20px; 
+  }
+  
+.container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+.section-container {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  max-width: 800px; 
+}
+
+.chart-section {
+  flex: 3; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.graf {
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  border: none;
+  color: #fff;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  background-image: linear-gradient(45deg, #0028ee, #001789);
+  cursor: pointer;
+  transition: background-image 0.5s ease, transform 0.2s ease;
+  align-items: left;
+  text-align: left;
+}
+
+.graf:hover {
+  background-image: linear-gradient(45deg, #001789, #0028ee);
+  transform: scale(1.05);
+}
+
+#chart-container {
+  width: 100%; 
+  height: auto;
+  margin-top: 20px;
+  text-align: center;
+}
+
+#chart-container h2 {
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Seção de Botões */
+.section-container {
+  flex: 1; /* Ocupa menos espaço */
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.graf {
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  border: none;
+  color: #fff;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  background-image: linear-gradient(45deg, #0028ee, #001789);
+  cursor: pointer;
+  transition: background-image 0.5s ease, transform 0.2s ease;
+}
+
+.graf:hover {
+  background-image: linear-gradient(45deg, #001789, #0028ee);
+  transform: scale(1.05);
+}
+
+/* Seção do Gráfico */
+.chart-section {
+  flex: 3; /* Ocupa mais espaço */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#chart-container {
+  width: 100%; /* Gráfico ocupa toda a largura da seção */
+  height: auto;
+  margin-top: 20px;
+  text-align: center;
+}
+
+#chart-container h2 {
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
