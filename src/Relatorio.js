@@ -110,84 +110,84 @@ const Relatorio = () => {
   };
   return (
     <div className="layout">
-      <Header />
-      <Navbar />
-      
-      <div className="modal-wrapper" style={{ paddingTop: '150px' }}> 
-        <div className="title-modal">
-          <h3>Relatórios</h3>
-        </div>
-      </div>
-      
-      <div className="container">
-        {/* Container de Gráficos */}
-        <div className="section-container">
-          <h3>Gráficos</h3>
-          <button className='graf' onClick={() => { setTituloGrafico('Validade por Ano'); fetchChartData('validadePorAno', 'barra'); }}>Validade por Ano</button>
-          <button className='graf' onClick={() => { setTituloGrafico('Quantidade por Tipo'); fetchChartData('totalPorTipo', 'pizza'); }}>Tipo por Área</button>
-          <button className='graf' onClick={() => { setTituloGrafico('Quantidade por Prédio'); fetchChartData('totalPorPredio', 'barraHorizontal'); }}>Contagem por Prédio</button>
-          <button className='graf' onClick={() => { setTituloGrafico('Vencimento Anual'); fetchChartData('validadeNoAno', 'pizza'); }}>Tipos de Equipamentos que Vencem no Ano</button>
-          <button className='graf' onClick={() => { setTituloGrafico('Contagem por Fabricante'); fetchChartData('contagemPorFabricante', 'barra'); }}>Contagem por Fabricante</button>
-          
-          <div id="chart-container">
-            <h2>{tituloGrafico}</h2>
-            {chartData && chartType === 'barra' && <BarraVertical data={chartData} />}
-            {chartData && chartType === 'pizza' && <Pizza data={chartData} />}
-            {chartData && chartType === 'barraHorizontal' && <BarraHorizontal data={chartData} />}
-          </div>
-          
-          {chartData && (
-           <button className="export-button" onClick={exportChartToPDF}>
-              <FiDownload style={{ marginRight: '8px' }} />
-              Exportar Gráfico para PDF
-            </button>
-          )}
-        </div>
+  <Header />
+  <Navbar />
   
-        {/* Container de Relatórios */}
-        <div className="section-container">
-          <h3>Relatórios</h3>
-          <button onClick={() => fetchReportData('validadePorAno')}>Validade por Ano</button>
-          <button onClick={() => fetchReportData('tipoPorArea')}>Tipo por Área</button>
-          <button onClick={() => fetchReportData('naoConformidades')}>Não Conformidades</button>
-          <button onClick={() => fetchReportData('validadeNoAno')}>Equipamentos que Vencem no Ano</button>
-          
-          <div id="report-container">
-            {reportData && (
-              <table>
-                <thead>
-                  <tr>
-                    {columns.map((column, index) => (
-                      <th key={index}>{column}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {reportData.map((item, rowIndex) => (
-                    <tr key={rowIndex}>
-                      {columns.map((column, colIndex) => (
-                        <td key={colIndex}>
-                          {item[column] != null ? item[column] : '-'} 
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </div>
-          
-          {reportData && (
-           <button className="export-button" onClick={exportChartToPDF}>
-              <FiDownload style={{ marginRight: '8px' }} />
-              Exportar Gráfico para PDF
-            </button>
-          )}
-        </div>
-      </div>
-  
-      <Footer />
+  <div className="modal-wrapper" style={{ paddingTop: '150px' }}> 
+    <div className="title-modal">
+      <h3>Relatórios</h3>
     </div>
+  </div>
+  
+  <div className="container">
+    {/* Container de Gráficos */}
+    <div className="section-container">
+      <h3>Gráficos</h3>
+      <button className='graf' onClick={() => { setTituloGrafico('Validade por Ano'); fetchChartData('validadePorAno', 'barra'); }}>Validade por Ano</button>
+      <button className='graf' onClick={() => { setTituloGrafico('Quantidade por Tipo'); fetchChartData('totalPorTipo', 'pizza'); }}>Tipo por Área</button>
+      <button className='graf' onClick={() => { setTituloGrafico('Quantidade por Prédio'); fetchChartData('totalPorPredio', 'barraHorizontal'); }}>Contagem por Prédio</button>
+      <button className='graf' onClick={() => { setTituloGrafico('Vencimento Anual'); fetchChartData('validadeNoAno', 'pizza'); }}>Tipos de Equipamentos que Vencem no Ano</button>
+      <button className='graf' onClick={() => { setTituloGrafico('Contagem por Fabricante'); fetchChartData('contagemPorFabricante', 'barra'); }}>Contagem por Fabricante</button>
+      
+      <div id="chart-container">
+        <h2>{tituloGrafico}</h2>
+        {chartData && chartType === 'barra' && <BarraVertical data={chartData} />}
+        {chartData && chartType === 'pizza' && <Pizza data={chartData} />}
+        {chartData && chartType === 'barraHorizontal' && <BarraHorizontal data={chartData} />}
+      </div>
+      
+      {chartData && (
+        <button className="export-button" onClick={exportChartToPDF}>
+          <FiDownload style={{ marginRight: '8px' }} />
+          Exportar Gráfico para PDF
+        </button>
+      )}
+    </div>
+
+    {/* Container de Relatórios */}
+    <div className="section-container">
+      <h3>Relatórios</h3>
+      <button className='graf' onClick={() => fetchReportData('validadePorAno')}>Validade por Ano</button>
+      <button className='graf' onClick={() => fetchReportData('tipoPorArea')}>Tipo por Área</button>
+      <button className='graf' onClick={() => fetchReportData('naoConformidades')}>Não Conformidades</button>
+      <button className='graf' onClick={() => fetchReportData('validadeNoAno')}>Equipamentos que Vencem no Ano</button>
+      
+      <div id="report-container">
+        {reportData && (
+          <table>
+            <thead>
+              <tr>
+                {columns.map((column, index) => (
+                  <th key={index}>{column}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {reportData.map((item, rowIndex) => (
+                <tr key={rowIndex}>
+                  {columns.map((column, colIndex) => (
+                    <td key={colIndex}>
+                      {item[column] != null ? item[column] : '-'} 
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+      
+      {reportData && (
+        <button className="export-button" onClick={exportReportToPDF}>
+          <FiDownload style={{ marginRight: '8px' }} />
+          Exportar Relatório para PDF
+        </button>
+      )}
+    </div>
+  </div>
+
+  <Footer />
+</div>
   );
   
 };

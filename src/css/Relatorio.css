@@ -1,16 +1,4 @@
-  #report-container {
-    margin: 20px auto;
-    padding: 20px;
-    max-width: 1200px; 
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
 
-  #chart-container {
-    width: 1000px; 
-    height: auto; 
-    margin: 0 auto; 
-  }
   
   table {
     width: 100%;
@@ -25,7 +13,7 @@
   
   th {
     background-color: #4CAF50; 
-    color: white; 
+    color: rgb(2, 2, 2); 
   }
   
   tr:nth-child(even) {
@@ -35,25 +23,8 @@
   tr:nth-child(odd) {
     background-color: #fff; 
   }
-  
-  .container {
-    display: flex;
-    gap: 20px;
-    padding: 20px;
     
-  }
-  
-  .section-container {
-    flex: 1;
-    flex-direction: column;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2%;
-    flex-direction: row;
-    width: 70%;
-  }
+
   
   .section-container h3 {
     font-size: 1.3rem;
@@ -61,32 +32,8 @@
     margin-bottom: 10px;
   }
   
-.graf{
-    padding: 10px 10px;
-    margin: 5px 15px 15px 0;
-    border: none;
-    color: white;
-    font-size: 0.9rem;
-    border-radius: 5px;
-    width: 25%;
-    gap: 25%;
-    padding: 1.5rem 2rem;
-    color: #fff;
-    background-image: linear-gradient(45deg, #0028ee, #001789); 
-    cursor: pointer;
-    transition: background-image 0.5s ease, transform 0.2s ease; 
-    
-  }
-  
-.graf:hover {
-    background-image: linear-gradient(45deg, #001789,#0028ee); 
-    transform: scale(1.05); 
-  }
-  
-  #chart-container {
-    margin-top: 20px;
-    text-align: center;
-  }
+
+
   
   #chart-container h2 {
     color: #333;
@@ -97,7 +44,7 @@
   #report-container table {
     width: 100%;
     border-collapse: collapse;
-    background-color: #ffffff;
+    background-color: #000000;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     margin-top: 15px;
   }
@@ -105,7 +52,7 @@
   #report-container th, 
   #report-container td {
     padding: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid #000000;
     color: #333;
     text-align: left;
   }
@@ -145,33 +92,6 @@
     font-size: 20px; 
   }
   
-.container {
-  display: flex;
-  gap: 20px;
-  padding: 20px;
-}
-
-.section-container {
-  display: flex;
-  flex-direction: column;
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  flex: 1;
-  max-width: 800px; 
-}
-
-.chart-section {
-  flex: 3; 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-}
 
 .graf {
   padding: 10px 20px;
@@ -185,6 +105,9 @@
   transition: background-image 0.5s ease, transform 0.2s ease;
   align-items: left;
   text-align: left;
+  width: 50%;
+  margin-left: 10%;
+  
 }
 
 .graf:hover {
@@ -192,12 +115,6 @@
   transform: scale(1.05);
 }
 
-#chart-container {
-  width: 100%; 
-  height: auto;
-  margin-top: 20px;
-  text-align: center;
-}
 
 #chart-container h2 {
   color: #333;
@@ -212,38 +129,12 @@
 }
 
 /* Seção de Botões */
-.section-container {
-  flex: 1; /* Ocupa menos espaço */
-  display: flex;
-  flex-direction: column;
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-}
 
-.graf {
-  padding: 10px 20px;
-  margin-bottom: 10px;
-  border: none;
-  color: #fff;
-  font-size: 0.9rem;
-  border-radius: 5px;
-  background-image: linear-gradient(45deg, #0028ee, #001789);
-  cursor: pointer;
-  transition: background-image 0.5s ease, transform 0.2s ease;
-}
 
-.graf:hover {
-  background-image: linear-gradient(45deg, #001789, #0028ee);
-  transform: scale(1.05);
-}
-
-/* Seção do Gráfico */
 .chart-section {
-  flex: 3; /* Ocupa mais espaço */
+  flex: 3;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   background-color: #ffffff;
   padding: 20px;
@@ -251,14 +142,29 @@
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#chart-container {
-  width: 100%; /* Gráfico ocupa toda a largura da seção */
-  height: auto;
+.container {
+  display: flex;
+  justify-content: space-between; 
+  gap: 20px;
+  flex-wrap: wrap; 
+}
+
+.section-container {
+  flex: 1; 
+  width: 70%; 
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#chart-container, #report-container {
+  width: 100%;
   margin-top: 20px;
   text-align: center;
 }
 
-#chart-container h2 {
+#chart-container h2, #report-container h2 {
   color: #333;
   font-weight: bold;
   margin-bottom: 20px;
