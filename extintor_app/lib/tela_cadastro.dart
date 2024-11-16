@@ -24,21 +24,34 @@ class TelaCadastro extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 60),
-          
-          // Grey Box with Instruction Text
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
-              decoration: BoxDecoration(
-                color: Colors.grey[400],
+          Container(
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
+                width: 350,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF001789),
+                  borderRadius: BorderRadius.circular(12)
+                ),
+                child: const Center(
+                  child: Text(
+                    'Login de usuário',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
               ),
-              child: const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'Digite seu número de registro e CPF',
-                  style: TextStyle(fontSize: 24),
-                  textAlign: TextAlign.center,
+          // Grey Box with Instruction Text
+          const Align(
+            alignment: Alignment.center,
+            child: Padding(padding: EdgeInsets.all(30.0),
+              child:Text(
+                'Digite seu CPF e número de registro para prosseguir', // O texto que você quer exibir
+                style: TextStyle(
+                  fontSize: 17, // Tamanho da fonte
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
               ),
             ),
@@ -92,7 +105,7 @@ class TelaCadastro extends StatelessWidget {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey[300],
+                    backgroundColor: const Color(0xFF001789),
                     padding: const EdgeInsets.symmetric(vertical: 25),
                     textStyle: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                     shape: RoundedRectangleBorder(
@@ -100,7 +113,7 @@ class TelaCadastro extends StatelessWidget {
                     ),
                     minimumSize: const Size(double.infinity, 80), // Increased button size
                   ),
-                  child: const Text('Acessar', style: TextStyle(color: Colors.black)),
+                  child: const Text('Acessar', style: TextStyle(color: Colors.white)),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(

@@ -38,19 +38,30 @@ class UserTypeScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 60),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
-            decoration: BoxDecoration(
-              color: Colors.grey[400],
-            ),
-            child: const Text(
-              'Selecione o tipo de usuário',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              // Faixa cinza no fundo
+              Container(
+                height: 30, // Altura da faixa cinza
+                color: Colors.grey[500], // Cor cinza
               ),
-            ),
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF001789),
+                  borderRadius: BorderRadius.circular(12)
+                ),
+                child: const Text(
+                  'Selecione o tipo de usuário',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 150),
           Padding(
@@ -96,6 +107,19 @@ class UserTypeScreen extends StatelessWidget {
                   child: const Text('Operador', style: TextStyle(color: Colors.black)),
                 ),
               ],
+            ),
+          ),
+          const Align(
+            alignment: Alignment.center,
+            child: Padding(padding: EdgeInsets.all(30.0),
+              child:Text(
+                'Obs: Ao selecionar o tipo de usuário, você será redirecionado a telas com funcionalidades específicas', // O texto que você quer exibir
+                style: TextStyle(
+                  fontSize: 13, // Tamanho da fonte
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
             ),
           ),
           const Spacer(),

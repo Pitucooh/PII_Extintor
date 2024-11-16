@@ -56,23 +56,24 @@ class _TelaQRCodeState extends State<TelaQRCode> {
           const SizedBox(height: 60),
           
           // Grey Box with Text
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
-              decoration: BoxDecoration(
-                color: Colors.grey[400],
-              ),
-              child: const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'Escaneie ou adicione um novo QR CODE',
-                  style: TextStyle(fontSize: 24),
-                  textAlign: TextAlign.center,
+          Container(
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
+                width: 350,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF001789),
+                  borderRadius: BorderRadius.circular(12)
+                ),
+                child: const Center(
+                  child: Text(
+                    'Scaneie ou pesquise por patrimonio',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
           const SizedBox(height: 20),
           
           // QR Code Scanner
