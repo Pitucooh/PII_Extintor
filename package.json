@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@djpfs/react-vlibras": "^2.0.2",
+    "@react-google-maps/api": "^2.20.3",
     "app": "^0.1.0",
     "axios": "^1.7.7",
     "chart.js": "^4.4.5",
@@ -37,14 +38,14 @@
   },
   "browserslist": {
     "production": [
-    ">0.2%",
-    "not dead",
-    "not op_mini all"
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
     ],
     "development": [
-    "last 1 chrome version",
-    "last 1 firefox version",
-    "last 1 safari version"
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ]
   },
   "devDependencies": {

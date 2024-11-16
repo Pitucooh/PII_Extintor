@@ -11,6 +11,7 @@ import BarraHorizontal from './graphs/BarraHorizontal';
 import './css/Relatorio.css'; 
 import { FiDownload } from 'react-icons/fi';
 
+
 const Relatorio = () => {
   const [chartData, setChartData] = useState(null);
   const [chartType, setChartType] = useState('');
@@ -108,6 +109,23 @@ const Relatorio = () => {
         console.error('Erro ao carregar os dados do gráfico:', error);
     }
   };
+
+  const Modal = ({ isOpen, onClose, children }) => {
+    if (!isOpen) return null;
+  
+    return (
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <button className="close-button" onClick={onClose}>
+            &times;
+          </button>
+          {children}
+        </div>
+      </div>
+    );
+  };
+  
+ 
   return (
     <div className="layout">
   <Header />
@@ -119,7 +137,7 @@ const Relatorio = () => {
     </div>
   </div>
   
-  <div className="container">
+  <div className="horizontal-container">
     {/* Container de Gráficos */}
     <div className="section-container">
       <h3>Gráficos</h3>
@@ -153,29 +171,31 @@ const Relatorio = () => {
       <button className='graf' onClick={() => fetchReportData('validadeNoAno')}>Equipamentos que Vencem no Ano</button>
       
       <div id="report-container">
-        {reportData && (
-          <table>
-            <thead>
-              <tr>
-                {columns.map((column, index) => (
-                  <th key={index}>{column}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {reportData.map((item, rowIndex) => (
-                <tr key={rowIndex}>
-                  {columns.map((column, colIndex) => (
-                    <td key={colIndex}>
-                      {item[column] != null ? item[column] : '-'} 
-                    </td>
-                  ))}
-                </tr>
+  {reportData && (
+    <div style={{ overflowX: 'auto' }}> 
+      <table>
+        <thead>
+          <tr>
+            {columns.map((column, index) => (
+              <th key={index}>{column}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {reportData.map((item, rowIndex) => (
+            <tr key={rowIndex}>
+              {columns.map((column, colIndex) => (
+                <td key={colIndex}>
+                  {item[column] != null ? item[column] : '-'} 
+                </td>
               ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )}
+</div>
       
       {reportData && (
         <button className="export-button" onClick={exportReportToPDF}>
@@ -188,6 +208,7 @@ const Relatorio = () => {
 
   <Footer />
 </div>
+
   );
   
 };
