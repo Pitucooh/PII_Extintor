@@ -45,7 +45,7 @@ const Menu = () => {
           <div className="map-container">
             <div className="map-responsive">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14625.238663597389!2d-46.62222311368996!3d-23.59322470604941!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce5bf8fec09847%3A0x21fe6ebe5482bc4e!2sUsina%20Eco-Cultural!5e0!3m2!1spt-BR!2sbr!4v1699800994498!5m2!1spt-BR!2sbr"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d58509.6946811248!2d-46.63283393154372!3d-23.573617701077403!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce5bd2efeb44b1%3A0xa140ce2757886229!2sCh%C3%A1cara%20Klabin!5e0!3m2!1spt-BR!2sbr!4v1731812334794!5m2!1spt-BR!2sbr"
                 width="100%"
                 height="100%"
                 style={{

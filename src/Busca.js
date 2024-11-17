@@ -461,60 +461,60 @@ const Busca = () => {
       </div>
       <div className='container-wrapper'>
 
-      <div className='search-container'>
-        <h1 className='containerPatr'>Busca de equipamento por patrimônio</h1>
-        <form id="formBusca" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            id="patrimonio"
-            placeholder="Digite o patrimônio"
-            value={patrimonio}
-            onChange={(e) => setPatrimonio(e.target.value)}
-            required
-          />
-          <button className='button-busca' type="submit">Buscar</button>
-        </form>
+        <div className='search-container'>
+          <h1 className='containerPatr'>Busca de equipamento por patrimônio</h1>
+          <form id="formBusca" onSubmit={handleSubmit}>
+            <input
+              type="text"
+              id="patrimonio"
+              placeholder="Digite o patrimônio"
+              value={patrimonio}
+              onChange={(e) => setPatrimonio(e.target.value)}
+              required
+            />
+            <button className='button-busca' type="submit">Buscar</button>
+          </form>
 
 
-        {modalAberto === 'modalExtintor' && itemSelecionado ? (
-          <div className="modal-overlay" onClick={fecharModal}>
-            <div className="modal" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-conteudo">
-                {(role === 'A' || role === 'O') && (
-                  <button onClick={() => abrirModalEdicao(itemSelecionado)}>Editar</button>
-                )}
-                <button className='modal-close' style={{backgroundColor: 'rgb(209, 8, 8)'}} onClick={fecharModal}>Fechar</button>
+          {modalAberto === 'modalExtintor' && itemSelecionado ? (
+            <div className="modal-overlay" onClick={fecharModal}>
+              <div className="modal" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-conteudo">
+                  {(role === 'A' || role === 'O') && (
+                    <button onClick={() => abrirModalEdicao(itemSelecionado)}>Editar</button>
+                  )}
+                  <button className='modal-close' style={{backgroundColor: 'rgb(209, 8, 8)'}} onClick={fecharModal}>Fechar</button>
 
-                <h2>Detalhes do Equipamento {itemSelecionado.patrimonio}</h2>
-                <p><strong>Número do Equipamento:</strong> {itemSelecionado.num_equip || 'Indisponível'}</p>
-                <p><strong>Tipo:</strong> {itemSelecionado.tipo || 'Indisponível'}</p>
-                <p><strong>Capacidade:</strong> {itemSelecionado.capacidade || 'Indisponível'}</p>
-                <p><strong>Código do Fabricante:</strong> {itemSelecionado.fabricante || 'Indisponível'}</p>
-                <p><strong>Data de Fabricação:</strong> {itemSelecionado.data_fabricacao || 'Indisponível'}</p>
-                <p><strong>Data de Validade:</strong> {itemSelecionado.prox_ret || 'Indisponível'}</p>
-                <p><strong>Última Recarga:</strong> {itemSelecionado.ultima_recarga || 'Indisponível'}</p>
-                <p><strong>Próxima Inspeção:</strong> {itemSelecionado.data_insp || 'Indisponível'}</p>
-                <p><strong>Próxima Recarga:</strong> {itemSelecionado.prox_rec || 'Indisponível'}</p>
-                <p><strong>Status:</strong> {itemSelecionado.nao_conf || 'Funcionando'}</p>
-                <p><strong>ID de Localização:</strong> {itemSelecionado.id_local || 'Indisponível'}</p>
-                <p><strong>Observações do Extintor:</strong> {itemSelecionado.observacao || 'Indisponível'}</p>
-                <p><strong>Setor:</strong> {itemSelecionado.setor || 'Indisponível'}</p>
-                <p><strong>Área:</strong> {itemSelecionado.area || 'Indisponível'}</p>
-                <p><strong>Gerência:</strong> {itemSelecionado.gerencia || 'Indisponível'}</p>
-                <p><strong>Prédio:</strong> {itemSelecionado.predio || 'Indisponível'}</p>
-                <p><strong>Local:</strong> {itemSelecionado.local || 'Indisponível'}</p>
-                <p><strong>Observações da Localização:</strong> {itemSelecionado.observacoes || 'Sem observações'}</p>
-            
-                {role === 'A' && (
-                  <button style={{backgroundColor: 'rgb(209, 8, 8)'}} onClick={() => handleDelete(itemSelecionado.patrimonio)}>Excluir</button>
-                )}
+                  <h2>Detalhes do Equipamento {itemSelecionado.patrimonio}</h2>
+                  <p><strong>Número do Equipamento:</strong> {itemSelecionado.num_equip || 'Indisponível'}</p>
+                  <p><strong>Tipo:</strong> {itemSelecionado.tipo || 'Indisponível'}</p>
+                  <p><strong>Capacidade:</strong> {itemSelecionado.capacidade || 'Indisponível'}</p>
+                  <p><strong>Código do Fabricante:</strong> {itemSelecionado.fabricante || 'Indisponível'}</p>
+                  <p><strong>Data de Fabricação:</strong> {itemSelecionado.data_fabricacao || 'Indisponível'}</p>
+                  <p><strong>Data de Validade:</strong> {itemSelecionado.prox_ret || 'Indisponível'}</p>
+                  <p><strong>Última Recarga:</strong> {itemSelecionado.ultima_recarga || 'Indisponível'}</p>
+                  <p><strong>Próxima Inspeção:</strong> {itemSelecionado.data_insp || 'Indisponível'}</p>
+                  <p><strong>Próxima Recarga:</strong> {itemSelecionado.prox_rec || 'Indisponível'}</p>
+                  <p><strong>Status:</strong> {itemSelecionado.nao_conf || 'Funcionando'}</p>
+                  <p><strong>ID de Localização:</strong> {itemSelecionado.id_local || 'Indisponível'}</p>
+                  <p><strong>Observações do Extintor:</strong> {itemSelecionado.observacao || 'Indisponível'}</p>
+                  <p><strong>Setor:</strong> {itemSelecionado.setor || 'Indisponível'}</p>
+                  <p><strong>Área:</strong> {itemSelecionado.area || 'Indisponível'}</p>
+                  <p><strong>Gerência:</strong> {itemSelecionado.gerencia || 'Indisponível'}</p>
+                  <p><strong>Prédio:</strong> {itemSelecionado.predio || 'Indisponível'}</p>
+                  <p><strong>Local:</strong> {itemSelecionado.local || 'Indisponível'}</p>
+                  <p><strong>Observações da Localização:</strong> {itemSelecionado.observacoes || 'Sem observações'}</p>
+              
+                  {role === 'A' && (
+                    <button style={{backgroundColor: 'rgb(209, 8, 8)'}} onClick={() => handleDelete(itemSelecionado.patrimonio)}>Excluir</button>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ) : (
-          modalAberto && <p>Erro: Item selecionado não encontrado.</p>
-        )}
-      </div>
+          ) : (
+            modalAberto && <p>Erro: Item selecionado não encontrado.</p>
+          )}
+        </div>
 
         {/* Container para busca por localização */}
         <div className='containerLocal'>
@@ -609,7 +609,7 @@ const Busca = () => {
               </div>
             </div>
           </div>
-        )}
+          )}
         </div>
 
         {/* Container para histórico de manutenções */}
