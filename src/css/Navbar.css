@@ -10,6 +10,7 @@
     padding-left: 100px;
     z-index: 10;
     text-align: left;
+    color: #333;
   }
   
   .navbar ul {
@@ -20,17 +21,19 @@
     padding: 0;
     align-items: center;
     text-align: left;
+    color: #333;
   }
   
   .navbar li {
     display: inline;
     margin-right: 80%;
     text-align: left;
+    color: #333;
   }
   
   .navbar a {
     font-family: 'Josefin Sans', sans-serif;
-    color: black;
+    color: #333;
     text-decoration: none;
     font-size: 18px;
     padding: 50px;
