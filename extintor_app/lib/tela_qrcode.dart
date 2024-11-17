@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'exibeqr.dart'; // Import the exibeqr.dart file
+import 'patrimoniodados.dart'; // Import the patrimoniodados.dart file
 
 class TelaQRCode extends StatefulWidget {
   const TelaQRCode({super.key});
@@ -41,10 +42,10 @@ class _TelaQRCodeState extends State<TelaQRCode> {
   }
 
   void _searchPatrimonio(String patrimonio) {
-    // Navigate to exibeqr.dart with the searched patrimonio
+    // Navigate to patrimoniodados.dart with the searched patrimonio
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ExibeQR(data: patrimonio)),
+      MaterialPageRoute(builder: (context) => PatrimonioDados(data: patrimonio, idEquipamento: '', linha: '', situacao: '', anotacoes: '',)),
     );
   }
 
@@ -147,7 +148,7 @@ class _TelaQRCodeState extends State<TelaQRCode> {
                       bottom: 0,
                       child: Container(
                         height: 60,
-                        width: 80,
+                        width: 80, // Increase the width of the button
                         decoration: BoxDecoration(
                           color: const Color(0xFF001789), // Blue color for the button
                           borderRadius: BorderRadius.circular(12),
