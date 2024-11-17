@@ -1,72 +1,83 @@
 .highlight-container {
-  background-color: #f0f8ff; 
-  border: 2px solid #87ceeb; 
+  background-color: #f0f8ff;
+  border: 2px solid #f3f3f3;
   border-radius: 8px;
-  padding: 20px; 
+  padding: 20px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-  text-align: center; 
-  position: relative; 
-  z-index: 0; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  position: relative;
+  z-index: 0;
 }
 
 .highlight-container h3 {
-  position: relative; 
-  z-index: 1; 
-  color: rgb(26, 1, 255); 
-  font-size: 30px; 
-  margin: 0; 
+  position: relative;
+  z-index: 1;
+  color: rgb(255, 255, 255);
+  font-size: 30px;
+  margin: 0;
 }
 
+.menu-layout {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+}
+
+.menu-layout h2 {
+  margin: 0;
+  font-size: x-large;
+  color: #222222;
+  height: fit-content;
+}
 
 .botao-container {
-  display: flex; 
-  justify-content: center; 
-  gap: 20px; 
-  margin-top: 50px; 
-  margin-bottom: 3%;
-  z-index: 3; 
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  z-index: 3;
 }
 
 .botao-container button {
   padding: 10px 20px;
-  font-size: 16px; 
-  background-color: #007bff; 
+  font-size: 16px;
+  background-image: linear-gradient(45deg, #0028ee, #001789);
   color: white;
-  border: none; 
+  border: none;
+  text-transform: uppercase;
+  color: white;
+  border: none;
   border-radius: 5px;
-  cursor: pointer; 
-  transition: background-color 0.3s ease; 
+  cursor: pointer;
+  
 }
 
 .botao-container button:hover {
-  background-color: #0056b3;
+  background-image: linear-gradient(45deg, #001789, #0028ee);
+  transform: scale(1.05);
 }
 
-
 .map-container {
-  text-align: center;
+  width: 60%;
+  height: 30rem;
 }
 
 .map-responsive {
-  position: relative;
-  padding-bottom: 56.25%; 
-  height: 0;
   overflow: hidden;
   max-width: 100%;
-  background: #f0f0f0; 
-  margin-top: 50%;
-  width: 100%; 
+  background: #f0f0f0;
+  width: 100%;
   height: 100%;
 }
 
 .map-responsive iframe {
-  position: absolute;
-  top: 20;
-  left: 0;
-  width: 100%; 
-  height: 100%; 
+  width: 100%;
+  height: 100%;
   border: none;
   border-radius: 8px;
   box-shadow: 15px 15px lightblue;
 }
+
