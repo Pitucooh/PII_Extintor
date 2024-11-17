@@ -63,66 +63,74 @@ class UserTypeScreen extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 150),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const TelaCadastro()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey[300],
-                    padding: const EdgeInsets.symmetric(vertical: 25),
-                    textStyle: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // Rounded corners
+          const SizedBox(height: 20),
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0), // Margin to avoid touching the sides and bottom
+              padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(12), // Rounded corners
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const TelaCadastro()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey[400], // Lighter grey color
+                      padding: const EdgeInsets.symmetric(vertical: 25),
+                      textStyle: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12), // Rounded corners
+                      ),
+                      minimumSize: const Size(double.infinity, 60),
                     ),
-                    minimumSize: const Size(double.infinity, 60),
+                    child: const Text('Administrador', style: TextStyle(color: Colors.black)),
                   ),
-                  child: const Text('Administrador', style: TextStyle(color: Colors.black)),
-                ),
-                const SizedBox(height: 40),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const TelaCadastro()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey[300],
-                    padding: const EdgeInsets.symmetric(vertical: 25),
-                    textStyle: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // Rounded corners
+                  const SizedBox(height: 40),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const TelaCadastro()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey[400], // Lighter grey color
+                      padding: const EdgeInsets.symmetric(vertical: 25),
+                      textStyle: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12), // Rounded corners
+                      ),
+                      minimumSize: const Size(double.infinity, 60),
                     ),
-                    minimumSize: const Size(double.infinity, 60),
+                    child: const Text('Operador', style: TextStyle(color: Colors.black)),
                   ),
-                  child: const Text('Operador', style: TextStyle(color: Colors.black)),
-                ),
-              ],
-            ),
-          ),
-          const Align(
-            alignment: Alignment.center,
-            child: Padding(padding: EdgeInsets.all(30.0),
-              child:Text(
-                'Obs: Ao selecionar o tipo de usuário, você será redirecionado a telas com funcionalidades específicas', // O texto que você quer exibir
-                style: TextStyle(
-                  fontSize: 13, // Tamanho da fonte
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+                  const SizedBox(height: 40),
+                  const Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: EdgeInsets.all(30.0),
+                      child: Text(
+                        'Obs: Ao selecionar o tipo de usuário, você será redirecionado a telas com funcionalidades específicas', // O texto que você quer exibir
+                        style: TextStyle(
+                          fontSize: 13, // Tamanho da fonte
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-          const Spacer(),
           Container(
             height: 10,
             color: const Color(0xFF001789),

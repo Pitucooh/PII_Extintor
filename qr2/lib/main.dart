@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:http/http.dart' as http;
@@ -155,6 +157,7 @@ class ApiResponseScreen extends StatefulWidget {
   const ApiResponseScreen(this.apiResponse, {super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ApiResponseScreenState createState() => _ApiResponseScreenState();
 }
 
