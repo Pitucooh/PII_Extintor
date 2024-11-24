@@ -1,8 +1,97 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'tela_qrcode.dart';
 
-class TelaCadastro extends StatelessWidget {
-  const TelaCadastro({super.key});
+class TelaCadastro extends StatefulWidget {
+  final String role; // Role a ser recebida (administrador ou operador)
+
+  const TelaCadastro({super.key, required this.role});
+
+  @override
+  _TelaCadastroState createState() => _TelaCadastroState();
+}
+
+class _TelaCadastroState extends State<TelaCadastro> {
+  final TextEditingController _cpfController = TextEditingController();
+  final TextEditingController _registroController = TextEditingController();
+  bool isLoading = false;
+
+  Future<void> _login(String cpf, String nRegistro, String role) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      // body requisição
+      final requestBody = {
+        'cpf': cpf,
+        'n_registro': nRegistro,
+        'role': role,
+      };
+
+      // log xcode
+      debugPrint('Request URL: http://192.168.15.41:3002/login');
+      debugPrint('Request Headers: {"Content-Type": "application/json"}');
+      debugPrint('Request Body: $requestBody');
+
+      // requisição
+      final response = await http.post(
+        Uri.parse('http://192.168.15.41:3002/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(requestBody),
+      );
+
+      // log resposta
+      debugPrint('Response Status Code: ${response.statusCode}');
+      debugPrint('Response Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        _showDialog('Sucesso', data['message']);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const TelaQRCode()),
+        );
+      } else if (response.statusCode == 401) {
+        _showDialog('Erro', 'Credenciais inválidas.');
+      } else if (response.statusCode == 403) {
+        _showDialog('Erro', json.decode(response.body)['message']);
+      } else {
+        _showDialog('Erro', 'Erro desconhecido. Tente novamente.');
+      }
+    } catch (error) {
+      debugPrint('Error: $error'); // log de erro
+      _showDialog('Erro', 'Erro ao se conectar ao servidor.');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  void _showDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _cpfController.dispose();
+    _registroController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +113,7 @@ class TelaCadastro extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          
+
           // Blue Box with "Login de usuário" Text
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -34,10 +123,10 @@ class TelaCadastro extends StatelessWidget {
                 color: const Color(0xFF001789),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Center(
+              child: Center(
                 child: Text(
-                  'Login de usuário',
-                  style: TextStyle(
+                  'Login de ${widget.role}',
+                  style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
@@ -47,143 +136,105 @@ class TelaCadastro extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          
-          // Grey Box with All Other Contents
+
+          // Grey Box with Input Fields
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
                 decoration: BoxDecoration(
                   color: Colors.grey[300],
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 20),
-                    
-                    // Instruction Text
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(12),
+                    // Número de Registro
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Número de Registro:',
+                        style: TextStyle(fontSize: 18),
                       ),
-                      child: const Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Text(
-                          'Digite seu número de registro e CPF',
-                          style: TextStyle(fontSize: 24),
-                          textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: _registroController,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
                         ),
+                        filled: true,
+                        fillColor: Colors.grey[500],
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 16),
                       ),
                     ),
                     const SizedBox(height: 20),
-                    
-                    // Text Fields
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(12),
+
+                    // CPF
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'CPF:',
+                        style: TextStyle(fontSize: 18),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'Número de Registro:',
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            TextField(
-                              decoration: InputDecoration(
-                                border: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                                ),
-                                filled: true,
-                                fillColor: Colors.grey[500], // Darker grey color inside the text field
-                                contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16), // Adjust height
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            const Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'CPF:',
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            TextField(
-                              decoration: InputDecoration(
-                                border: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                                ),
-                                filled: true,
-                                fillColor: Colors.grey[500], // Darker grey color inside the text field
-                                contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16), // Adjust height
-                              ),
-                            ),
-                          ],
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: _cpfController,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
                         ),
+                        filled: true,
+                        fillColor: Colors.grey[500],
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 16),
                       ),
                     ),
                     const SizedBox(height: 20),
-                    
-                    // Buttons
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const TelaQRCode()),
-                              );
+
+                    // Login Button
+                    ElevatedButton(
+                      onPressed: isLoading
+                          ? null
+                          : () {
+                              final cpf = _cpfController.text;
+                              final nRegistro = _registroController.text;
+
+                              if (cpf.isEmpty || nRegistro.isEmpty) {
+                                _showDialog(
+                                    'Erro', 'Preencha todos os campos.');
+                                return;
+                              }
+
+                              _login(cpf, nRegistro,
+                                  widget.role); // Usando a role recebida
                             },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF001789),
-                              padding: const EdgeInsets.symmetric(vertical: 25),
-                              textStyle: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12), // Rounded corners
-                              ),
-                              minimumSize: const Size(double.infinity, 80), // Increased button size
-                            ),
-                            child: const Text('Acessar', style: TextStyle(color: Colors.white)),
-                          ),
-                          const SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.grey[400],
-                              padding: const EdgeInsets.symmetric(vertical: 25),
-                              textStyle: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12), // Rounded corners
-                              ),
-                              minimumSize: const Size(200, 80), // Smaller button width
-                            ),
-                            child: const Text('Voltar', style: TextStyle(color: Colors.black)),
-                          ),
-                        ],
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF001789),
+                        padding: const EdgeInsets.symmetric(vertical: 25),
+                        textStyle: const TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        minimumSize: const Size(double.infinity, 80),
                       ),
+                      child: isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text('Acessar',
+                              style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),
               ),
             ),
           ),
-          const SizedBox(height: 20), // Add spacing between grey box and footer
+          const SizedBox(height: 20),
           Container(
             height: 10,
             color: const Color(0xFF001789),

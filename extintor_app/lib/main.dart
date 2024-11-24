@@ -79,7 +79,10 @@ class UserTypeScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const TelaCadastro()),
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const TelaCadastro(role: 'admin'),
+                        ),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -98,7 +101,10 @@ class UserTypeScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const TelaCadastro()),
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const TelaCadastro(role: 'operador'),
+                        ),
                       );
                     },
                     style: ElevatedButton.styleFrom(
