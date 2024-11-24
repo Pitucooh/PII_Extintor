@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'tela_qrcode.dart';
+import 'user_session.dart';
 
 class TelaCadastro extends StatefulWidget {
-  final String role; // Role a ser recebida (administrador ou operador)
-
-  const TelaCadastro({super.key, required this.role});
+  const TelaCadastro({super.key});
 
   @override
   _TelaCadastroState createState() => _TelaCadastroState();
@@ -17,38 +16,44 @@ class _TelaCadastroState extends State<TelaCadastro> {
   final TextEditingController _registroController = TextEditingController();
   bool isLoading = false;
 
+  // Obtendo o tipo de usuário diretamente do UserSession
+  String get role => UserSession.getUserType() as String? ?? ''; // Se for nulo, retorna uma string vazia
+
   Future<void> _login(String cpf, String nRegistro, String role) async {
     setState(() {
       isLoading = true;
     });
 
     try {
-      // body requisição
       final requestBody = {
         'cpf': cpf,
         'n_registro': nRegistro,
         'role': role,
       };
 
-      // log xcode
       debugPrint('Request URL: http://192.168.15.41:3002/login');
       debugPrint('Request Headers: {"Content-Type": "application/json"}');
       debugPrint('Request Body: $requestBody');
 
-      // requisição
       final response = await http.post(
         Uri.parse('http://192.168.15.41:3002/login'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(requestBody),
       );
 
-      // log resposta
       debugPrint('Response Status Code: ${response.statusCode}');
       debugPrint('Response Body: ${response.body}');
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         _showDialog('Sucesso', data['message']);
+
+        if (role == 'administrador') {
+          UserSession.setUserType('admin');
+        } else if (role == 'operador') {
+          UserSession.setUserType('operador');
+        }
+
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const TelaQRCode()),
@@ -61,7 +66,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
         _showDialog('Erro', 'Erro desconhecido. Tente novamente.');
       }
     } catch (error) {
-      debugPrint('Error: $error'); // log de erro
+      debugPrint('Error: $error');
       _showDialog('Erro', 'Erro ao se conectar ao servidor.');
     } finally {
       setState(() {
@@ -99,7 +104,6 @@ class _TelaCadastroState extends State<TelaCadastro> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          // Header
           Container(
             color: const Color(0xFF001789),
             height: 120,
@@ -113,8 +117,6 @@ class _TelaCadastroState extends State<TelaCadastro> {
             ),
           ),
           const SizedBox(height: 20),
-
-          // Blue Box with "Login de usuário" Text
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Container(
@@ -125,7 +127,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
               ),
               child: Center(
                 child: Text(
-                  'Login de ${widget.role}',
+                  'Login de $role',
                   style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w600,
@@ -135,109 +137,63 @@ class _TelaCadastroState extends State<TelaCadastro> {
               ),
             ),
           ),
-          const SizedBox(height: 20),
-
-          // Grey Box with Input Fields
+          const SizedBox(height: 40),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Número de Registro
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Número de Registro:',
-                        style: TextStyle(fontSize: 18),
-                      ),
+            child: Container(
+              margin:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextField(
+                    controller: _cpfController,
+                    decoration: const InputDecoration(
+                      labelText: 'CPF',
+                      border: OutlineInputBorder(),
                     ),
-                    const SizedBox(height: 10),
-                    TextField(
-                      controller: _registroController,
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                  ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: _registroController,
+                    decoration: const InputDecoration(
+                      labelText: 'Número de Registro',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  isLoading
+                      ? const CircularProgressIndicator()
+                      : ElevatedButton(
+                          onPressed: () {
+                            final cpf = _cpfController.text;
+                            final nRegistro = _registroController.text;
+
+                            if (cpf.isEmpty || nRegistro.isEmpty) {
+                              _showDialog('Erro', 'Preencha todos os campos.');
+                            } else {
+                              _login(cpf, nRegistro, role);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            textStyle: const TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.bold),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            minimumSize: const Size(double.infinity, 60),
+                          ),
+                          child: const Text('Entrar'),
                         ),
-                        filled: true,
-                        fillColor: Colors.grey[500],
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 16),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    // CPF
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'CPF:',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    TextField(
-                      controller: _cpfController,
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                        ),
-                        filled: true,
-                        fillColor: Colors.grey[500],
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 16),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    // Login Button
-                    ElevatedButton(
-                      onPressed: isLoading
-                          ? null
-                          : () {
-                              final cpf = _cpfController.text;
-                              final nRegistro = _registroController.text;
-
-                              if (cpf.isEmpty || nRegistro.isEmpty) {
-                                _showDialog(
-                                    'Erro', 'Preencha todos os campos.');
-                                return;
-                              }
-
-                              _login(cpf, nRegistro,
-                                  widget.role); // Usando a role recebida
-                            },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF001789),
-                        padding: const EdgeInsets.symmetric(vertical: 25),
-                        textStyle: const TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        minimumSize: const Size(double.infinity, 80),
-                      ),
-                      child: isLoading
-                          ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text('Acessar',
-                              style: TextStyle(color: Colors.white)),
-                    ),
-                  ],
-                ),
+                ],
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-          Container(
-            height: 10,
-            color: const Color(0xFF001789),
           ),
         ],
       ),

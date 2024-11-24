@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'exibeqr.dart'; // Substitua por seu arquivo específico, se necessário
-import 'patrimoniodados.dart'; // Substitua por seu arquivo específico, se necessário
+import 'operador/patrimoniodados.dart'; // Substitua por seu arquivo específico, se necessário
+import 'admin/editapatrimonio.dart';  // Certifique-se de que a classe EditaPatrimonio está sendo importada corretamente
+import 'user_session.dart'; // Supondo que você tem um arquivo que gerencia a sessão do usuário
 
 class TelaQRCode extends StatefulWidget {
   const TelaQRCode({super.key});
@@ -17,6 +19,11 @@ class _TelaQRCodeState extends State<TelaQRCode> {
   String qrText = '';
   String scanStatus = 'Pronto para escanear';
   bool isScanning = false;
+
+  // Obtendo o tipo de usuário diretamente do UserSession
+  String get role =>
+      UserSession.getUserType() as String? ??
+      ''; // Se for nulo, retorna uma string vazia
 
   @override
   void reassemble() {
@@ -64,16 +71,49 @@ class _TelaQRCodeState extends State<TelaQRCode> {
   }
 
   void _searchPatrimonio(String patrimonio) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PatrimonioDados(
-          data: patrimonio,
-          idEquipamento: '',
-          linha: '',
-          situacao: '',
-          anotacoes: '',
+    // Verifica o tipo de usuário para navegar para a tela apropriada
+    if (role == 'admin') {
+      // Navegar para a tela de edição de patrimônio (admin)
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EditaPatrimonio(
+          patrimonio: qrText,
+          ),
         ),
+      );
+    } else if (role == 'operador') {
+      // Navegar para a tela de dados do patrimônio (operador)
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PatrimonioDados(
+            data: patrimonio, // Enviando o patrimônio escaneado ou digitado
+            idEquipamento: '', // Valores vazios ou padrão
+            linha: '',
+            situacao: '',
+            anotacoes: '',
+          ),
+        ),
+      );
+    } else {
+      // Caso o tipo de usuário não seja nem admin nem operador
+      _showDialog('Erro', 'Usuário sem permissão para editar.');
+    }
+  }
+
+  void _showDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
       ),
     );
   }
@@ -200,7 +240,8 @@ class _TelaQRCodeState extends State<TelaQRCode> {
                         child: IconButton(
                           icon: const Icon(Icons.search, color: Colors.white),
                           onPressed: () {
-                            _searchPatrimonio(qrText);
+                            _searchPatrimonio(
+                                qrText); // Passando o texto escaneado ou digitado para a busca
                           },
                         ),
                       ),
@@ -210,11 +251,7 @@ class _TelaQRCodeState extends State<TelaQRCode> {
               ],
             ),
           ),
-          const Spacer(),
-          Container(
-            height: 10,
-            color: const Color(0xFF001789),
-          ),
+          const SizedBox(height: 20),
         ],
       ),
     );

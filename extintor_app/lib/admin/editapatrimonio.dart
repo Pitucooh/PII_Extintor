@@ -1,22 +1,16 @@
 import 'package:flutter/material.dart';
-import 'patrimoniodados.dart'; // Import the patrimoniodados.dart file
+import 'package:http/http.dart' as http;
+import 'dart:convert'; // Para converter JSON em Map
 
-class EditaPatrimonio extends StatefulWidget {
-  final String idEquipamento;
-  final String linha;
-  final String situacao;
-  final String anotacoes;
+class EditaPatrimonio extends StatelessWidget {
+  final String patrimonio;
 
   const EditaPatrimonio({
     super.key,
-    required this.idEquipamento,
-    required this.linha,
-    required this.situacao,
-    required this.anotacoes,
+    required this.patrimonio,
   });
 
   @override
-  // ignore: library_private_types_in_public_api
   _EditaPatrimonioState createState() => _EditaPatrimonioState();
 }
 
@@ -26,13 +20,17 @@ class _EditaPatrimonioState extends State<EditaPatrimonio> {
   late TextEditingController situacaoController;
   late TextEditingController anotacoesController;
 
+  bool isLoading = true; // Para mostrar o carregamento enquanto esperamos a resposta da API
+  bool isError = false; // Para lidar com erros de carregamento
+
   @override
   void initState() {
     super.initState();
-    idController = TextEditingController(text: widget.idEquipamento);
-    linhaController = TextEditingController(text: widget.linha);
-    situacaoController = TextEditingController(text: widget.situacao);
-    anotacoesController = TextEditingController(text: widget.anotacoes);
+    idController = TextEditingController();
+    linhaController = TextEditingController();
+    situacaoController = TextEditingController();
+    anotacoesController = TextEditingController();
+    _fetchPatrimonioData(widget.patrimonio); // Buscar os dados com o patrimônio
   }
 
   @override
@@ -44,23 +42,42 @@ class _EditaPatrimonioState extends State<EditaPatrimonio> {
     super.dispose();
   }
 
-  void _navigateBack(BuildContext context) {
-    Navigator.pop(context);
-  }
+  Future<void> _fetchPatrimonioData(String patrimonio) async {
+    final response = await http.get(Uri.parse(
+        'http://192.168.15.41:3002/busca?patrimonio=$patrimonio'));
 
-  void _editAndNavigateBack(BuildContext context) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PatrimonioDados(
-          data: '',
-          idEquipamento: idController.text,
-          linha: linhaController.text,
-          situacao: situacaoController.text,
-          anotacoes: anotacoesController.text,
-        ),
-      ),
-    );
+    if (response.statusCode == 200) {
+      try {
+        final List<dynamic> data = json.decode(response.body);
+
+        if (data.isNotEmpty) {
+          setState(() {
+            idController.text = data[0]['id_equipamento'] ?? '';
+            linhaController.text = data[0]['linha'] ?? '';
+            situacaoController.text = data[0]['situacao'] ?? '';
+            anotacoesController.text = data[0]['anotacoes'] ?? '';
+            isLoading = false;
+          });
+        } else {
+          setState(() {
+            isError = true;
+            isLoading = false;
+          });
+        }
+      } catch (e) {
+        setState(() {
+          isError = true;
+          isLoading = false;
+        });
+        print("Erro ao processar os dados: $e");
+      }
+    } else {
+      setState(() {
+        isError = true;
+        isLoading = false;
+      });
+      throw Exception('Falha ao carregar dados do patrimônio');
+    }
   }
 
   @override
@@ -83,10 +100,10 @@ class _EditaPatrimonioState extends State<EditaPatrimonio> {
             ),
           ),
           const SizedBox(height: 20),
-          
+
           // Blue Box with "Patrimônio"
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24), // Increased padding
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
             width: double.infinity,
             margin: const EdgeInsets.symmetric(horizontal: 24.0),
             decoration: BoxDecoration(
@@ -104,46 +121,53 @@ class _EditaPatrimonioState extends State<EditaPatrimonio> {
               ),
             ),
           ),
-          const SizedBox(height: 10), // Add spacing between blue box and grey box
-          
+          const SizedBox(height: 10),
+
+          // Loading or Error Display
+          if (isLoading)
+            const CircularProgressIndicator()
+          else if (isError)
+            const Text("Erro ao carregar dados!", style: TextStyle(color: Colors.red)),
+
           // Grey Box with Fields
-          Container(
-            padding: const EdgeInsets.all(15), // Reduced padding
-            margin: const EdgeInsets.symmetric(horizontal: 24.0),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(12),
-                topRight: Radius.circular(12),
-                bottomLeft: Radius.circular(0),
-                bottomRight: Radius.circular(0),
-              ),
-            ),
-            child: Container(
+          if (!isLoading && !isError)
+            Container(
               padding: const EdgeInsets.all(15),
+              margin: const EdgeInsets.symmetric(horizontal: 24.0),
               decoration: BoxDecoration(
-                color: Colors.grey[400],
-                borderRadius: BorderRadius.circular(12),
+                color: Colors.grey.shade300,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(12),
+                  topRight: Radius.circular(12),
+                  bottomLeft: Radius.circular(0),
+                  bottomRight: Radius.circular(0),
+                ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildTextField('Id do equipamento', controller: idController),
-                  const SizedBox(height: 20),
-                  _buildTextField('Linha', controller: linhaController),
-                  const SizedBox(height: 20),
-                  _buildTextField('Situação', controller: situacaoController),
-                  const SizedBox(height: 20),
-                  _buildTextField('Anotações', controller: anotacoesController, maxLines: 4),
-                  const SizedBox(height: 10), // Small padding after the last field
-                ],
+              child: Container(
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: Colors.grey[400],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildTextField('Id do equipamento', controller: idController),
+                    const SizedBox(height: 20),
+                    _buildTextField('Linha', controller: linhaController),
+                    const SizedBox(height: 20),
+                    _buildTextField('Situação', controller: situacaoController),
+                    const SizedBox(height: 20),
+                    _buildTextField('Anotações', controller: anotacoesController, maxLines: 4),
+                    const SizedBox(height: 10),
+                  ],
+                ),
               ),
             ),
-          ),
-          
+
           // Blue Box with Buttons
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 24), // Increased padding
+            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 24),
             width: double.infinity,
             margin: const EdgeInsets.symmetric(horizontal: 24.0),
             decoration: const BoxDecoration(
@@ -159,13 +183,15 @@ class _EditaPatrimonioState extends State<EditaPatrimonio> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () => _editAndNavigateBack(context),
+                    onPressed: () {
+                      // Salvar ou editar o patrimônio
+                    },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.amber, // Yellow color for the button
-                      padding: const EdgeInsets.symmetric(vertical: 20), // Increased padding
+                      backgroundColor: Colors.amber,
+                      padding: const EdgeInsets.symmetric(vertical: 20),
                       textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12), // Rounded corners
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                     child: const Row(
@@ -178,16 +204,18 @@ class _EditaPatrimonioState extends State<EditaPatrimonio> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 20), // Space between buttons
+                const SizedBox(width: 20),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () => _navigateBack(context),
+                    onPressed: () {
+                      // Voltar
+                    },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey, // Grey color for the button
-                      padding: const EdgeInsets.symmetric(vertical: 20), // Increased padding
+                      backgroundColor: Colors.grey,
+                      padding: const EdgeInsets.symmetric(vertical: 20),
                       textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12), // Rounded corners
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                     child: const Text('Voltar', style: TextStyle(color: Colors.white)),
@@ -196,7 +224,7 @@ class _EditaPatrimonioState extends State<EditaPatrimonio> {
               ],
             ),
           ),
-          const Spacer(), // Pushes the bar to the bottom
+          const Spacer(),
           Container(
             height: 10,
             color: const Color(0xFF001789),

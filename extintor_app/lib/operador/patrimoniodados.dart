@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'editapatrimonio.dart'; // Import the editapatrimonio.dart file
+import '../admin/editapatrimonio.dart'; // Import the editapatrimonio.dart file
 
 class PatrimonioDados extends StatefulWidget {
   final String data;
@@ -65,10 +65,11 @@ class _PatrimonioDadosState extends State<PatrimonioDados> {
             ),
           ),
           const SizedBox(height: 20),
-          
+
           // Blue Box with "Patrimônio"
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24), // Increased padding
+            padding: const EdgeInsets.symmetric(
+                vertical: 20, horizontal: 24), // Increased padding
             width: double.infinity,
             margin: const EdgeInsets.symmetric(horizontal: 24.0),
             decoration: BoxDecoration(
@@ -86,8 +87,9 @@ class _PatrimonioDadosState extends State<PatrimonioDados> {
               ),
             ),
           ),
-          const SizedBox(height: 10), // Add spacing between blue box and grey box
-          
+          const SizedBox(
+              height: 10), // Add spacing between blue box and grey box
+
           // Grey Box with Fields
           Container(
             padding: const EdgeInsets.all(15), // Reduced padding
@@ -110,22 +112,28 @@ class _PatrimonioDadosState extends State<PatrimonioDados> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildTextField(context, 'Id do equipamento', controller: idController),
+                  _buildTextField(context, 'Id do equipamento',
+                      controller: idController),
                   const SizedBox(height: 20),
-                  _buildTextField(context, 'Linha', controller: linhaController),
+                  _buildTextField(context, 'Linha',
+                      controller: linhaController),
                   const SizedBox(height: 20),
-                  _buildTextField(context, 'Situação', controller: situacaoController),
+                  _buildTextField(context, 'Situação',
+                      controller: situacaoController),
                   const SizedBox(height: 20),
-                  _buildTextField(context, 'Anotações', controller: anotacoesController, maxLines: 4),
-                  const SizedBox(height: 10), // Small padding after the last field
+                  _buildTextField(context, 'Anotações',
+                      controller: anotacoesController, maxLines: 4),
+                  const SizedBox(
+                      height: 10), // Small padding after the last field
                 ],
               ),
             ),
           ),
-          
+
           // Blue Box with Buttons
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 24), // Increased padding
+            padding: const EdgeInsets.symmetric(
+                vertical: 30, horizontal: 24), // Increased padding
             width: double.infinity,
             margin: const EdgeInsets.symmetric(horizontal: 24.0),
             decoration: const BoxDecoration(
@@ -146,44 +154,16 @@ class _PatrimonioDadosState extends State<PatrimonioDados> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red, // Red color for the button
-                    padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                    textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 15, horizontal: 20),
+                    textStyle: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // Rounded corners
+                      borderRadius:
+                          BorderRadius.circular(12), // Rounded corners
                     ),
                   ),
                   child: const Icon(Icons.delete, color: Colors.white),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Navegar para a tela de edição
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditaPatrimonio(
-                          idEquipamento: idController.text,
-                          linha: linhaController.text,
-                          situacao: situacaoController.text,
-                          anotacoes: anotacoesController.text,
-                        ),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green, // Green color for the button
-                    padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 40), // Increased padding
-                    textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // Rounded corners
-                    ),
-                  ),
-                  child: const Row(
-                    children: [
-                      Icon(Icons.save, color: Colors.white),
-                      SizedBox(width: 5),
-                      Text('Salvar', style: TextStyle(color: Colors.white)),
-                    ],
-                  ),
                 ),
               ],
             ),
@@ -198,7 +178,8 @@ class _PatrimonioDadosState extends State<PatrimonioDados> {
     );
   }
 
-  Widget _buildTextField(BuildContext context, String label, {required TextEditingController controller, int maxLines = 1}) {
+  Widget _buildTextField(BuildContext context, String label,
+      {required TextEditingController controller, int maxLines = 1}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -216,27 +197,6 @@ class _PatrimonioDadosState extends State<PatrimonioDados> {
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
-            suffixIcon: IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: () {
-                // Navegar para a tela de edição
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditaPatrimonio(
-                      idEquipamento: controller == idController ? controller.text : widget.idEquipamento,
-                      linha: controller == linhaController ? controller.text : widget.linha,
-                      situacao: controller == situacaoController ? controller.text : widget.situacao,
-                      anotacoes: controller == anotacoesController ? controller.text : widget.anotacoes,
-                    ),
-                  ),
-                );
-              },
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide.none,
-            ),
           ),
         ),
       ],
