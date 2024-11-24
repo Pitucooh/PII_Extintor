@@ -1,23 +1,33 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'exibeqr.dart'; // Import the exibeqr.dart file
-import 'patrimoniodados.dart'; // Import the patrimoniodados.dart file
+import 'exibeqr.dart'; // Substitua por seu arquivo específico, se necessário
+import 'patrimoniodados.dart'; // Substitua por seu arquivo específico, se necessário
 
 class TelaQRCode extends StatefulWidget {
   const TelaQRCode({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _TelaQRCodeState createState() => _TelaQRCodeState();
 }
 
 class _TelaQRCodeState extends State<TelaQRCode> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? controller;
-  bool isCameraActive = false;
   String qrText = '';
-  String apiResponse = 'Aguardando resultado do QR Code...';
-  bool showApiResponseButton = false;
+  String scanStatus = 'Pronto para escanear';
+  bool isScanning = false;
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    if (controller != null) {
+      if (Platform.isAndroid) {
+        controller!.pauseCamera();
+      }
+      controller!.resumeCamera();
+    }
+  }
 
   @override
   void dispose() {
@@ -29,23 +39,42 @@ class _TelaQRCodeState extends State<TelaQRCode> {
     setState(() {
       this.controller = controller;
     });
+
     controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        qrText = scanData.code;
-        // Navigate to exibeqr.dart with the scanned QR code data
+      if (!isScanning) {
+        setState(() {
+          isScanning = true;
+          scanStatus = 'Escaneando QR Code...';
+          qrText = scanData.code ?? '';
+        });
+
+        // Navega para a tela de exibição do QR Code
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => ExibeQR(data: qrText)),
-        );
-      });
+        ).then((_) {
+          // Reinicia o estado após retornar da tela
+          setState(() {
+            isScanning = false;
+            scanStatus = 'Pronto para escanear';
+          });
+        });
+      }
     });
   }
 
   void _searchPatrimonio(String patrimonio) {
-    // Navigate to patrimoniodados.dart with the searched patrimonio
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => PatrimonioDados(data: patrimonio, idEquipamento: '', linha: '', situacao: '', anotacoes: '',)),
+      MaterialPageRoute(
+        builder: (context) => PatrimonioDados(
+          data: patrimonio,
+          idEquipamento: '',
+          linha: '',
+          situacao: '',
+          anotacoes: '',
+        ),
+      ),
     );
   }
 
@@ -69,18 +98,17 @@ class _TelaQRCodeState extends State<TelaQRCode> {
             ),
           ),
           const SizedBox(height: 60),
-          
           // Grey Box with Text
           Container(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
             width: 350,
             decoration: BoxDecoration(
               color: const Color(0xFF001789),
-              borderRadius: BorderRadius.circular(12)
+              borderRadius: BorderRadius.circular(12),
             ),
             child: const Center(
               child: Text(
-                'Scaneie ou pesquise por patrimonio',
+                'Scaneie ou pesquise por patrimônio',
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w600,
@@ -90,30 +118,44 @@ class _TelaQRCodeState extends State<TelaQRCode> {
             ),
           ),
           const SizedBox(height: 20),
-          
           // QR Code Scanner
           Expanded(
-            flex: 3, // Increase the flex value to make it taller
+            flex: 3,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: isCameraActive
-                    ? QRView(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12), // Bordas arredondadas
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      QRView(
                         key: qrKey,
                         onQRViewCreated: _onQRViewCreated,
-                      )
-                    : const Center(
-                        child: Text('Pressione o botão para ativar a câmera')),
+                      ),
+                      Positioned(
+                        bottom: 10,
+                        child: Text(
+                          scanStatus,
+                          style: TextStyle(
+                            color: isScanning ? Colors.green : Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
           const SizedBox(height: 20),
-          
-          // "Ou se preferir..." and Search Box
+          // Search Box
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40.0),
             child: Column(
@@ -131,16 +173,18 @@ class _TelaQRCodeState extends State<TelaQRCode> {
                     TextField(
                       decoration: InputDecoration(
                         hintText: 'Digite o patrimônio...',
-                        hintStyle: const TextStyle(), // Add padding to hint text
                         filled: true,
                         fillColor: Colors.grey[300],
-                        contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10), // Increase the height and add padding
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 20,
+                          horizontal: 10,
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,
                         ),
                       ),
-                      onSubmitted: _searchPatrimonio, // Handle search on submit
+                      onSubmitted: _searchPatrimonio,
                     ),
                     Positioned(
                       right: 0,
@@ -148,15 +192,14 @@ class _TelaQRCodeState extends State<TelaQRCode> {
                       bottom: 0,
                       child: Container(
                         height: 60,
-                        width: 80, // Increase the width of the button
+                        width: 80,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF001789), // Blue color for the button
+                          color: const Color(0xFF001789),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: IconButton(
                           icon: const Icon(Icons.search, color: Colors.white),
                           onPressed: () {
-                            // Ação do botão de pesquisa
                             _searchPatrimonio(qrText);
                           },
                         ),
