@@ -166,8 +166,6 @@ const Relatorio = () => {
 
         <div className="section-container">
           <h3>Relatórios</h3>
-          <button className='graf' onClick={() => fetchReportData('validadePorAno')}>Validade por Ano</button>
-          <button className='graf' onClick={() => fetchReportData('tipoPorArea')}>Tipo por Área</button>
           <button className='graf' onClick={() => fetchReportData('naoConformidades')}>Não Conformidades</button>
           <button className='graf' onClick={() => fetchReportData('validadeNoAno')}>Equipamentos que Vencem no Ano</button>
           

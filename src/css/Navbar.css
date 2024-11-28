@@ -26,7 +26,7 @@
   
   .navbar li {
     display: inline;
-    margin-right: 80%;
+    margin-right: 20%;
     text-align: left;
     color: #333;
   }
@@ -36,7 +36,7 @@
     color: #333;
     text-decoration: none;
     font-size: 18px;
-    padding: 50px;
+    padding: 20px;
     text-align: left;
     
   }
