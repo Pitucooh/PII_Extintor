@@ -194,7 +194,7 @@ class _PatrimonioDadosState extends State<PatrimonioDados> {
         TextField(
           maxLines: maxLines,
           controller: controller,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             filled: true,
             fillColor: Colors.white,
           ),

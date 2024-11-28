@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; // Para converter JSON em Map
 
-class EditaPatrimonio extends StatelessWidget {
+class EditaPatrimonio extends StatefulWidget {
   final String patrimonio;
 
   const EditaPatrimonio({
@@ -11,10 +11,10 @@ class EditaPatrimonio extends StatelessWidget {
   });
 
   @override
-  _EditaPatrimonioState createState() => _EditaPatrimonioState();
+  EditaPatrimonioState createState() => EditaPatrimonioState();
 }
 
-class _EditaPatrimonioState extends State<EditaPatrimonio> {
+class EditaPatrimonioState extends State<EditaPatrimonio> {
   late TextEditingController idController;
   late TextEditingController linhaController;
   late TextEditingController situacaoController;
@@ -22,6 +22,7 @@ class _EditaPatrimonioState extends State<EditaPatrimonio> {
 
   bool isLoading = true; // Para mostrar o carregamento enquanto esperamos a resposta da API
   bool isError = false; // Para lidar com erros de carregamento
+  bool isSaving = false;
 
   @override
   void initState() {
@@ -42,43 +43,144 @@ class _EditaPatrimonioState extends State<EditaPatrimonio> {
     super.dispose();
   }
 
+  // Função para salvar as alterações
+  Future<void> _salvarAlteracoes() async {
+    final url = 'http://192.168.15.41:3002/atualizar';
+    final body = json.encode({
+      'id_equipamento': idController.text,
+      'linha': linhaController.text,
+      'situacao': situacaoController.text,
+      'anotacoes': anotacoesController.text,
+    });
+
+    try {
+      setState(() {
+        isSaving = true;
+      });
+
+      final response = await http
+          .put(Uri.parse(url),
+              headers: {'Content-Type': 'application/json'}, body: body)
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        // Sucesso
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Dados atualizados com sucesso!")),
+        );
+      } else {
+        // Falha
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Erro ao salvar: ${response.body}")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Erro ao salvar: $e")),
+      );
+    } finally {
+      setState(() {
+        isSaving = false;
+      });
+    }
+  }
+
   Future<void> _fetchPatrimonioData(String patrimonio) async {
-    final response = await http.get(Uri.parse(
-        'http://192.168.15.41:3002/busca?patrimonio=$patrimonio'));
+  try {
+    final response = await http
+        .get(Uri.parse('http://192.168.15.41:3002/busca?patrimonio=$patrimonio'))
+        .timeout(const Duration(seconds: 10));
 
     if (response.statusCode == 200) {
-      try {
-        final List<dynamic> data = json.decode(response.body);
+      final List<dynamic> data = json.decode(response.body);
 
-        if (data.isNotEmpty) {
-          setState(() {
-            idController.text = data[0]['id_equipamento'] ?? '';
-            linhaController.text = data[0]['linha'] ?? '';
-            situacaoController.text = data[0]['situacao'] ?? '';
-            anotacoesController.text = data[0]['anotacoes'] ?? '';
-            isLoading = false;
-          });
-        } else {
-          setState(() {
-            isError = true;
-            isLoading = false;
-          });
-        }
-      } catch (e) {
+      if (data.isNotEmpty) {
+        setState(() {
+          idController.text = data[0]['id_equipamento'] ?? '';
+          linhaController.text = data[0]['linha'] ?? '';
+          situacaoController.text = data[0]['situacao'] ?? '';
+          anotacoesController.text = data[0]['anotacoes'] ?? '';
+          isLoading = false;
+        });
+      } else {
         setState(() {
           isError = true;
           isLoading = false;
         });
-        print("Erro ao processar os dados: $e");
       }
     } else {
       setState(() {
         isError = true;
         isLoading = false;
       });
-      throw Exception('Falha ao carregar dados do patrimônio');
+      print("Erro ao carregar dados do patrimônio: ${response.body}");
     }
+  } catch (e) {
+    setState(() {
+      isError = true;
+      isLoading = false;
+    });
+    print("Erro ao buscar os dados: $e");
   }
+}
+
+Future<void> _excluirPatrimonio() async {
+  final url = 'http://192.168.15.41:3002/deletar';
+  final body = json.encode({
+    'id_equipamento': idController.text, // Ou o ID do patrimônio
+  });
+
+  try {
+    final response = await http
+        .delete(Uri.parse(url),
+            headers: {'Content-Type': 'application/json'}, body: body)
+        .timeout(const Duration(seconds: 10));
+
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Patrimônio excluído com sucesso!")),
+      );
+      Navigator.pop(context); // Voltar para a tela anterior após a exclusão
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Erro ao excluir: ${response.body}")),
+      );
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Erro ao excluir: $e")),
+    );
+  }
+}
+
+Future<bool> _confirmarExclusao(BuildContext context) async {
+  return await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Confirmar Exclusão'),
+        content: const Text('Tem certeza de que deseja excluir este patrimônio?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false), // Retorna false
+            child: const Text(
+              'Cancelar',
+              style: TextStyle(color: Colors.blue),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true), // Retorna true
+            child: const Text(
+              'Excluir',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -183,11 +285,41 @@ class _EditaPatrimonioState extends State<EditaPatrimonio> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: isSaving ? null : _salvarAlteracoes,
                       // Salvar ou editar o patrimônio
-                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.amber,
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: isSaving
+                        ? const CircularProgressIndicator()
+                        : const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.save, color: Colors.white),
+                            SizedBox(width: 5),
+                            Text('Editar', style: TextStyle(color: Colors.white)),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 20),
+
+                // Botão de Excluir
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      final confirm = await _confirmarExclusao(context);
+                      if (confirm) {
+                        await _excluirPatrimonio();
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       shape: RoundedRectangleBorder(
@@ -197,18 +329,18 @@ class _EditaPatrimonioState extends State<EditaPatrimonio> {
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.save, color: Colors.white),
+                        Icon(Icons.delete, color: Colors.white),
                         SizedBox(width: 5),
-                        Text('Editar', style: TextStyle(color: Colors.white)),
+                        Text('Excluir', style: TextStyle(color: Colors.white)),
                       ],
                     ),
                   ),
                 ),
                 const SizedBox(width: 20),
                 Expanded(
-                  child: ElevatedButton(
+                  child: ElevatedButton( // botao voltar
                     onPressed: () {
-                      // Voltar
+                      Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.grey,
@@ -218,7 +350,14 @@ class _EditaPatrimonioState extends State<EditaPatrimonio> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text('Voltar', style: TextStyle(color: Colors.white)),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.arrow_back, color: Colors.white),
+                        SizedBox(width: 5),
+                        Text('Voltar', style: TextStyle(color: Colors.white)),
+                      ],
+                    ),
                   ),
                 ),
               ],
