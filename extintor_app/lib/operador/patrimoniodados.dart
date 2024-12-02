@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../admin/editapatrimonio.dart'; // Import the editapatrimonio.dart file
+// Import the editapatrimonio.dart file
 
 class PatrimonioDados extends StatefulWidget {
   final String data;

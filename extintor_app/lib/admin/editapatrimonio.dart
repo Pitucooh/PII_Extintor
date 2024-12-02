@@ -17,7 +17,7 @@ class EditaPatrimonio extends StatefulWidget {
 class EditaPatrimonioState extends State<EditaPatrimonio> {
   late TextEditingController idController;
   late TextEditingController linhaController;
-  late TextEditingController situacaoController;
+  late TextEditingController localController;
   late TextEditingController anotacoesController;
 
   bool isLoading = true; // Para mostrar o carregamento enquanto esperamos a resposta da API
@@ -29,7 +29,7 @@ class EditaPatrimonioState extends State<EditaPatrimonio> {
     super.initState();
     idController = TextEditingController();
     linhaController = TextEditingController();
-    situacaoController = TextEditingController();
+    localController = TextEditingController();
     anotacoesController = TextEditingController();
     _fetchPatrimonioData(widget.patrimonio); // Buscar os dados com o patrimônio
   }
@@ -38,20 +38,21 @@ class EditaPatrimonioState extends State<EditaPatrimonio> {
   void dispose() {
     idController.dispose();
     linhaController.dispose();
-    situacaoController.dispose();
+    localController.dispose();
     anotacoesController.dispose();
     super.dispose();
   }
 
   // Função para salvar as alterações
   Future<void> _salvarAlteracoes() async {
-    final url = 'http://192.168.15.41:3002/atualizar';
+    const url = 'http://192.168.15.41:3002/atualizar';
     final body = json.encode({
       'id_equipamento': idController.text,
       'linha': linhaController.text,
-      'situacao': situacaoController.text,
+      'situacao': localController.text,
       'anotacoes': anotacoesController.text,
     });
+    debugPrint("Dados recebidos: $body");
 
     try {
       setState(() {
@@ -90,16 +91,18 @@ class EditaPatrimonioState extends State<EditaPatrimonio> {
     final response = await http
         .get(Uri.parse('http://192.168.15.41:3002/busca?patrimonio=$patrimonio'))
         .timeout(const Duration(seconds: 10));
+        debugPrint("Dados recebidos: $response");
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
+      debugPrint("Dados recebidos: $data");
 
       if (data.isNotEmpty) {
         setState(() {
-          idController.text = data[0]['id_equipamento'] ?? '';
-          linhaController.text = data[0]['linha'] ?? '';
-          situacaoController.text = data[0]['situacao'] ?? '';
-          anotacoesController.text = data[0]['anotacoes'] ?? '';
+          idController.text = data[0]['patrimonio'] ?? ''; 
+          linhaController.text = data[0]['area'] ?? '';  
+          localController.text = data[0]['local'] ?? ''; // Agora com 'tipo'
+          anotacoesController.text = data[0]['observacao'] ?? ''; // Agora com 'observacao'
           isLoading = false;
         });
       } else {
@@ -125,7 +128,7 @@ class EditaPatrimonioState extends State<EditaPatrimonio> {
 }
 
 Future<void> _excluirPatrimonio() async {
-  final url = 'http://192.168.15.41:3002/deletar';
+  const url = 'http://192.168.15.41:3002/deletar';
   final body = json.encode({
     'id_equipamento': idController.text, // Ou o ID do patrimônio
   });
@@ -232,7 +235,7 @@ Future<bool> _confirmarExclusao(BuildContext context) async {
             const Text("Erro ao carregar dados!", style: TextStyle(color: Colors.red)),
 
           // Grey Box with Fields
-          if (!isLoading && !isError)
+            if (!isLoading && !isError)
             Container(
               padding: const EdgeInsets.all(15),
               margin: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -258,7 +261,7 @@ Future<bool> _confirmarExclusao(BuildContext context) async {
                     const SizedBox(height: 20),
                     _buildTextField('Linha', controller: linhaController),
                     const SizedBox(height: 20),
-                    _buildTextField('Situação', controller: situacaoController),
+                    _buildTextField('Local', controller: localController),
                     const SizedBox(height: 20),
                     _buildTextField('Anotações', controller: anotacoesController, maxLines: 4),
                     const SizedBox(height: 10),

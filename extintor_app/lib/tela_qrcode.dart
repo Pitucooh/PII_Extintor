@@ -58,7 +58,7 @@ class _TelaQRCodeState extends State<TelaQRCode> {
         // Navega para a tela de exibição do QR Code
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ExibeQR(data: qrText)),
+          MaterialPageRoute(builder: (context) => EditaPatrimonio(patrimonio: qrText)),
         ).then((_) {
           // Reinicia o estado após retornar da tela
           setState(() {

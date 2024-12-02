@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'tela_qrcode.dart';
 import 'user_session.dart';
 
-class TelaCadastro extends StatefulWidget {
+class TelaCadastro extends StatefulWidget { 
   const TelaCadastro({super.key});
 
   @override
@@ -17,7 +17,8 @@ class _TelaCadastroState extends State<TelaCadastro> {
   bool isLoading = false;
 
   // Obtendo o tipo de usuário diretamente do UserSession
-  String get role => UserSession.getUserType() as String? ?? ''; // Se for nulo, retorna uma string vazia
+  Future<String> get role async => await UserSession.getUserType() ?? ''; // Se for nulo, retorna uma string vazia
+  String roleValue = '';
 
   Future<void> _login(String cpf, String nRegistro, String role) async {
     setState(() {
@@ -99,51 +100,59 @@ class _TelaCadastroState extends State<TelaCadastro> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    UserSession.getUserType().then((value) {
+      setState(() {
+        roleValue = value ?? '';
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          Container(
-            color: const Color(0xFF001789),
-            height: 120,
-            width: double.infinity,
-            child: Center(
-              child: Image.asset(
-                'assets/images/LOGO.jpg',
-                fit: BoxFit.contain,
-                height: 80,
+      body: SingleChildScrollView(  // Adicionando SingleChildScrollView para permitir rolagem
+        child: Column(
+          children: [
+            Container(
+              color: const Color(0xFF001789),
+              height: 120,
+              width: double.infinity,
+              child: Center(
+                child: Image.asset(
+                  'assets/images/LOGO.jpg',
+                  fit: BoxFit.contain,
+                  height: 80,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
-              decoration: BoxDecoration(
-                color: const Color(0xFF001789),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: Text(
-                  'Login de $role',
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF001789),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                  child: Text(
+                    'Login de $roleValue',
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 40),
-          Expanded(
-            child: Container(
-              margin:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
+            const SizedBox(height: 40),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
               decoration: BoxDecoration(
                 color: Colors.grey[300],
                 borderRadius: BorderRadius.circular(12),
@@ -177,7 +186,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
                             if (cpf.isEmpty || nRegistro.isEmpty) {
                               _showDialog('Erro', 'Preencha todos os campos.');
                             } else {
-                              _login(cpf, nRegistro, role);
+                              _login(cpf, nRegistro, roleValue);
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -194,8 +203,8 @@ class _TelaCadastroState extends State<TelaCadastro> {
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
