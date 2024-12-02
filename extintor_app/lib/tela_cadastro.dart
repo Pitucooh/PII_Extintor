@@ -179,27 +179,57 @@ class _TelaCadastroState extends State<TelaCadastro> {
                   const SizedBox(height: 40),
                   isLoading
                       ? const CircularProgressIndicator()
-                      : ElevatedButton(
-                          onPressed: () {
-                            final cpf = _cpfController.text;
-                            final nRegistro = _registroController.text;
+                      : Column(
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                final cpf = _cpfController.text;
+                                final nRegistro = _registroController.text;
 
-                            if (cpf.isEmpty || nRegistro.isEmpty) {
-                              _showDialog('Erro', 'Preencha todos os campos.');
-                            } else {
-                              _login(cpf, nRegistro, roleValue);
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            textStyle: const TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.bold),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                                if (cpf.isEmpty || nRegistro.isEmpty) {
+                                  _showDialog('Erro', 'Preencha todos os campos.');
+                                } else {
+                                  _login(cpf, nRegistro, roleValue);
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF001789), // Cor de fundo azul
+                                padding: const EdgeInsets.symmetric(vertical: 20),
+                                textStyle: const TextStyle(
+                                    fontSize: 22, fontWeight: FontWeight.bold),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                minimumSize: const Size(200, 60), // Diminuir comprimento
+                              ),
+                              child: const Text(
+                                'Entrar',
+                                style: TextStyle(color: Colors.white), // Texto branco
+                              ),
                             ),
-                            minimumSize: const Size(double.infinity, 60),
-                          ),
-                          child: const Text('Entrar'),
+                            const SizedBox(height: 10), // Espaçamento entre os botões
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context); // Ação do botão Voltar
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.grey, // Cor de fundo cinza
+                                padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+                                textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                minimumSize: const Size(150, 50), // Tamanho menor
+                              ),
+                              child: const Text(
+                                'Voltar',
+                                style: TextStyle(
+                                  color: Colors.white, // Texto branco
+                                  fontSize: 18, // Aumentar o tamanho da palavra "Voltar"
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                 ],
               ),
