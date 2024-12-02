@@ -45,7 +45,7 @@ class EditaPatrimonioState extends State<EditaPatrimonio> {
 
   // Função para salvar as alterações
   Future<void> _salvarAlteracoes() async {
-    const url = 'http://192.168.15.41:3002/atualizar';
+    const url = 'http://192.168.56.1:3002/atualizar';
     final body = json.encode({
       'id_equipamento': idController.text,
       'linha': linhaController.text,
@@ -87,291 +87,288 @@ class EditaPatrimonioState extends State<EditaPatrimonio> {
   }
 
   Future<void> _fetchPatrimonioData(String patrimonio) async {
-  try {
-    final response = await http
-        .get(Uri.parse('http://192.168.15.41:3002/busca?patrimonio=$patrimonio'))
-        .timeout(const Duration(seconds: 10));
-        debugPrint("Dados recebidos: $response");
+    try {
+      final response = await http
+          .get(Uri.parse('http://192.168.56.1:3002/busca?patrimonio=$patrimonio'))
+          .timeout(const Duration(seconds: 10));
+      debugPrint("Dados recebidos: $response");
 
-    if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
-      debugPrint("Dados recebidos: $data");
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        debugPrint("Dados recebidos: $data");
 
-      if (data.isNotEmpty) {
-        setState(() {
-          idController.text = data[0]['patrimonio'] ?? ''; 
-          linhaController.text = data[0]['area'] ?? '';  
-          localController.text = data[0]['local'] ?? ''; // Agora com 'tipo'
-          anotacoesController.text = data[0]['observacao'] ?? ''; // Agora com 'observacao'
-          isLoading = false;
-        });
+        if (data.isNotEmpty) {
+          setState(() {
+            idController.text = data[0]['patrimonio'] ?? '';
+            linhaController.text = data[0]['area'] ?? '';
+            localController.text = data[0]['local'] ?? ''; // Agora com 'tipo'
+            anotacoesController.text = data[0]['observacao'] ?? ''; // Agora com 'observacao'
+            isLoading = false;
+          });
+        } else {
+          setState(() {
+            isError = true;
+            isLoading = false;
+          });
+        }
       } else {
         setState(() {
           isError = true;
           isLoading = false;
         });
+        print("Erro ao carregar dados do patrimônio: ${response.body}");
       }
-    } else {
+    } catch (e) {
       setState(() {
         isError = true;
         isLoading = false;
       });
-      print("Erro ao carregar dados do patrimônio: ${response.body}");
+      print("Erro ao buscar os dados: $e");
     }
-  } catch (e) {
-    setState(() {
-      isError = true;
-      isLoading = false;
-    });
-    print("Erro ao buscar os dados: $e");
   }
-}
 
-Future<void> _excluirPatrimonio() async {
-  const url = 'http://192.168.15.41:3002/deletar';
-  final body = json.encode({
-    'id_equipamento': idController.text, // Ou o ID do patrimônio
-  });
+  Future<void> _excluirPatrimonio() async {
+    const url = 'http://192.168.56.1:3002/deletar';
+    final body = json.encode({
+      'id_equipamento': idController.text, // Ou o ID do patrimônio
+    });
 
-  try {
-    final response = await http
-        .delete(Uri.parse(url),
-            headers: {'Content-Type': 'application/json'}, body: body)
-        .timeout(const Duration(seconds: 10));
+    try {
+      final response = await http
+          .delete(Uri.parse(url),
+              headers: {'Content-Type': 'application/json'}, body: body)
+          .timeout(const Duration(seconds: 10));
 
-    if (response.statusCode == 200) {
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Patrimônio excluído com sucesso!")),
+        );
+        Navigator.pop(context); // Voltar para a tela anterior após a exclusão
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Erro ao excluir: ${response.body}")),
+        );
+      }
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Patrimônio excluído com sucesso!")),
-      );
-      Navigator.pop(context); // Voltar para a tela anterior após a exclusão
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Erro ao excluir: ${response.body}")),
+        SnackBar(content: Text("Erro ao excluir: $e")),
       );
     }
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Erro ao excluir: $e")),
+  }
+
+  Future<bool> _confirmarExclusao(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmar Exclusão'),
+          content: const Text('Tem certeza de que deseja excluir este patrimônio?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false), // Retorna false
+              child: const Text(
+                'Cancelar',
+                style: TextStyle(color: Colors.blue),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true), // Retorna true
+              child: const Text(
+                'Excluir',
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
-}
-
-Future<bool> _confirmarExclusao(BuildContext context) async {
-  return await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Confirmar Exclusão'),
-        content: const Text('Tem certeza de que deseja excluir este patrimônio?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false), // Retorna false
-            child: const Text(
-              'Cancelar',
-              style: TextStyle(color: Colors.blue),
-            ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true), // Retorna true
-            child: const Text(
-              'Excluir',
-              style: TextStyle(color: Colors.red),
-            ),
-          ),
-        ],
-      );
-    },
-  );
-}
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          // Header
-          Container(
-            color: const Color(0xFF001789),
-            height: 120,
-            width: double.infinity,
-            child: Center(
-              child: Image.asset(
-                'assets/images/LOGO.jpg',
-                fit: BoxFit.contain,
-                height: 80,
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-
-          // Blue Box with "Patrimônio"
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
-            width: double.infinity,
-            margin: const EdgeInsets.symmetric(horizontal: 24.0),
-            decoration: BoxDecoration(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Header
+            Container(
               color: const Color(0xFF001789),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Center(
-              child: Text(
-                'Patrimônio',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+              height: 120,
+              width: double.infinity,
+              child: Center(
+                child: Image.asset(
+                  'assets/images/LOGO.jpg',
+                  fit: BoxFit.contain,
+                  height: 80,
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 10),
+            const SizedBox(height: 20),
 
-          // Loading or Error Display
-          if (isLoading)
-            const CircularProgressIndicator()
-          else if (isError)
-            const Text("Erro ao carregar dados!", style: TextStyle(color: Colors.red)),
-
-          // Grey Box with Fields
-            if (!isLoading && !isError)
+            // Blue Box with "Patrimônio"
             Container(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+              width: double.infinity,
               margin: const EdgeInsets.symmetric(horizontal: 24.0),
               decoration: BoxDecoration(
-                color: Colors.grey.shade300,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
-                  bottomLeft: Radius.circular(0),
-                  bottomRight: Radius.circular(0),
+                color: const Color(0xFF001789),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Center(
+                child: Text(
+                  'Patrimônio',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
                 ),
               ),
-              child: Container(
+            ),
+            const SizedBox(height: 10),
+
+            // Loading or Error Display
+            if (isLoading)
+              const CircularProgressIndicator()
+            else if (isError)
+              const Text("Erro ao carregar dados!", style: TextStyle(color: Colors.red)),
+
+            // Grey Box with Fields
+            if (!isLoading && !isError)
+              Container(
                 padding: const EdgeInsets.all(15),
+                margin: const EdgeInsets.symmetric(horizontal: 24.0),
                 decoration: BoxDecoration(
-                  color: Colors.grey[400],
-                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey.shade300,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12),
+                    bottomLeft: Radius.circular(0),
+                    bottomRight: Radius.circular(0),
+                  ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildTextField('Id do equipamento', controller: idController),
-                    const SizedBox(height: 20),
-                    _buildTextField('Linha', controller: linhaController),
-                    const SizedBox(height: 20),
-                    _buildTextField('Local', controller: localController),
-                    const SizedBox(height: 20),
-                    _buildTextField('Anotações', controller: anotacoesController, maxLines: 4),
-                    const SizedBox(height: 10),
-                  ],
+                child: Container(
+                  padding: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[400],
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildTextField('Id do equipamento', controller: idController),
+                      const SizedBox(height: 20),
+                      _buildTextField('Linha', controller: linhaController),
+                      const SizedBox(height: 20),
+                      _buildTextField('Local', controller: localController),
+                      const SizedBox(height: 20),
+                      _buildTextField('Anotações', controller: anotacoesController, maxLines: 4),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
                 ),
               ),
-            ),
 
-          // Blue Box with Buttons
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 24),
-            width: double.infinity,
-            margin: const EdgeInsets.symmetric(horizontal: 24.0),
-            decoration: const BoxDecoration(
-              color: Color(0xFF001789),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(0),
-                topRight: Radius.circular(0),
-                bottomLeft: Radius.circular(12),
-                bottomRight: Radius.circular(12),
+            // Blue Box with Buttons
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 24),
+              width: double.infinity,
+              margin: const EdgeInsets.symmetric(horizontal: 24.0),
+              decoration: const BoxDecoration(
+                color: Color(0xFF001789),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(0),
+                  topRight: Radius.circular(0),
+                  bottomLeft: Radius.circular(12),
+                  bottomRight: Radius.circular(12),
+                ),
               ),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: isSaving ? null : _salvarAlteracoes,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: isSaving ? null : _salvarAlteracoes,
                       // Salvar ou editar o patrimônio
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.amber,
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.amber,
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                    ),
-                    child: isSaving
-                        ? const CircularProgressIndicator()
-                        : const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.save, color: Colors.white),
-                            SizedBox(width: 5),
-                            Text('Editar', style: TextStyle(color: Colors.white)),
-                      ],
+                      child: isSaving
+                          ? const CircularProgressIndicator()
+                          : const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.save, color: Colors.white),
+                                SizedBox(width: 5),
+                                Text('Editar', style: TextStyle(color: Colors.white)),
+                              ],
+                            ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 20),
+                  const SizedBox(width: 20),
 
-                // Botão de Excluir
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      final confirm = await _confirmarExclusao(context);
-                      if (confirm) {
-                        await _excluirPatrimonio();
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  // Botão de Excluir
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final confirm = await _confirmarExclusao(context);
+                        if (confirm) {
+                          await _excluirPatrimonio();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.delete, color: Colors.white),
+                          SizedBox(width: 5),
+                          Text('Excluir', style: TextStyle(color: Colors.white)),
+                        ],
                       ),
                     ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.delete, color: Colors.white),
-                        SizedBox(width: 5),
-                        Text('Excluir', style: TextStyle(color: Colors.white)),
-                      ],
-                    ),
                   ),
-                ),
-                const SizedBox(width: 20),
-                Expanded(
-                  child: ElevatedButton( // botao voltar
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey,
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: ElevatedButton( // botao voltar
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey,
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.arrow_back, color: Colors.white),
+                          SizedBox(width: 5),
+                          Text('Voltar', style: TextStyle(color: Colors.white)),
+                        ],
                       ),
                     ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.arrow_back, color: Colors.white),
-                        SizedBox(width: 5),
-                        Text('Voltar', style: TextStyle(color: Colors.white)),
-                      ],
-                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const Spacer(),
-          Container(
-            height: 10,
-            color: const Color(0xFF001789),
-          ),
-        ],
+            const SizedBox(height: 10), // Small padding after the buttons
+          ],
+        ),
       ),
     );
   }

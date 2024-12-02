@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'tela_qrcode.dart';
 import 'user_session.dart';
+import 'admin/editapatrimonio.dart';
 
 class TelaCadastro extends StatefulWidget { 
   const TelaCadastro({super.key});
@@ -32,12 +33,12 @@ class _TelaCadastroState extends State<TelaCadastro> {
         'role': role,
       };
 
-      debugPrint('Request URL: http://192.168.15.41:3002/login');
+      debugPrint('Request URL: http://192.168.56.1:3002/login');
       debugPrint('Request Headers: {"Content-Type": "application/json"}');
       debugPrint('Request Body: $requestBody');
 
       final response = await http.post(
-        Uri.parse('http://192.168.15.41:3002/login'),
+        Uri.parse('http://192.168.56.1:3002/login'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(requestBody),
       );
@@ -55,9 +56,9 @@ class _TelaCadastroState extends State<TelaCadastro> {
           UserSession.setUserType('operador');
         }
 
-        Navigator.push(
+      Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const TelaQRCode()),
+          MaterialPageRoute(builder: (context) => const EditaPatrimonio(patrimonio: '0028')),
         );
       } else if (response.statusCode == 401) {
         _showDialog('Erro', 'Credenciais inválidas.');
