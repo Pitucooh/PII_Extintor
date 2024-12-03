@@ -284,83 +284,86 @@ class EditaPatrimonioState extends State<EditaPatrimonio> {
                   bottomRight: Radius.circular(12),
                 ),
               ),
-              child: Row(
+              child: Column(
                 children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: isSaving ? null : _salvarAlteracoes,
-                      // Salvar ou editar o patrimônio
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.amber,
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: isSaving
-                          ? const CircularProgressIndicator()
-                          : const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.save, color: Colors.white),
-                                SizedBox(width: 5),
-                                Text('Editar', style: TextStyle(color: Colors.white)),
-                              ],
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: isSaving ? null : _salvarAlteracoes,
+                          // Salvar ou editar o patrimônio
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.amber,
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
+                          ),
+                          child: isSaving
+                              ? const CircularProgressIndicator()
+                              : const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.save, color: Colors.white),
+                                    SizedBox(width: 5),
+                                    Text('Editar', style: TextStyle(color: Colors.white)),
+                                  ],
+                                ),
+                        ),
+                      ),
+                      const SizedBox(width: 20),
 
-                  // Botão de Excluir
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        final confirm = await _confirmarExclusao(context);
-                        if (confirm) {
-                          await _excluirPatrimonio();
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                      // Botão de Excluir
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            final confirm = await _confirmarExclusao(context);
+                            if (confirm) {
+                              await _excluirPatrimonio();
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.delete, color: Colors.white),
+                              SizedBox(width: 5),
+                              Text('Excluir', style: TextStyle(color: Colors.white)),
+                            ],
+                          ),
                         ),
                       ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.delete, color: Colors.white),
-                          SizedBox(width: 5),
-                          Text('Excluir', style: TextStyle(color: Colors.white)),
-                        ],
-                      ),
-                    ),
+                    ],
                   ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: ElevatedButton( // botao voltar
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey,
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey,
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.arrow_back, color: Colors.white),
-                          SizedBox(width: 5),
-                          Text('Voltar', style: TextStyle(color: Colors.white)),
-                        ],
-                      ),
+                      minimumSize: const Size(double.infinity, 60), // Tamanho do botão Voltar
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.arrow_back, color: Colors.white),
+                        SizedBox(width: 5),
+                        Text('Voltar', style: TextStyle(color: Colors.white)),
+                      ],
                     ),
                   ),
                 ],
