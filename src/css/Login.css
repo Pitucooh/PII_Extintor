@@ -318,22 +318,3 @@ button:hover {
     transform: translateY(0); /* Volta à posição original */
   }
 }
-
-.login-container {
-  background-color: #c5c5c5;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
-  max-width: 400px;
-  text-align: center;
-  margin: auto;
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  justify-content: flex-start;
-
-  /* Animação adicionada */
-  animation: slideInContainer 0.6s ease-in-out;
-}
