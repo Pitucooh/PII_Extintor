@@ -455,7 +455,7 @@ const Busca = () => {
         {(role === 'A' || role === 'O') && (
           <button className='button-cadastrar' onClick={abrirModalCadastro}>
             <span className="icon">+</span>
-            <span className="button-text">Cadastrar Novo Extintor</span>
+            
           </button>
         )}
       </div>

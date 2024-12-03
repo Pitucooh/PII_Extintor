@@ -80,6 +80,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    text-transform: uppercase;
   }
   
   .layout .export-button:hover {
@@ -107,6 +108,7 @@
   text-align: left;
   width: 50%;
   margin-left: 10%;
+  text-transform: uppercase;
   
 }
 
