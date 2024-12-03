@@ -107,8 +107,13 @@
   align-items: left;
   text-align: left;
   width: 50%;
-  margin-left: 10%;
   text-transform: uppercase;
+  gap: 10%;
+  align-items: center; 
+  text-align: center;  
+  width: 50%;
+  text-transform: uppercase;
+  margin-right: 2px; 
   
 }
 
@@ -191,7 +196,7 @@
   max-width: 700px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
- /* Ajuste geral para a tabela */
+
 table {
   width: 100%;
   border-collapse: collapse;
