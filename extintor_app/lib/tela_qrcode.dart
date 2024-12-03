@@ -90,11 +90,7 @@ class _TelaQRCodeState extends State<TelaQRCode> {
         context,
         MaterialPageRoute(
           builder: (context) => PatrimonioDados(
-            data: patrimonio, // Enviando o patrimônio escaneado ou digitado
-            idEquipamento: '', // Valores vazios ou padrão
-            linha: '',
-            situacao: '',
-            anotacoes: '',
+            patrimonio: patrimonio, // Enviando o patrimônio escaneado ou digitado
           ),
         ),
       );

@@ -45,7 +45,7 @@ class EditaPatrimonioState extends State<EditaPatrimonio> {
 
   // update patrimonio
   Future<void> _salvarAlteracoes() async {
-    const url = 'http://192.168.15.41:3002/update';
+    const url = 'http://10.2.128.199:3002/update';
     final body = json.encode({
       'id_equipamento': idController.text,
       'linha': linhaController.text,
@@ -90,7 +90,7 @@ class EditaPatrimonioState extends State<EditaPatrimonio> {
   Future<void> _fetchPatrimonioData(String patrimonio) async {
     try {
       final response = await http
-          .get(Uri.parse('http://192.168.15.41:3002/busca?patrimonio=$patrimonio'))
+          .get(Uri.parse('http://10.2.128.199:3002/busca?patrimonio=$patrimonio'))
           .timeout(const Duration(seconds: 10));
       debugPrint("Dados recebidos: $response");
 
@@ -129,7 +129,7 @@ class EditaPatrimonioState extends State<EditaPatrimonio> {
   }
 
   Future<void> _excluirPatrimonio() async {
-    const url = 'http://192.168.15.41:3002/delete';
+    const url = 'http://10.2.128.199:3002/delete';
     final body = json.encode({
       'id_equipamento': idController.text, // Ou o ID do patrimônio
     });

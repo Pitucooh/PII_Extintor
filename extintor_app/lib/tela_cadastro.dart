@@ -33,12 +33,12 @@ class _TelaCadastroState extends State<TelaCadastro> {
         'role': role,
       };
 
-      debugPrint('Request URL: http://192.168.15.41:3002/login');
+      debugPrint('Request URL: http://10.2.128.199:3002/login');
       debugPrint('Request Headers: {"Content-Type": "application/json"}');
       debugPrint('Request Body: $requestBody');
 
       final response = await http.post(
-        Uri.parse('http://192.168.15.41:3002/login'),
+        Uri.parse('http://10.2.128.199:3002/login'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(requestBody),
       );
