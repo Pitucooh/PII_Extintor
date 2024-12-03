@@ -170,6 +170,7 @@ const Busca = () => {
           <form id="form-edit">
             <div>
               <strong>ID Local:</strong> {item.id_local}
+              
             </div>
             <input type="text" name="setor" placeholder="Setor" defaultValue={item.setor} />
             <input type="text" name="area" placeholder="Area" defaultValue={item.area} />
@@ -463,6 +464,7 @@ const Busca = () => {
 
         <div className='search-container'>
           <h1 className='containerPatr'>Busca de equipamento por patrimônio</h1>
+          
           <form id="formBusca" onSubmit={handleSubmit}>
             <input
               type="text"
@@ -484,7 +486,8 @@ const Busca = () => {
                     <button onClick={() => abrirModalEdicao(itemSelecionado)}>Editar</button>
                   )}
                   <button className='modal-close' style={{backgroundColor: 'rgb(209, 8, 8)'}} onClick={fecharModal}>Fechar</button>
-
+                  <h2>Equipamentos por patrimônio {predio}</h2>
+                  <h3>Clique em uma localização para editá-la</h3>
                   <h2>Detalhes do Equipamento {itemSelecionado.patrimonio}</h2>
                   <p><strong>Número do Equipamento:</strong> {itemSelecionado.num_equip || 'Indisponível'}</p>
                   <p><strong>Tipo:</strong> {itemSelecionado.tipo || 'Indisponível'}</p>
@@ -536,6 +539,7 @@ const Busca = () => {
               <div className="modal" onClick={(e) => e.stopPropagation()}>
                 <button className='modal-close' onClick={fecharModal}>Fechar</button>
                 <h2>Equipamentos localizados no prédio {predio}</h2>
+                <h3>Clique em uma localização para editá-la</h3>
                 <table>
                   <thead>
                     <tr>
@@ -600,6 +604,7 @@ const Busca = () => {
                 <div style={{padding: '20px'}}></div>
                 <div>
                   <h2>Detalhes da Manutenção de ID {data[0].id_manutencao}:</h2> 
+                  <h3>Clique em uma localização para editá-la</h3>
                   <p><strong>Patrimônio:</strong> {data[0].patrimonio}</p>
                   <p><strong>Data:</strong> {new Date(data[0].data_manu).toLocaleDateString('pt-BR')}</p>
                   <p><strong>Descrição:</strong> {data[0].desc}</p>
