@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'exibeqr.dart'; // Substitua por seu arquivo específico, se necessário
 import 'operador/patrimoniodados.dart'; // Substitua por seu arquivo específico, se necessário
-import 'admin/editapatrimonio.dart';  // Certifique-se de que a classe EditaPatrimonio está sendo importada corretamente
+import 'admin/editapatrimonio.dart'; // Certifique-se de que a classe EditaPatrimonio está sendo importada corretamente
 import 'user_session.dart'; // Supondo que você tem um arquivo que gerencia a sessão do usuário
 
 class TelaQRCode extends StatefulWidget {
@@ -58,7 +58,8 @@ class _TelaQRCodeState extends State<TelaQRCode> {
         // Navega para a tela de exibição do QR Code
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => EditaPatrimonio(patrimonio: qrText)),
+          MaterialPageRoute(
+              builder: (context) => EditaPatrimonio(patrimonio: qrText)),
         ).then((_) {
           // Reinicia o estado após retornar da tela
           setState(() {
@@ -70,19 +71,20 @@ class _TelaQRCodeState extends State<TelaQRCode> {
     });
   }
 
-  void _searchPatrimonio(String patrimonio) {
-    // Verifica o tipo de usuário para navegar para a tela apropriada
-    if (role == 'admin') {
+  void _searchPatrimonio(String patrimonio) async {
+    String? userType = await UserSession.getUserType();
+
+    if (userType == 'admin') {
       // Navegar para a tela de edição de patrimônio (admin)
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => EditaPatrimonio(
-          patrimonio: qrText,
+            patrimonio: patrimonio,
           ),
         ),
       );
-    } else if (role == 'operador') {
+    } else if (userType == 'operador') {
       // Navegar para a tela de dados do patrimônio (operador)
       Navigator.push(
         context,
@@ -119,6 +121,8 @@ class _TelaQRCodeState extends State<TelaQRCode> {
   }
 
   @override
+  final TextEditingController _controller = TextEditingController();
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -211,6 +215,7 @@ class _TelaQRCodeState extends State<TelaQRCode> {
                 Stack(
                   children: [
                     TextField(
+                      controller: _controller,
                       decoration: InputDecoration(
                         hintText: 'Digite o patrimônio...',
                         filled: true,
@@ -224,7 +229,6 @@ class _TelaQRCodeState extends State<TelaQRCode> {
                           borderSide: BorderSide.none,
                         ),
                       ),
-                      onSubmitted: _searchPatrimonio,
                     ),
                     Positioned(
                       right: 0,
@@ -240,6 +244,9 @@ class _TelaQRCodeState extends State<TelaQRCode> {
                         child: IconButton(
                           icon: const Icon(Icons.search, color: Colors.white),
                           onPressed: () {
+                            qrText = _controller
+                                .text; // Armazena o texto digitado na variável qrcode
+                            print("Texto digitado: $qrText");
                             _searchPatrimonio(
                                 qrText); // Passando o texto escaneado ou digitado para a busca
                           },
